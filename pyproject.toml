@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pharma-ocr-date-rag"
+version = "0.1.0"
+description = "Student OCR-to-RAG prototype for extracting dates from pharmaceutical-style documents"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Lam Hoang" }]
+dependencies = []
+
+[project.optional-dependencies]
+ocr = [
+  "pillow>=10.0.0",
+  "pytesseract>=0.3.10",
+  "paddleocr>=2.7.0",
+]
+rag = [
+  "llama-index>=0.10.0",
+]
+demo = [
+  "streamlit>=1.32.0",
+]
+dev = [
+  "pytest>=8.0.0",
+]
+
+[project.scripts]
+pharma-date-rag = "pharma_ocr_date_rag.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

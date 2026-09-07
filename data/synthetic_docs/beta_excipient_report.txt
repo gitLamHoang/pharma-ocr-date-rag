@@ -1,0 +1,13 @@
+BETA EXCIPIENT SUPPLIER
+Incoming Material Report - Synthetic Training Sample
+
+Material: Microcrystalline Cellulose
+Supplier batch: BET-1107-26
+Received at warehouse: 07/18/2026
+Supplier audit planned for August 05, 2026.
+
+MFG: 2026-07-10
+EXP: 07/2029
+
+Quality review verified on 2026/07/21.
+The OCR engine sometimes reads EXP as E XP or confuses 0 and O on scanned copies.

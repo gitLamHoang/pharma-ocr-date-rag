@@ -1,0 +1,16 @@
+[
+  {"doc": "alpha_packaging_coa.txt", "normalized": "2026-04-15", "label": "manufacture"},
+  {"doc": "alpha_packaging_coa.txt", "normalized": "2028-04-14", "label": "expiry"},
+  {"doc": "alpha_packaging_coa.txt", "normalized": "2026-04-22", "label": "qa_check"},
+  {"doc": "alpha_packaging_coa.txt", "normalized": "2026-04-23", "label": "document"},
+  {"doc": "beta_excipient_report.txt", "normalized": "2026-07-18", "label": "received"},
+  {"doc": "beta_excipient_report.txt", "normalized": "2026-08-05", "label": "audit"},
+  {"doc": "beta_excipient_report.txt", "normalized": "2026-07-10", "label": "manufacture"},
+  {"doc": "beta_excipient_report.txt", "normalized": "2029-07", "label": "expiry"},
+  {"doc": "beta_excipient_report.txt", "normalized": "2026-07-21", "label": "qa_check"},
+  {"doc": "gamma_stability_notice.txt", "normalized": "2026-08-12", "label": "document"},
+  {"doc": "gamma_stability_notice.txt", "normalized": "2026-09-01", "label": "qa_check"},
+  {"doc": "gamma_stability_notice.txt", "normalized": "2027-09-30", "label": "expiry"},
+  {"doc": "gamma_stability_notice.txt", "normalized": "2026-08-15", "label": "unknown"},
+  {"doc": "gamma_stability_notice.txt", "normalized": "2026-08-19", "label": "unknown"}
+]

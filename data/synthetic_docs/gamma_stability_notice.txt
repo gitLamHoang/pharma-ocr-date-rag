@@ -1,0 +1,11 @@
+GAMMA LAB SERVICES
+Stability Pull Notice - Synthetic Training Sample
+
+Product code: GL-2026-STAB
+Report Date: 2026.08.12
+Next chamber check: 09/01/2026
+Stability sample expires on September 30, 2027.
+
+Reviewer comment:
+The pull window starts 2026-08-15 and ends 2026-08-19.
+This document date is not the same as the product expiry date.
