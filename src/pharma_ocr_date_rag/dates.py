@@ -58,6 +58,24 @@ LABEL_KEYWORDS = {
     "document": ["document", "issued", "printed", "report date"],
 }
 
+OCR_WORD_REPAIRS = {
+    "exp1ry": "expiry",
+    "exp1ration": "expiration",
+    "manufacturc": "manufacture",
+    "mfg.": "mfg:",
+    "q.c.": "qc",
+}
+
+DATE_LIKE_TOKEN = re.compile(
+    r"(?<![A-Za-z0-9-])"
+    r"(?P<token>"
+    r"[0-9OIl]{4}[-/.][0-9OIl]{1,2}[-/.][0-9OIl]{1,2}|"
+    r"[0-9OIl]{1,2}[-/.][0-9OIl]{1,2}[-/.][0-9OIl]{4}|"
+    r"[0-9OIl]{1,2}[-/][0-9OIl]{4}"
+    r")"
+    r"(?![A-Za-z0-9-])"
+)
+
 
 @dataclass(frozen=True)
 class DateHit:
@@ -68,6 +86,23 @@ class DateHit:
     context: str
     start: int
     end: int
+
+
+def repair_ocr_noise(text: str) -> str:
+    """Clean a few OCR mistakes before date extraction.
+
+    This is intentionally small and transparent. It only repairs common field
+    words and date-looking tokens, not the whole document.
+    """
+    repaired = text
+    for wrong, right in OCR_WORD_REPAIRS.items():
+        repaired = re.sub(re.escape(wrong), right, repaired, flags=re.IGNORECASE)
+
+    def fix_date_token(match: re.Match[str]) -> str:
+        token = match.group("token")
+        return token.translate(str.maketrans({"O": "0", "I": "1", "l": "1"}))
+
+    return DATE_LIKE_TOKEN.sub(fix_date_token, repaired)
 
 
 def _safe_date(year: int, month: int, day: int) -> str | None:
@@ -133,7 +168,10 @@ def classify_context(context: str, date_start: int | None = None, date_end: int 
     return "unknown", 0.35
 
 
-def extract_dates(text: str) -> list[DateHit]:
+def extract_dates(text: str, repair_ocr: bool = True) -> list[DateHit]:
+    if repair_ocr:
+        text = repair_ocr_noise(text)
+
     hits: list[DateHit] = []
     seen: list[tuple[int, int]] = []
 

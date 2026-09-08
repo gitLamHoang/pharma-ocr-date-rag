@@ -1,0 +1,13 @@
+DELTA COLD CHAIN VENDOR
+Temperature Excursion Review - Synthetic OCR Noise Sample
+
+Material: refrigerated label adhesive
+Lot: DCC-O812-26
+Manufacturc Date: 2O26-O8-12
+EXP1RY: O8/2O28
+
+Q.C. check completed on O8/2O/2O26 after cooler alarm review.
+Report Date: 2O26.O8.21
+
+OCR notes:
+The scan uses letter O instead of zero in several dates.

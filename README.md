@@ -97,6 +97,7 @@ The public repo keeps the benchmarking small, but the workflow is the same idea:
 I tracked failure modes like:
 
 - OCR confusing `1`, `I`, and `l`
+- OCR confusing `O` and `0` inside date fields
 - month/day ambiguity
 - expiry dates written as only month/year
 - document dates being confused with product dates

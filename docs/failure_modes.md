@@ -26,3 +26,7 @@ These notes are from the public synthetic version of the project.
 - Store page number and bounding boxes for each date.
 - Add a second-pass classifier for ambiguous date context.
 - Compare a small local model against API models using the same eval file.
+
+## Week 1 Update
+
+I added a small OCR-noise repair step for date-looking tokens. It fixes examples like `2O26.O8.21` before the regex parser runs, but it avoids replacing every letter `O` in the whole document. This is safer for fields like lot numbers and material names.

@@ -12,5 +12,9 @@
   {"doc": "gamma_stability_notice.txt", "normalized": "2026-09-01", "label": "qa_check"},
   {"doc": "gamma_stability_notice.txt", "normalized": "2027-09-30", "label": "expiry"},
   {"doc": "gamma_stability_notice.txt", "normalized": "2026-08-15", "label": "unknown"},
-  {"doc": "gamma_stability_notice.txt", "normalized": "2026-08-19", "label": "unknown"}
+  {"doc": "gamma_stability_notice.txt", "normalized": "2026-08-19", "label": "unknown"},
+  {"doc": "delta_noisy_scan.txt", "normalized": "2026-08-12", "label": "manufacture"},
+  {"doc": "delta_noisy_scan.txt", "normalized": "2028-08", "label": "expiry"},
+  {"doc": "delta_noisy_scan.txt", "normalized": "2026-08-20", "label": "qa_check"},
+  {"doc": "delta_noisy_scan.txt", "normalized": "2026-08-21", "label": "document"}
 ]
