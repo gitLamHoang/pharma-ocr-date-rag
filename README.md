@@ -106,7 +106,3 @@ I tracked failure modes like:
 ## Limits
 
 This is a learning project, not a validated medical device or production quality system. It does not make release decisions. It is meant to show the engineering workflow and how I thought through the problem.
-
-## LinkedIn-Friendly Summary
-
-Built an anonymized OCR-to-RAG prototype for pharmaceutical-style vendor documents using Tesseract/PaddleOCR adapters, date extraction, lightweight retrieval, and an evaluation workflow. Compared chunking and retrieval settings, documented OCR/date-classification failure modes, and built a small demo for reviewing model trade-offs.
