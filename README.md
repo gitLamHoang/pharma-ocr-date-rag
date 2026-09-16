@@ -69,6 +69,12 @@ Run the evaluation:
 python scripts/evaluate.py
 ```
 
+Compare simple retrieval chunk sizes:
+
+```bash
+python scripts/benchmark_retrieval.py
+```
+
 Optional Streamlit demo:
 
 ```bash
@@ -92,6 +98,7 @@ The public repo keeps the benchmarking small, but the workflow is the same idea:
 - OCR engine comparison: clean text vs noisy OCR text
 - chunk size comparison: short chunks vs larger chunks
 - retrieval comparison: keyword retrieval vs optional LlamaIndex index
+- small chunk-size benchmark in `scripts/benchmark_retrieval.py`
 - model notes: Mistral-style instruction following vs Phi-2-style smaller model behavior
 
 I tracked failure modes like:

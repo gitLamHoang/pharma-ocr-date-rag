@@ -20,6 +20,8 @@ This file is a truthful plan for future commits. It is not fake commit history.
 - Compare short chunks vs long chunks.
 - Write down Mistral and Phi-2 observations from experiments.
 
+Progress note: added a small chunk-size benchmark script that reports hit-rate for a few synthetic retrieval questions.
+
 ## Week 4
 
 - Clean up Streamlit demo.
