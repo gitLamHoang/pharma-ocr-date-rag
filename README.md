@@ -69,6 +69,8 @@ Run the evaluation:
 python scripts/evaluate.py
 ```
 
+The evaluation prints overall precision, recall, and F1, plus a per-label table. This helps show whether one date type, such as expiry or manufacturing, is weaker than the others even when the overall score looks good.
+
 Compare simple retrieval chunk sizes:
 
 ```bash
@@ -99,6 +101,7 @@ The public repo keeps the benchmarking small, but the workflow is the same idea:
 - chunk size comparison: short chunks vs larger chunks
 - retrieval comparison: keyword retrieval vs optional LlamaIndex index
 - small chunk-size benchmark in `scripts/benchmark_retrieval.py`
+- per-label precision, recall, and F1 for structured date extraction
 - model notes: Mistral-style instruction following vs Phi-2-style smaller model behavior
 
 I tracked failure modes like:

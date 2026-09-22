@@ -27,3 +27,5 @@ Progress note: added a small chunk-size benchmark script that reports hit-rate f
 - Clean up Streamlit demo.
 - Improve README screenshots.
 - Add final evaluation table and reflection.
+
+Progress note: the evaluation script now reports per-label precision, recall, and F1 in addition to the overall score. This makes weak date categories easier to spot.
