@@ -16,7 +16,8 @@ def main() -> None:
     expected_rows = json.loads(expected_path.read_text(encoding="utf-8"))
     expected = {(row["doc"], row["normalized"], row["label"]) for row in expected_rows}
 
-    docs = process_folder(ROOT / "data" / "synthetic_docs")
+    # These original fixtures were authored with an explicit US date convention.
+    docs = process_folder(ROOT / "data" / "synthetic_docs", date_order="mdy")
     predicted = {
         (doc.path.name, hit.normalized, hit.label)
         for doc in docs

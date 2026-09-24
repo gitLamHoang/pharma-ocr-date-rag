@@ -1,5 +1,7 @@
 # One Month Work Plan
 
+This initial plan is retained as project history. The active schedule and verified progress are in [the daily roadmap](roadmap.md). Items below are plans, not claims of completed model experiments.
+
 This file is a truthful plan for future commits. It is not fake commit history.
 
 ## Week 1

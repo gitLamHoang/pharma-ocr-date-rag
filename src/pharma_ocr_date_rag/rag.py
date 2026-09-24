@@ -5,9 +5,11 @@ import math
 import re
 
 from .dates import DateHit, extract_dates
+from .languages import fold, labels_in
 
 
-TOKEN_RE = re.compile(r"[a-zA-Z0-9]+")
+TOKEN_RE = re.compile(r"\w+", re.UNICODE)
+STOP_WORDS = set("which what when where is are the a an of for in on was were does do how date dates document documents quelle quel quand la le les de des du est sont fecha datum ngay".split())
 
 
 @dataclass(frozen=True)
@@ -15,6 +17,10 @@ class DocumentChunk:
     doc_id: str
     chunk_id: int
     text: str
+    start: int = 0
+    end: int = 0
+    language: str = "auto"
+    date_order: str = "auto"
 
 
 @dataclass(frozen=True)
@@ -25,31 +31,26 @@ class RetrievedChunk:
 
 
 def tokenize(text: str) -> list[str]:
-    return [token.lower() for token in TOKEN_RE.findall(text)]
+    tokens = [token for token in TOKEN_RE.findall(fold(text)) if token not in STOP_WORDS]
+    return tokens + [f"field_{label}" for label in sorted(labels_in(text))]
 
 
-def split_chunks(doc_id: str, text: str, max_words: int = 90, overlap: int = 15) -> list[DocumentChunk]:
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-    if not lines:
-        return []
-
-    chunks: list[DocumentChunk] = []
-    current: list[str] = []
-    current_words = 0
-
-    for line in lines:
-        line_words = len(line.split())
-        if current and current_words + line_words > max_words:
-            chunks.append(DocumentChunk(doc_id=doc_id, chunk_id=len(chunks), text="\n".join(current)))
-            keep = current[-2:] if overlap else []
-            current = keep[:]
-            current_words = sum(len(item.split()) for item in current)
-
-        current.append(line)
-        current_words += line_words
-
-    if current:
-        chunks.append(DocumentChunk(doc_id=doc_id, chunk_id=len(chunks), text="\n".join(current)))
+def split_chunks(
+    doc_id: str, text: str, max_words: int = 90, overlap: int = 15,
+    language: str = "auto", date_order: str = "auto",
+) -> list[DocumentChunk]:
+    if max_words <= 0 or not 0 <= overlap < max_words:
+        raise ValueError("max_words must be positive and 0 <= overlap < max_words")
+    words = list(re.finditer(r"\S+", text))
+    chunks = []
+    for first in range(0, len(words), max_words - overlap):
+        last = min(first + max_words, len(words))
+        start, end = words[first].start(), words[last - 1].end()
+        chunks.append(DocumentChunk(
+            doc_id, len(chunks), text[start:end], start, end, language, date_order,
+        ))
+        if last == len(words):
+            break
     return chunks
 
 
@@ -61,7 +62,7 @@ def _term_counts(tokens: list[str]) -> dict[str, int]:
 
 
 def _cosine(query_counts: dict[str, int], chunk_counts: dict[str, int]) -> float:
-    dot = sum(query_counts.get(token, 0) * chunk_counts.get(token, 0) for token in query_counts)
+    dot = sum(count * chunk_counts.get(token, 0) for token, count in query_counts.items())
     if dot == 0:
         return 0.0
     q_norm = math.sqrt(sum(count * count for count in query_counts.values()))
@@ -70,44 +71,33 @@ def _cosine(query_counts: dict[str, int], chunk_counts: dict[str, int]) -> float
 
 
 def retrieve(chunks: list[DocumentChunk], question: str, top_k: int = 3) -> list[RetrievedChunk]:
+    if top_k <= 0:
+        return []
     query_counts = _term_counts(tokenize(question))
-    scored: list[RetrievedChunk] = []
-
+    requested_labels = labels_in(question)
+    scored = []
     for chunk in chunks:
-        chunk_counts = _term_counts(tokenize(chunk.text))
-        score = _cosine(query_counts, chunk_counts)
-        date_bonus = 0.08 if extract_dates(chunk.text) else 0.0
-        scored.append(
-            RetrievedChunk(
-                chunk=chunk,
-                score=round(score + date_bonus, 4),
-                dates=extract_dates(chunk.text),
-            )
-        )
-
+        dates = extract_dates(chunk.text, language=chunk.language, date_order=chunk.date_order)
+        if requested_labels and not requested_labels.intersection(hit.label for hit in dates):
+            continue
+        score = _cosine(query_counts, _term_counts(tokenize(chunk.text)))
+        if score <= 0:
+            continue
+        scored.append(RetrievedChunk(chunk, round(score, 4), dates))
     return sorted(scored, key=lambda item: item.score, reverse=True)[:top_k]
 
 
 def answer_question(chunks: list[DocumentChunk], question: str, top_k: int = 3) -> str:
     results = retrieve(chunks, question, top_k=top_k)
     lines = [f"Question: {question}", ""]
-
+    if not results:
+        return "\n".join(lines + ["No matching evidence found."])
     for result in results:
-        lines.append(f"[{result.chunk.doc_id} chunk {result.chunk.chunk_id}] score={result.score}")
-        if result.dates:
-            for hit in result.dates:
-                lines.append(f"- {hit.normalized} ({hit.label}, confidence={hit.confidence:.2f})")
-        else:
-            lines.append("- no dates found in this chunk")
-        lines.append(result.chunk.text[:350])
-        lines.append("")
-
+        chunk = result.chunk
+        lines.append(f"[{chunk.doc_id} chunk {chunk.chunk_id}, chars {chunk.start}:{chunk.end}] score={result.score}")
+        for hit in result.dates:
+            value = hit.normalized or "ambiguous: " + " or ".join(hit.candidates)
+            review = "; review: " + ", ".join(hit.review_reasons) if hit.review_reasons else ""
+            lines.append(f"- {value} ({hit.label}{review})")
+        lines.extend([chunk.text, ""])
     return "\n".join(lines).strip()
-
-
-def try_llama_index_summary(_: list[DocumentChunk]) -> str:
-    try:
-        import llama_index  # noqa: F401
-    except ImportError:
-        return "LlamaIndex is not installed; using lightweight local retrieval."
-    return "LlamaIndex is installed; this repo keeps the public demo on local retrieval for reproducibility."

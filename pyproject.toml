@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pharma-ocr-date-rag"
-version = "0.1.0"
-description = "Student OCR-to-RAG prototype for extracting dates from pharmaceutical-style documents"
+version = "0.2.0"
+description = "Multilingual pharmaceutical date extraction with source evidence and review workflows"
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Lam Hoang" }]
@@ -17,11 +17,8 @@ ocr = [
   "pytesseract>=0.3.10",
   "paddleocr>=2.7.0",
 ]
-rag = [
-  "llama-index>=0.10.0",
-]
 demo = [
-  "streamlit>=1.32.0",
+  "streamlit>=1.50.0,<2",
 ]
 dev = [
   "pytest>=8.0.0",

@@ -1,0 +1,680 @@
+{
+  "description": "Authored synthetic development fixtures, not held-out or real OCR accuracy.",
+  "cases": [
+    {
+      "id": "en-iso",
+      "language": "en",
+      "text": "Expiry: 2028-04-14",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-04-14",
+          "label": "expiry",
+          "candidates": [
+            "2028-04-14"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-month",
+      "language": "en",
+      "text": "Manufactured: 15 April 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-04-15",
+          "label": "manufacture",
+          "candidates": [
+            "2026-04-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-check",
+      "language": "en",
+      "text": "QA check: April 22, 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-04-22",
+          "label": "qa_check",
+          "candidates": [
+            "2026-04-22"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-received",
+      "language": "en",
+      "text": "Received: 07/18/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-07-18",
+          "label": "received",
+          "candidates": [
+            "2026-07-18"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-ambiguous",
+      "language": "en",
+      "text": "Inspection: 09/01/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": null,
+          "label": "qa_check",
+          "candidates": [
+            "2026-01-09",
+            "2026-09-01"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "en-partial",
+      "language": "en",
+      "text": "EXP: 07/2029",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2029-07",
+          "label": "expiry",
+          "candidates": [
+            "2029-07"
+          ],
+          "precision": "month",
+          "review_reasons": [
+            "month_precision"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr-expiry",
+      "language": "fr",
+      "text": "Date de péremption: 28 février 2028",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-02-28",
+          "label": "expiry",
+          "candidates": [
+            "2028-02-28"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "fr-manufacture",
+      "language": "fr",
+      "text": "Date de fabrication: 15 août 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-08-15",
+          "label": "manufacture",
+          "candidates": [
+            "2026-08-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "fr-check",
+      "language": "fr",
+      "text": "Contrôle qualité: 21 mars 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-03-21",
+          "label": "qa_check",
+          "candidates": [
+            "2026-03-21"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "fr-received",
+      "language": "fr",
+      "text": "Réception: 24/03/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-03-24",
+          "label": "received",
+          "candidates": [
+            "2026-03-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "fr-audit",
+      "language": "fr",
+      "text": "Visite fournisseur: 09/10/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": null,
+          "label": "audit",
+          "candidates": [
+            "2026-09-10",
+            "2026-10-09"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fr-document",
+      "language": "fr",
+      "text": "Date du rapport: 25 décembre 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-12-25",
+          "label": "document",
+          "candidates": [
+            "2026-12-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "de-expiry",
+      "language": "de",
+      "text": "Verfallsdatum: 31. März 2028",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-03-31",
+          "label": "expiry",
+          "candidates": [
+            "2028-03-31"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "de-manufacture",
+      "language": "de",
+      "text": "Herstellungsdatum: 15. Oktober 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-10-15",
+          "label": "manufacture",
+          "candidates": [
+            "2026-10-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "de-check",
+      "language": "de",
+      "text": "Qualitätsprüfung: 22. April 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-04-22",
+          "label": "qa_check",
+          "candidates": [
+            "2026-04-22"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "de-received",
+      "language": "de",
+      "text": "Wareneingang: 24.04.2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-04-24",
+          "label": "received",
+          "candidates": [
+            "2026-04-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "de-audit",
+      "language": "de",
+      "text": "Lieferantenbesuch: 09/10/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": null,
+          "label": "audit",
+          "candidates": [
+            "2026-09-10",
+            "2026-10-09"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "de-document",
+      "language": "de",
+      "text": "Berichtsdatum: 25. Dezember 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-12-25",
+          "label": "document",
+          "candidates": [
+            "2026-12-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "es-expiry",
+      "language": "es",
+      "text": "Fecha de caducidad: 31 de enero de 2028",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-01-31",
+          "label": "expiry",
+          "candidates": [
+            "2028-01-31"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "es-manufacture",
+      "language": "es",
+      "text": "Fecha de fabricación: 15 de septiembre de 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-09-15",
+          "label": "manufacture",
+          "candidates": [
+            "2026-09-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "es-check",
+      "language": "es",
+      "text": "Inspección de calidad: 22 de febrero de 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-02-22",
+          "label": "qa_check",
+          "candidates": [
+            "2026-02-22"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "es-received",
+      "language": "es",
+      "text": "Recepción: 24/02/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-02-24",
+          "label": "received",
+          "candidates": [
+            "2026-02-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "es-audit",
+      "language": "es",
+      "text": "Auditoría: 09/10/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": null,
+          "label": "audit",
+          "candidates": [
+            "2026-09-10",
+            "2026-10-09"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "es-document",
+      "language": "es",
+      "text": "Fecha de emisión: 25 de diciembre de 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-12-25",
+          "label": "document",
+          "candidates": [
+            "2026-12-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "vi-expiry",
+      "language": "vi",
+      "text": "Hạn sử dụng: ngày 28 tháng 2 năm 2028",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-02-28",
+          "label": "expiry",
+          "candidates": [
+            "2028-02-28"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "vi-manufacture",
+      "language": "vi",
+      "text": "Ngày sản xuất: ngày 15 tháng 2 năm 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-02-15",
+          "label": "manufacture",
+          "candidates": [
+            "2026-02-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "vi-check",
+      "language": "vi",
+      "text": "Kiểm tra chất lượng: ngày 22 tháng 3 năm 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-03-22",
+          "label": "qa_check",
+          "candidates": [
+            "2026-03-22"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "vi-received",
+      "language": "vi",
+      "text": "Ngày nhận: 24/03/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-03-24",
+          "label": "received",
+          "candidates": [
+            "2026-03-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "vi-audit",
+      "language": "vi",
+      "text": "Đánh giá nhà cung cấp: 09/10/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": null,
+          "label": "audit",
+          "candidates": [
+            "2026-09-10",
+            "2026-10-09"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vi-document",
+      "language": "vi",
+      "text": "Ngày phát hành: ngày 25 tháng 3 năm 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-03-25",
+          "label": "document",
+          "candidates": [
+            "2026-03-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-invalid-day",
+      "language": "en",
+      "text": "Expiry: 02/31/2026",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-invalid-iso",
+      "language": "en",
+      "text": "EXP: 2026-02-31",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-leap-valid",
+      "language": "en",
+      "text": "EXP: 2028-02-29",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-02-29",
+          "label": "expiry",
+          "candidates": [
+            "2028-02-29"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-leap-invalid",
+      "language": "en",
+      "text": "EXP: 2026-02-29",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-no-dates",
+      "language": "en",
+      "text": "Batch released after packaging inspection.",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-lot-token",
+      "language": "en",
+      "text": "Lot DCC-O812-26 and ID-2026-08-12-X",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-noisy",
+      "language": "en",
+      "text": "EXP1RY: 2O28-O8-2I",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-08-21",
+          "label": "expiry",
+          "candidates": [
+            "2028-08-21"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ocr_repaired"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edge-unknown",
+      "language": "en",
+      "text": "Window starts 2026-08-15",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-08-15",
+          "label": "unknown",
+          "candidates": [
+            "2026-08-15"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "unknown_label"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edge-explicit-dmy",
+      "language": "en",
+      "text": "EXP: 09/01/2026",
+      "date_order": "dmy",
+      "expected": [
+        {
+          "normalized": "2026-01-09",
+          "label": "expiry",
+          "candidates": [
+            "2026-01-09"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-explicit-mdy",
+      "language": "en",
+      "text": "EXP: 09/01/2026",
+      "date_order": "mdy",
+      "expected": [
+        {
+          "normalized": "2026-09-01",
+          "label": "expiry",
+          "candidates": [
+            "2026-09-01"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-equal-day-month",
+      "language": "en",
+      "text": "Expiry: 08/08/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-08-08",
+          "label": "expiry",
+          "candidates": [
+            "2026-08-08"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-invalid-policy",
+      "language": "en",
+      "text": "Expiry: 24/03/2026",
+      "date_order": "mdy",
+      "expected": []
+    }
+  ]
+}

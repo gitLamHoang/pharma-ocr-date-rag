@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from pharma_ocr_date_rag.pipeline import all_chunks, format_date_report, process_folder
-from pharma_ocr_date_rag.rag import answer_question, try_llama_index_summary
+from pharma_ocr_date_rag.rag import answer_question
 
 
 def main() -> None:
@@ -16,8 +16,6 @@ def main() -> None:
         print(format_date_report(doc))
         print()
 
-    print(try_llama_index_summary(all_chunks(docs)))
-    print()
     print(answer_question(all_chunks(docs), "Which dates look like expiry dates?"))
 
 

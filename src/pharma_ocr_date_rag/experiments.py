@@ -46,7 +46,9 @@ def evaluate_chunk_sizes(
                     document.path.name,
                     document.ocr.text,
                     max_words=chunk_words,
-                    overlap=max(4, chunk_words // 6),
+                    overlap=min(chunk_words - 1, max(0, chunk_words // 6)),
+                    language=document.language,
+                    date_order=document.date_order,
                 )
             )
 

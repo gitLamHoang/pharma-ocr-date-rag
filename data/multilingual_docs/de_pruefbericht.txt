@@ -1,0 +1,12 @@
+WERK D - SYNTHETISCHES BEISPIEL
+Prüfbericht für Verpackungsmaterial
+Charge: DE-2409-B
+
+Herstellungsdatum: 15. März 2026
+Verfallsdatum: 31. März 2028
+Qualitätsprüfung: 22. April 2026
+Wareneingang: 24. April 2026
+Berichtsdatum: 25. April 2026
+Lieferantenbesuch: 09/10/2026
+
+Fiktives Dokument für Softwaretests.

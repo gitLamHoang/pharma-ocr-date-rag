@@ -1,0 +1,12 @@
+XƯỞNG V - MẪU GIẢ LẬP
+Phiếu kiểm tra vật liệu đóng gói
+Mã lô: VI-2409-D
+
+Ngày sản xuất: ngày 15 tháng 2 năm 2026
+Hạn sử dụng: ngày 28 tháng 2 năm 2028
+Kiểm tra chất lượng: ngày 22 tháng 3 năm 2026
+Ngày nhận: ngày 24 tháng 3 năm 2026
+Ngày phát hành: ngày 25 tháng 3 năm 2026
+Đánh giá nhà cung cấp: 09/10/2026
+
+Tài liệu giả lập dùng để kiểm thử phần mềm.

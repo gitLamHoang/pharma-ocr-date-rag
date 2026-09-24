@@ -2,6 +2,15 @@
 
 These notes are from the public synthetic version of the project.
 
+## September 24 Findings
+
+- Numeric dates with two valid interpretations now stay unresolved until the user chooses a convention. The original English evaluation explicitly uses MDY.
+- OCR repairs now preserve source positions and expose the original characters with review reasons.
+- Multilingual field terms and month names are supported for five languages, but decomposed Unicode and complex layouts need further coverage.
+- Retrieval now abstains on zero lexical overlap. The shared field vocabulary supports limited cross-language search, not arbitrary semantic translation.
+- Chunk sizes now count words accurately; overlap no longer means a hard-coded pair of lines. Field fragments at chunk boundaries remain a limitation.
+- Perfect development-fixture results do not establish performance on real scans. Image OCR and model comparisons remain unmeasured.
+
 ## OCR Problems
 
 - `EXP` can be read as `E XP`, especially when the scan is low resolution.

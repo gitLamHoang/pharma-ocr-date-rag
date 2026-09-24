@@ -1,0 +1,55 @@
+# Product and Engineering Decisions
+
+## User and Outcome
+
+**Customer hypothesis:** a supplier-quality reviewer who receives vendor documents with many date fields. The initial workflow is to inspect a batch of documents, locate uncertain fields, and export a register with evidence.
+
+The prototype does not yet establish demand. A discovery interview should test whether date review is frequent enough to matter, what mistakes are costly, what formats arrive, and how reviewers record decisions today. Procurement requirements, willingness to pay and time savings are unknown.
+
+A useful pilot measure would be median time to prepare a correct date register, paired with critical date error rate and the percentage of fields requiring review. None of those customer outcomes has been measured here.
+
+## Why These Choices
+
+| Decision | Reason | Trade-off |
+| --- | --- | --- |
+| Transparent rules first | Date formats are inspectable; a failing example can become a small regression case | Limited vocabulary and layout coverage |
+| Separate language from date order | Language does not prove the document's numeric convention | Reviewers must confirm ambiguous dates |
+| Null plus candidates | A guessed expiry date can look falsely authoritative | Downstream consumers must handle unresolved values |
+| Preserve original source positions | The reviewer can inspect the exact input span even after OCR repair | No bounding boxes or page coordinates yet |
+| Small shared field dictionary | An English expiry query can find French expiry evidence locally | This is terminology matching, not general multilingual semantic search |
+| Bounded overlapping word chunks | Chunk-size experiments now use actual word budgets | A field can still split at a boundary |
+| One pipeline for CLI and UI | Export and displayed results follow the same parser settings | Review decisions are not yet saved per document |
+| Synthetic public corpus | Reproducible examples can be shared and inspected | Scores do not estimate real vendor-document accuracy |
+
+## Data Contract
+
+Each date record contains document identity, the SHA-256 of decoded source text, OCR/text engine, selected language and date order, source line and character span, raw text, normalized value, alternatives, precision, contextual field label, label heuristic and review reasons.
+
+The hash identifies the text processed, not the original image bytes or a signed audit record. Offsets address the original decoded Python string. OCR corrections preserve string length; the raw text remains unchanged in the result.
+
+An unresolved date is represented with a null normalized value and two ISO candidates. Month precision produces YYYY-MM, never an invented day. CSV flattens lists; JSON is the lossless structured export.
+
+## Review Policy
+
+- Ambiguous numeric date: inspect the source and confirm DMY/MDY.
+- Month precision: keep the month and confirm how the consuming workflow treats it.
+- OCR repaired: inspect the original characters.
+- Unknown label: inspect the context before assigning a field type.
+
+The confidence value belongs to context classification. It is not a probability of the date being correct, and does not override review reasons. Selecting DMY/MDY currently applies to the whole loaded workspace; separate documents can need different policies.
+
+## Evaluation Contract
+
+The original metric counts unique (document, normalized date, label) records. Duplicate occurrences are collapsed. It uses MDY because that was the declared authoring convention of those English fixtures.
+
+The multilingual benchmark checks the entire expected list for each input, including null values, alternatives, precision and review reasons. An extra prediction or missing flag fails that case. It runs with all vocabularies enabled and with each fixture's language selected explicitly.
+
+The corpus contains 30 multilingual field examples and 12 additional English edge cases. It was written during implementation. It is a development regression corpus, not a held-out test. A larger independently annotated set, especially actual rendered/scanned images, is needed to estimate generalization.
+
+## Next Decision Gates
+
+1. Validate date review as a user problem before calling this a viable product.
+2. Add actual image fixtures and test installed OCR language packs before claiming multilingual OCR.
+3. Expand retrieval questions with distractors and no-answer cases before selecting a retriever.
+4. Run optional model comparisons under the same schema and record hardware, model version, latency, cost and accuracy before making model recommendations.
+5. Evaluate per-document review settings and saved reviewer decisions before describing an operational review workflow.
