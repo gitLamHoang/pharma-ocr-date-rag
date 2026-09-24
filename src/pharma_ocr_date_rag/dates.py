@@ -1,17 +1,19 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import date
-from functools import lru_cache
-import re
+from functools import cache
 
 from .languages import field_patterns, fold, month_lookup, validate_language
 
-
 DATE_ORDERS = ("auto", "dmy", "mdy")
 OCR_WORD_REPAIRS = {
-    "exp1ry": "expiry", "exp1ration": "expiration", "manufacturc": "manufacture",
-    "mfg.": "mfg:", "q.c.": "qc",
+    "exp1ry": "expiry",
+    "exp1ration": "expiration",
+    "manufacturc": "manufacture",
+    "mfg.": "mfg:",
+    "q.c.": "qc",
 }
 DATE_LIKE_TOKEN = re.compile(
     r"(?<![\w/.-])(?:[0-9OIl]{4}[-/.][0-9OIl]{1,2}[-/.][0-9OIl]{1,2}|"
@@ -39,7 +41,9 @@ def repair_ocr_noise(text: str) -> str:
     for wrong, right in OCR_WORD_REPAIRS.items():
         text = re.sub(
             r"(?<!\w)" + re.escape(wrong) + r"(?!\w)",
-            right.ljust(len(wrong)), text, flags=re.IGNORECASE,
+            right.ljust(len(wrong)),
+            text,
+            flags=re.IGNORECASE,
         )
     return DATE_LIKE_TOKEN.sub(
         lambda match: match.group().translate(str.maketrans({"O": "0", "I": "1", "l": "1"})),
@@ -47,7 +51,7 @@ def repair_ocr_noise(text: str) -> str:
     )
 
 
-@lru_cache(maxsize=None)
+@cache
 def _patterns(language: str) -> tuple[re.Pattern[str], ...]:
     months = month_lookup(language)
     month = "|".join(re.escape(name) for name in sorted(months, key=lambda s: (-len(s), s)))
@@ -56,10 +60,12 @@ def _patterns(language: str) -> tuple[re.Pattern[str], ...]:
         r"(?P<first>\d{1,2})[-/.](?P<second>\d{1,2})[-/.](?P<year>[12]\d{3})",
     ]
     if months:
-        bodies.extend([
-            rf"(?P<day>\d{{1,2}})\.?\s+(?:de\s+)?(?P<month>{month})\.?\s+(?:de\s+)?(?P<year>[12]\d{{3}})",
-            rf"(?P<month>{month})\.?\s+(?P<day>\d{{1,2}}),?\s+(?P<year>[12]\d{{3}})",
-        ])
+        bodies.extend(
+            [
+                rf"(?P<day>\d{{1,2}})\.?\s+(?:de\s+)?(?P<month>{month})\.?\s+(?:de\s+)?(?P<year>[12]\d{{3}})",
+                rf"(?P<month>{month})\.?\s+(?P<day>\d{{1,2}}),?\s+(?P<year>[12]\d{{3}})",
+            ]
+        )
     if language in {"auto", "vi"}:
         bodies.append(r"ngay\s+(?P<day>\d{1,2})\s+thang\s+(?P<month>\d{1,2})\s+nam\s+(?P<year>[12]\d{3})")
     bodies.append(r"(?P<month>\d{1,2})[-/](?P<year>[12]\d{3})")
@@ -93,7 +99,9 @@ def _normalize(match: re.Match[str], language: str, date_order: str) -> tuple[st
 
 
 def classify_context(
-    context: str, date_start: int | None = None, date_end: int | None = None,
+    context: str,
+    date_start: int | None = None,
+    date_end: int | None = None,
     language: str = "auto",
 ) -> tuple[str, float]:
     best_label, best_distance = "unknown", 10_000
@@ -117,7 +125,10 @@ def classify_context(
 
 
 def extract_dates(
-    text: str, repair_ocr: bool = True, language: str = "auto", date_order: str = "auto",
+    text: str,
+    repair_ocr: bool = True,
+    language: str = "auto",
+    date_order: str = "auto",
 ) -> list[DateHit]:
     """Return source-backed fields. Ambiguous numeric dates have no normalized value."""
     validate_language(language)
@@ -151,9 +162,18 @@ def extract_dates(
                 reasons.append("ocr_repaired")
             if label == "unknown":
                 reasons.append("unknown_label")
-            hits.append(DateHit(
-                raw_text=text[start:end], normalized=candidates[0] if len(candidates) == 1 else None,
-                label=label, confidence=confidence, context=text[left:right], start=start, end=end,
-                candidates=candidates, precision=precision, review_reasons=tuple(reasons),
-            ))
+            hits.append(
+                DateHit(
+                    raw_text=text[start:end],
+                    normalized=candidates[0] if len(candidates) == 1 else None,
+                    label=label,
+                    confidence=confidence,
+                    context=text[left:right],
+                    start=start,
+                    end=end,
+                    candidates=candidates,
+                    precision=precision,
+                    review_reasons=tuple(reasons),
+                )
+            )
     return sorted(hits, key=lambda hit: hit.start)

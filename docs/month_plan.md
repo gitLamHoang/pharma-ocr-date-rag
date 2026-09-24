@@ -1,33 +1,27 @@
-# One Month Work Plan
+# Project roadmap
 
 This initial plan is retained as project history. The active schedule and verified progress are in [the daily roadmap](roadmap.md). Items below are plans, not claims of completed model experiments.
 
 This file is a truthful plan for future commits. It is not fake commit history.
+This roadmap separates shipped behavior from future experiments. The actual commit history records when work was done.
 
-## Week 1
+## Implemented
 
-- Build the basic date extractor.
-- Add synthetic documents and expected labels.
-- Write first tests for date formats.
+- Date normalization and context labels on synthetic fixtures.
+- Optional image OCR adapters; the reproducible path uses plain text.
+- Source-chunk retrieval and a three-query chunk-size experiment.
+- Per-label extraction evaluation with hashed input/source evidence.
+- Local SQLite review queue, versioned document evidence, and persistent decisions.
+- Automated tests, linting, formatting, and reproducibility checks in CI.
 
-## Week 2
+## Next bounded milestones
 
-- Add OCR adapters for Tesseract and PaddleOCR.
-- Collect notes about OCR mistakes.
-- Add more noisy synthetic examples.
+1. Define and collect an independently labeled document set with appropriate permission; include ambiguous and failed extractions.
+2. Observe a consented reviewer workflow and measure corrections and review time against manual date lookup.
+3. Add explicit document retirement and review-cycle semantics so a file reversion can require a fresh review when needed.
+4. Exercise real-image OCR adapters on known test scans and record engine/package versions; do not infer OCR accuracy from text fixtures.
+5. Add authenticated multi-user service behavior only if reviewer trials justify that scope. See the [scaling boundary](architecture.md#scaling-boundary).
 
-## Week 3
+## Not yet measured or implemented
 
-- Add chunking and retrieval experiments.
-- Compare short chunks vs long chunks.
-- Write down Mistral and Phi-2 observations from experiments.
-
-Progress note: added a small chunk-size benchmark script that reports hit-rate for a few synthetic retrieval questions.
-
-## Week 4
-
-- Clean up Streamlit demo.
-- Improve README screenshots.
-- Add final evaluation table and reflection.
-
-Progress note: the evaluation script now reports per-label precision, recall, and F1 in addition to the overall score. This makes weak date categories easier to spot.
+No Mistral/Phi-2 comparison, semantic-model benchmark, user adoption study, production deployment, or compliance validation is claimed. The earlier installed-only LlamaIndex placeholder was removed because it did not implement retrieval.

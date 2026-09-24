@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-
 DateRecord = tuple[str, str, str]
 
 
@@ -44,9 +43,7 @@ def _calculate_metrics(label: str, expected: set[DateRecord], predicted: set[Dat
     )
 
 
-def score_predictions(
-    expected: set[DateRecord], predicted: set[DateRecord]
-) -> EvaluationSummary:
+def score_predictions(expected: set[DateRecord], predicted: set[DateRecord]) -> EvaluationSummary:
     labels = sorted({row[2] for row in expected | predicted})
     by_label = []
     for label in labels:

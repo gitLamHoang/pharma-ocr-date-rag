@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pharma-ocr-date-rag"
-version = "0.2.0"
+version = "0.3.0"
 description = "Multilingual pharmaceutical date extraction with source evidence and review workflows"
 readme = "README.md"
 requires-python = ">=3.9"
-authors = [{ name = "Lam Hoang" }]
+authors = [{ name = "Lam Phan" }]
 dependencies = []
 
 [project.optional-dependencies]
@@ -21,7 +21,8 @@ demo = [
   "streamlit>=1.50.0,<2",
 ]
 dev = [
-  "pytest>=8.0.0",
+  "pytest>=8,<9",
+  "ruff>=0.11,<1",
 ]
 
 [project.scripts]
@@ -33,3 +34,18 @@ pythonpath = ["src"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+pharma_ocr_date_rag = ["schema.sql", "migrate_v1.sql"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Standalone examples support running from an uninstalled source checkout.
+"scripts/*.py" = ["E402"]
+"demo_app.py" = ["E402"]

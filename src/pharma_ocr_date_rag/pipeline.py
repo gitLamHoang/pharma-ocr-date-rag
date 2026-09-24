@@ -19,22 +19,30 @@ class ProcessedDocument:
 
 
 def process_text(
-    name: str, text: str, language: str = "auto", date_order: str = "auto",
+    name: str,
+    text: str,
+    language: str = "auto",
+    date_order: str = "auto",
 ) -> ProcessedDocument:
     return _process(Path(name), OCRResult(text=text, engine="plain-text"), language, date_order)
 
 
 def _process(path: Path, ocr: OCRResult, language: str, date_order: str) -> ProcessedDocument:
     return ProcessedDocument(
-        path=path, ocr=ocr,
+        path=path,
+        ocr=ocr,
         dates=extract_dates(ocr.text, language=language, date_order=date_order),
         chunks=split_chunks(path.name, ocr.text, language=language, date_order=date_order),
-        language=language, date_order=date_order,
+        language=language,
+        date_order=date_order,
     )
 
 
 def process_document(
-    path: str | Path, engine: str = "auto", language: str = "auto", date_order: str = "auto",
+    path: str | Path,
+    engine: str = "auto",
+    language: str = "auto",
+    date_order: str = "auto",
 ) -> ProcessedDocument:
     path = Path(path)
     ocr = read_document(path, engine=engine)
@@ -42,10 +50,17 @@ def process_document(
 
 
 def process_folder(
-    folder: str | Path, engine: str = "auto", language: str = "auto", date_order: str = "auto",
+    folder: str | Path,
+    engine: str = "auto",
+    language: str = "auto",
+    date_order: str = "auto",
 ) -> list[ProcessedDocument]:
     folder = Path(folder)
-    paths = sorted(path for path in folder.iterdir() if path.suffix.lower() in {".txt", ".md", ".png", ".jpg", ".jpeg"})
+    paths = sorted(
+        path
+        for path in folder.iterdir()
+        if path.is_file() and path.suffix.lower() in {".txt", ".md", ".png", ".jpg", ".jpeg"}
+    )
     return [process_document(path, engine=engine, language=language, date_order=date_order) for path in paths]
 
 
@@ -65,7 +80,5 @@ def format_date_report(document: ProcessedDocument) -> str:
     for hit in document.dates:
         value = hit.normalized or " / ".join(hit.candidates)
         review = f" [review: {', '.join(hit.review_reasons)}]" if hit.review_reasons else ""
-        lines.append(
-            f"  {value:<10}  {hit.label:<11}  {hit.confidence:.2f}  {hit.context}{review}"
-        )
+        lines.append(f"  {value:<10}  {hit.label:<11}  {hit.confidence:.2f}  {hit.context}{review}")
     return "\n".join(lines)

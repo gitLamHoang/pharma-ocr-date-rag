@@ -33,15 +33,13 @@ def read_document(path: str | Path, engine: str = "auto") -> OCRResult:
         if result:
             return result
 
-    raise RuntimeError(
-        f"Could not OCR {path}. Install optional OCR dependencies or use a .txt sample file."
-    )
+    raise RuntimeError(f"Could not OCR {path}. Install optional OCR dependencies or use a .txt sample file.")
 
 
 def _try_tesseract(path: Path) -> OCRResult | None:
     try:
-        from PIL import Image
         import pytesseract
+        from PIL import Image
     except ImportError:
         return None
 

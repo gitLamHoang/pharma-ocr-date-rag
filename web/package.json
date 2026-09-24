@@ -1,0 +1,27 @@
+{
+  "name": "pharma-date-review",
+  "private": true,
+  "version": "0.3.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24.12"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build --base=./",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test src/*.test.ts",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "format:check": "prettier --check src scripts index.html package.json tsconfig.json"
+  },
+  "dependencies": {
+    "lucide": "^0.577.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.2",
+    "playwright": "^1.62.1",
+    "prettier": "3.9.9",
+    "typescript": "7.0.2",
+    "vite": "8.3.1"
+  }
+}

@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import math
 import re
+from dataclasses import dataclass
 
 from .dates import DateHit, extract_dates
 from .languages import fold, labels_in
 
-
 TOKEN_RE = re.compile(r"\w+", re.UNICODE)
-STOP_WORDS = set("which what when where is are the a an of for in on was were does do how date dates document documents quelle quel quand la le les de des du est sont fecha datum ngay".split())
+STOP_WORDS = set(
+    "which what when where is are the a an of for in on was were does do how date dates document documents quelle quel quand la le les de des du est sont fecha datum ngay".split()
+)
 
 
 @dataclass(frozen=True)
@@ -36,8 +37,12 @@ def tokenize(text: str) -> list[str]:
 
 
 def split_chunks(
-    doc_id: str, text: str, max_words: int = 90, overlap: int = 15,
-    language: str = "auto", date_order: str = "auto",
+    doc_id: str,
+    text: str,
+    max_words: int = 90,
+    overlap: int = 15,
+    language: str = "auto",
+    date_order: str = "auto",
 ) -> list[DocumentChunk]:
     if max_words <= 0 or not 0 <= overlap < max_words:
         raise ValueError("max_words must be positive and 0 <= overlap < max_words")
@@ -46,9 +51,17 @@ def split_chunks(
     for first in range(0, len(words), max_words - overlap):
         last = min(first + max_words, len(words))
         start, end = words[first].start(), words[last - 1].end()
-        chunks.append(DocumentChunk(
-            doc_id, len(chunks), text[start:end], start, end, language, date_order,
-        ))
+        chunks.append(
+            DocumentChunk(
+                doc_id,
+                len(chunks),
+                text[start:end],
+                start,
+                end,
+                language,
+                date_order,
+            )
+        )
         if last == len(words):
             break
     return chunks
@@ -94,7 +107,9 @@ def answer_question(chunks: list[DocumentChunk], question: str, top_k: int = 3) 
         return "\n".join(lines + ["No matching evidence found."])
     for result in results:
         chunk = result.chunk
-        lines.append(f"[{chunk.doc_id} chunk {chunk.chunk_id}, chars {chunk.start}:{chunk.end}] score={result.score}")
+        lines.append(
+            f"[{chunk.doc_id} chunk {chunk.chunk_id}, chars {chunk.start}:{chunk.end}] score={result.score}"
+        )
         for hit in result.dates:
             value = hit.normalized or "ambiguous: " + " or ".join(hit.candidates)
             review = "; review: " + ", ".join(hit.review_reasons) if hit.review_reasons else ""

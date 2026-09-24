@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import html
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
@@ -13,7 +13,6 @@ from pharma_ocr_date_rag.languages import LANGUAGES
 from pharma_ocr_date_rag.pipeline import all_chunks, process_document, process_text
 from pharma_ocr_date_rag.rag import retrieve
 from pharma_ocr_date_rag.reporting import date_rows, export_csv, export_json
-
 
 st.set_page_config(page_title="Pharma Date Review", layout="wide")
 st.html("""
@@ -38,14 +37,17 @@ with st.sidebar:
     source = st.radio("Source", ["Sample library", "Paste text", "Upload text"], key="source")
     language = st.selectbox("Field language", list(LANGUAGES), format_func=LANGUAGES.get, key="language")
     orders = {"auto": "Unconfirmed", "dmy": "Day / month / year", "mdy": "Month / day / year"}
-    date_order = st.selectbox("Numeric date convention", list(orders), format_func=orders.get, key="date_order")
+    date_order = st.selectbox(
+        "Numeric date convention", list(orders), format_func=orders.get, key="date_order"
+    )
     st.divider()
     st.caption("Research prototype. Synthetic examples. Human review required.")
 
 docs = []
 if source == "Sample library":
     collection = st.selectbox(
-        "Collection", ["All samples", "English", "French", "German", "Spanish", "Vietnamese"],
+        "Collection",
+        ["All samples", "English", "French", "German", "Spanish", "Vietnamese"],
         key="collection",
     )
     paths = sorted((ROOT / "data" / "synthetic_docs").glob("*.txt"))
@@ -92,31 +94,46 @@ with review_tab:
     with right:
         only_review = st.checkbox("Needs review only", key="only_review")
     visible = [
-        row for row in rows
+        row
+        for row in rows
         if (not selected_labels or row["label"] in selected_labels)
         and (not only_review or row["needs_review"])
     ]
-    display = [{
-        "Document": row["document"], "Line": row["line"],
-        "Date": row["normalized"] or "Unresolved", "Type": row["label"],
-        "Source text": row["raw_text"],
-        "Review": ", ".join(reason.replace("_", " ") for reason in row["review_reasons"]) or "Clear",
-    } for row in visible]
+    display = [
+        {
+            "Document": row["document"],
+            "Line": row["line"],
+            "Date": row["normalized"] or "Unresolved",
+            "Type": row["label"],
+            "Source text": row["raw_text"],
+            "Review": ", ".join(reason.replace("_", " ") for reason in row["review_reasons"]) or "Clear",
+        }
+        for row in visible
+    ]
     if display:
         st.dataframe(display, hide_index=True, use_container_width=True)
     else:
         st.info("No date fields match these filters.")
     st.caption(f"{len(visible)} of {len(rows)} fields")
     csv_col, json_col = st.columns(2)
-    csv_col.download_button("Export CSV", export_csv(visible), "date-register.csv", "text/csv", icon=":material/download:")
-    json_col.download_button("Export JSON", export_json(visible), "date-evidence.json", "application/json", icon=":material/download:")
+    csv_col.download_button(
+        "Export CSV", export_csv(visible), "date-register.csv", "text/csv", icon=":material/download:"
+    )
+    json_col.download_button(
+        "Export JSON",
+        export_json(visible),
+        "date-evidence.json",
+        "application/json",
+        icon=":material/download:",
+    )
 
 with evidence_tab:
     name = st.selectbox("Document", [doc.path.name for doc in docs], key="evidence_document")
     doc = next(doc for doc in docs if doc.path.name == name)
     if doc.dates:
         index = st.selectbox(
-            "Date field", list(range(len(doc.dates))),
+            "Date field",
+            list(range(len(doc.dates))),
             format_func=lambda i: f"{doc.dates[i].raw_text} | {doc.dates[i].label}",
             key=f"evidence_field_{name}",
         )
@@ -124,14 +141,17 @@ with evidence_tab:
         left, right = st.columns([2, 1])
         with left:
             highlighted = (
-                html.escape(doc.ocr.text[:hit.start])
-                + "<mark>" + html.escape(doc.ocr.text[hit.start:hit.end]) + "</mark>"
-                + html.escape(doc.ocr.text[hit.end:])
+                html.escape(doc.ocr.text[: hit.start])
+                + "<mark>"
+                + html.escape(doc.ocr.text[hit.start : hit.end])
+                + "</mark>"
+                + html.escape(doc.ocr.text[hit.end :])
             )
             st.html(
                 '<pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;'
                 'line-height:1.6;padding:16px;background:#f4f6f5;color:#182b26;border-radius:6px">'
-                + highlighted + "</pre>",
+                + highlighted
+                + "</pre>",
             )
         with right:
             st.subheader(hit.normalized or "Unresolved date")

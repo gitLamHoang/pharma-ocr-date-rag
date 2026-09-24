@@ -14,7 +14,7 @@ def test_json_keeps_ambiguous_candidates_and_source_provenance():
     assert row["candidates"] == ["2026-01-09", "2026-09-01"]
     assert row["needs_review"] is True
     assert row["line"] == 2
-    assert row["raw_text"] == doc.ocr.text[row["start"]:row["end"]]
+    assert row["raw_text"] == doc.ocr.text[row["start"] : row["end"]]
     assert len(row["source_sha256"]) == 64
 
 

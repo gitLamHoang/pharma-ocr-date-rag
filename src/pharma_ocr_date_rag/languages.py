@@ -1,12 +1,19 @@
 """Small, inspectable vocabularies for the date fields in our synthetic corpus."""
+
 from __future__ import annotations
 
-from functools import lru_cache
 import re
 import unicodedata
+from functools import cache
 
-
-LANGUAGES = {"auto": "All languages", "en": "English", "fr": "French", "de": "German", "es": "Spanish", "vi": "Vietnamese"}
+LANGUAGES = {
+    "auto": "All languages",
+    "en": "English",
+    "fr": "French",
+    "de": "German",
+    "es": "Spanish",
+    "vi": "Vietnamese",
+}
 
 MONTH_NAMES = {
     "en": "January February March April May June July August September October November December".split(),
@@ -61,10 +68,7 @@ FIELD_WORDS = {
 
 def fold(text: str) -> str:
     # One base character per source character keeps offsets stable for NFC text.
-    return "".join(
-        unicodedata.normalize("NFD", char.lower().replace("đ", "d"))[0]
-        for char in text
-    )
+    return "".join(unicodedata.normalize("NFD", char.lower().replace("đ", "d"))[0] for char in text)
 
 
 def validate_language(language: str) -> None:
@@ -72,7 +76,7 @@ def validate_language(language: str) -> None:
         raise ValueError(f"Unsupported language: {language}. Choose one of {', '.join(LANGUAGES)}.")
 
 
-@lru_cache(maxsize=None)
+@cache
 def field_patterns(language: str = "auto") -> tuple[tuple[str, re.Pattern[str]], ...]:
     validate_language(language)
     selected = FIELD_WORDS.values() if language == "auto" else [FIELD_WORDS[language]]
@@ -81,9 +85,14 @@ def field_patterns(language: str = "auto") -> tuple[tuple[str, re.Pattern[str]],
         for label, synonyms in vocabulary.items():
             words.setdefault(label, set()).update(fold(word) for word in synonyms)
     return tuple(
-        (label, re.compile(r"(?<!\w)(?:" + "|".join(
-            re.escape(word) for word in sorted(synonyms, key=lambda s: (-len(s), s))
-        ) + r")(?!\w)"))
+        (
+            label,
+            re.compile(
+                r"(?<!\w)(?:"
+                + "|".join(re.escape(word) for word in sorted(synonyms, key=lambda s: (-len(s), s)))
+                + r")(?!\w)"
+            ),
+        )
         for label, synonyms in words.items()
     )
 
@@ -93,7 +102,7 @@ def labels_in(text: str, language: str = "auto") -> set[str]:
     return {label for label, pattern in field_patterns(language) if pattern.search(text)}
 
 
-@lru_cache(maxsize=None)
+@cache
 def month_lookup(language: str) -> dict[str, int]:
     validate_language(language)
     selected = MONTH_NAMES.values() if language == "auto" else [MONTH_NAMES.get(language, [])]

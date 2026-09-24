@@ -1,11 +1,12 @@
 """Reproduce the authored multilingual extraction regression benchmark."""
+
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -26,7 +27,10 @@ def benchmark() -> dict:
             language = "auto" if mode == "all_languages" else case["language"]
             hits = extract_dates(case["text"], language=language, date_order=case["date_order"])
             predicted = [
-                {field: list(value) if isinstance(value := getattr(hit, field), tuple) else value for field in fields}
+                {
+                    field: list(value) if isinstance(value := getattr(hit, field), tuple) else value
+                    for field in fields
+                }
                 for hit in hits
             ]
             passed = predicted == case["expected"]
@@ -36,8 +40,10 @@ def benchmark() -> dict:
             if not passed:
                 failures.append({"id": case["id"], "expected": case["expected"], "predicted": predicted})
         results[mode] = {
-            "passed": len(cases) - len(failures), "total": len(cases),
-            "by_language": groups, "failures": failures,
+            "passed": len(cases) - len(failures),
+            "total": len(cases),
+            "by_language": groups,
+            "failures": failures,
         }
     return {
         "dataset": "data/multilingual_cases.json",

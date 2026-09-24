@@ -1,7 +1,8 @@
-from pharma_ocr_date_rag.rag import retrieve, split_chunks
+import pytest
+
 from pharma_ocr_date_rag.experiments import RetrievalCase, evaluate_chunk_sizes
 from pharma_ocr_date_rag.pipeline import process_folder
-import pytest
+from pharma_ocr_date_rag.rag import retrieve, split_chunks
 
 
 def test_retrieval_finds_expiry_chunk():
@@ -51,7 +52,7 @@ def test_chunk_word_limit_overlap_and_original_source_slices():
     assert [len(chunk.text.split()) for chunk in chunks] == [8, 8, 8]
     assert chunks[0].text.split()[-2:] == chunks[1].text.split()[:2]
     for chunk in chunks:
-        assert text[chunk.start:chunk.end] == chunk.text
+        assert text[chunk.start : chunk.end] == chunk.text
 
 
 @pytest.mark.parametrize("max_words,overlap", [(0, 0), (8, 8), (8, -1)])

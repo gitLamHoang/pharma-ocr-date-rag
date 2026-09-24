@@ -12,7 +12,9 @@ Each date is a planned work session, not a promise that an untested feature alre
 - Review workspace with filters, highlighted evidence, pasted/uploaded text, and CSV/JSON.
 - Cross-language date-field vocabulary for lexical retrieval, no-match responses and bounded word chunking.
 - 42 authored benchmark cases in two language modes; all cases pass.
-- 110 tests pass with demo dependencies installed, including documented script entry points.
+- Custom TypeScript browser workspace: source-page highlights, field inspector, per-field interpretation, reasoned review decisions, local history, date register and benchmark lab.
+- Integrated the versioned SQLite review workflow; added ambiguity-aware storage, settings identity, and a rollback-tested v1-to-v2 migration that preserves historical decisions.
+- Nine browser unit tests plus production-browser checks for image assets, persistence, exports and desktop/mobile layouts. Python regression coverage includes both UIs and database migration.
 - Product/design notes, a demo walkthrough, real UI screenshots and explicit limits on public-project claims.
 
 ## Planned Work Sessions
@@ -22,7 +24,7 @@ Each date is a planned work session, not a promise that an untested feature alre
 | September 25 | Broaden adversarial date fixtures and per-document convention handling | Mixed-convention examples, regression tests, visible source policy |
 | September 26 | Exercise real image OCR, starting with Tesseract language configuration | Synthetic rendered image, installed-pack checks, measured extraction results; distinguish missing dependencies |
 | September 27 | Build harder multilingual retrieval evaluation | Gold questions, distractors, no-answer cases, top-k metrics and recorded failures |
-| September 28 | Improve review decisions and export reproducibility | Reviewer changes tied to source evidence; tests for reset, conflicting settings and exported decisions |
+| September 28 | Extend review-cycle semantics | Explicit re-review and source retirement behavior; preserve existing browser and SQL decision history |
 | September 29 | Compare retrieval/model alternatives if prerequisites exist | Reproducible measured comparison; never invent unavailable model results or spend on APIs without authorization |
 | September 30 | Refine demo flow and visual documentation | Browser checks on desktop/mobile, reproducible screenshots, concise walkthrough |
 | October 1 | Installation and release rehearsal | Clean-environment installation, CI, dependency notes and full demo run |

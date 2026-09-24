@@ -14,14 +14,19 @@ CASES = json.loads((ROOT / "data" / "multilingual_cases.json").read_text(encodin
 def test_multilingual_regression_case(case, use_explicit_language):
     language = case["language"] if use_explicit_language else "auto"
     hits = extract_dates(case["text"], language=language, date_order=case["date_order"])
-    actual = [{
-        "normalized": hit.normalized, "label": hit.label,
-        "candidates": list(hit.candidates), "precision": hit.precision,
-        "review_reasons": list(hit.review_reasons),
-    } for hit in hits]
+    actual = [
+        {
+            "normalized": hit.normalized,
+            "label": hit.label,
+            "candidates": list(hit.candidates),
+            "precision": hit.precision,
+            "review_reasons": list(hit.review_reasons),
+        }
+        for hit in hits
+    ]
     assert actual == case["expected"]
     for hit in hits:
-        assert case["text"][hit.start:hit.end] == hit.raw_text
+        assert case["text"][hit.start : hit.end] == hit.raw_text
 
 
 def test_source_positions_survive_ocr_word_repairs_and_repeated_dates():
@@ -30,7 +35,7 @@ def test_source_positions_survive_ocr_word_repairs_and_repeated_dates():
     assert [hit.label for hit in hits] == ["qa_check", "expiry", "manufacture"]
     assert [hit.raw_text for hit in hits] == ["2O26-O8-2I", "2026-08-21", "2026-08-21"]
     for hit in hits:
-        assert text[hit.start:hit.end] == hit.raw_text
+        assert text[hit.start : hit.end] == hit.raw_text
 
 
 @pytest.mark.parametrize("options", [{"language": "zz"}, {"date_order": "ymd"}])

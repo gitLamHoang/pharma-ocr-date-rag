@@ -15,10 +15,11 @@ A useful pilot measure would be median time to prepare a correct date register, 
 | Transparent rules first | Date formats are inspectable; a failing example can become a small regression case | Limited vocabulary and layout coverage |
 | Separate language from date order | Language does not prove the document's numeric convention | Reviewers must confirm ambiguous dates |
 | Null plus candidates | A guessed expiry date can look falsely authoritative | Downstream consumers must handle unresolved values |
-| Preserve original source positions | The reviewer can inspect the exact input span even after OCR repair | No bounding boxes or page coordinates yet |
+| Preserve original source positions | The reviewer can inspect the exact input span even after OCR repair | Browser boxes are rendered-fixture geometry, not measured OCR coordinates |
 | Small shared field dictionary | An English expiry query can find French expiry evidence locally | This is terminology matching, not general multilingual semantic search |
 | Bounded overlapping word chunks | Chunk-size experiments now use actual word budgets | A field can still split at a boundary |
-| One pipeline for CLI and UI | Export and displayed results follow the same parser settings | Review decisions are not yet saved per document |
+| One extractor for CLI and both UIs | Exports and displayed results share parser semantics | The browser uses a generated snapshot, not a live Python service |
+| Separate local review stores | Static browser demo is easy to try; SQL provides persistent local indexing | Browser localStorage and SQLite do not synchronize |
 | Synthetic public corpus | Reproducible examples can be shared and inspected | Scores do not estimate real vendor-document accuracy |
 
 ## Data Contract
@@ -36,7 +37,9 @@ An unresolved date is represented with a null normalized value and two ISO candi
 - OCR repaired: inspect the original characters.
 - Unknown label: inspect the context before assigning a field type.
 
-The confidence value belongs to context classification. It is not a probability of the date being correct, and does not override review reasons. Selecting DMY/MDY currently applies to the whole loaded workspace; separate documents can need different policies.
+The confidence value belongs to context classification. It is not a probability of the date being correct, and does not override review reasons. Selecting DMY/MDY in Streamlit applies to the loaded workspace; separate documents can need different policies. The browser supports a per-field interpretation as a separate review decision without changing the original extraction.
+
+Both local stores require a reviewer label and reason. Browser decisions are associated with a source hash, field span and extractor version. SQL versions also include language/date-order settings. SQL history is protected against update/delete by triggers, but anyone with filesystem access can replace the database. Browser storage is editable and can be cleared. Neither store authenticates the reviewer or provides regulatory audit guarantees.
 
 ## Evaluation Contract
 
@@ -52,4 +55,4 @@ The corpus contains 30 multilingual field examples and 12 additional English edg
 2. Add actual image fixtures and test installed OCR language packs before claiming multilingual OCR.
 3. Expand retrieval questions with distractors and no-answer cases before selecting a retriever.
 4. Run optional model comparisons under the same schema and record hardware, model version, latency, cost and accuracy before making model recommendations.
-5. Evaluate per-document review settings and saved reviewer decisions before describing an operational review workflow.
+5. Evaluate review-cycle, identity, synchronization and per-document settings before describing a shared operational workflow.

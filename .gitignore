@@ -1,4 +1,7 @@
 .venv/
+node_modules/
+web/dist/
+web/test-results/
 __pycache__/
 *.pyc
 .pytest_cache/
@@ -8,3 +11,6 @@ build/
 *.egg-info/
 outputs/
 *.sqlite
+
+.ruff_cache/
+*.sqlite-*
