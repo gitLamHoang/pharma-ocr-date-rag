@@ -1,0 +1,147 @@
+{
+  "dataset": "Four synthetic text documents; not a held-out benchmark or a real-image OCR evaluation",
+  "documents": 4,
+  "extraction": {
+    "by_label": [
+      {
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "label": "audit",
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positive": 1
+      },
+      {
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "label": "document",
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positive": 3
+      },
+      {
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "label": "expiry",
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positive": 4
+      },
+      {
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "label": "manufacture",
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positive": 3
+      },
+      {
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "label": "qa_check",
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positive": 4
+      },
+      {
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "label": "received",
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positive": 1
+      },
+      {
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_positive": 0,
+        "label": "unknown",
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positive": 2
+      }
+    ],
+    "expected": 18,
+    "extra": [],
+    "macro_f1": 1.0,
+    "missed": [],
+    "overall": {
+      "f1": 1.0,
+      "false_negative": 0,
+      "false_positive": 0,
+      "label": "overall",
+      "precision": 1.0,
+      "recall": 1.0,
+      "true_positive": 18
+    },
+    "predicted": 18,
+    "unit": "unique (document, normalized date, label) tuple"
+  },
+  "input_sha256": {
+    "data/expected_dates.json": "ca90452d95a99d1e887b5540d63e1a37b01d7a985d34c22fa353dbf82ae93b6b",
+    "data/synthetic_docs/alpha_packaging_coa.txt": "c01dc6af8731cd8f95868c5352dbe0e11313b298b95f9eeabba8a15064b95867",
+    "data/synthetic_docs/beta_excipient_report.txt": "72221cd0af68579548a4054bee84f5946ccf863ea75a5cda39f176f50906337d",
+    "data/synthetic_docs/delta_noisy_scan.txt": "cc7b9d7453ea0e5b009344d168352683d2766b8062fc0e7d4fa81c8fe83f44e2",
+    "data/synthetic_docs/gamma_stability_notice.txt": "2b48b085fee311e174b8b9d1a6766468e0ef84af542e2fcc7dc4b895d0d94110"
+  },
+  "retrieval": {
+    "cases": [
+      {
+        "expected_doc": "delta_noisy_scan.txt",
+        "expected_label": "expiry",
+        "question": "Which document mentions the expiry date for the Delta cold chain vendor?"
+      },
+      {
+        "expected_doc": "beta_excipient_report.txt",
+        "expected_label": "audit",
+        "question": "When was the supplier audit planned?"
+      },
+      {
+        "expected_doc": "gamma_stability_notice.txt",
+        "expected_label": "qa_check",
+        "question": "Find the QA or chamber check date."
+      }
+    ],
+    "method": "term-frequency cosine with date bonus; top_k=3",
+    "rows": [
+      {
+        "chunk_words": 35,
+        "hit_rate": 0.6666666666666666,
+        "hits": 2,
+        "total": 3
+      },
+      {
+        "chunk_words": 60,
+        "hit_rate": 1.0,
+        "hits": 3,
+        "total": 3
+      },
+      {
+        "chunk_words": 90,
+        "hit_rate": 1.0,
+        "hits": 3,
+        "total": 3
+      }
+    ]
+  },
+  "schema_version": 1,
+  "source_sha256": {
+    "scripts/benchmark_retrieval.py": "309a52efe3d4ffdd5419919e1a1543e449c62678337c6b4be303b8437649672a",
+    "scripts/export_evidence.py": "02c788c834e54c33f7aa7cd28550cf11510f19a63bc6f9efc9b925d8060c8870",
+    "src/pharma_ocr_date_rag/__init__.py": "ebeaf7c2603c84a32b19d5d21e49b1ea976be499683ad1044279d29744da98d8",
+    "src/pharma_ocr_date_rag/cli.py": "742d3409f6ab7a36fbfd9e7e77e2787900e0aa0407e00eaabef10b6eae7fe638",
+    "src/pharma_ocr_date_rag/dates.py": "9996872b416d1fc0aa84da88da61f084a3367d9b7c669d567e6bc9b2fb42f67d",
+    "src/pharma_ocr_date_rag/evaluation.py": "4e53ae7c26a77fd026071144f43787c5b4a3b841412912885f20fd925f443815",
+    "src/pharma_ocr_date_rag/experiments.py": "e45907e8ee809b176fbba5c06e626fb9c5a7c62197d72625635d07cdec918813",
+    "src/pharma_ocr_date_rag/ocr.py": "434d2300c5575a4f10d195596ec79850ca2b765775d58af38d31a04d08f6fcea",
+    "src/pharma_ocr_date_rag/pipeline.py": "11bdd8374c66fdb08b1149740c2754573ce28ad9d1ab9f4a6dd687d8a5ee37aa",
+    "src/pharma_ocr_date_rag/rag.py": "27b95e6212115ce1d889e58a9d337a8f0a011eff7c61855a55362de0edb4657c",
+    "src/pharma_ocr_date_rag/review.py": "20446dfd882b3fca92b85a24cdcd5647cb8c1c369175f06e6a8b93b018d7ff59"
+  }
+}

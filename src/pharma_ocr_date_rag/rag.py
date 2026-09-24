@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import math
 import re
+from dataclasses import dataclass
 
 from .dates import DateHit, extract_dates
-
 
 TOKEN_RE = re.compile(r"[a-zA-Z0-9]+")
 

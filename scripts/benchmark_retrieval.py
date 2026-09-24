@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from pharma_ocr_date_rag.experiments import RetrievalCase, evaluate_chunk_sizes
 from pharma_ocr_date_rag.pipeline import process_folder
-
 
 CASES = [
     RetrievalCase(

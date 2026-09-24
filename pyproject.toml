@@ -5,10 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pharma-ocr-date-rag"
 version = "0.1.0"
-description = "Student OCR-to-RAG prototype for extracting dates from pharmaceutical-style documents"
+description = "Local document date extraction, retrieval, and versioned human review"
 readme = "README.md"
 requires-python = ">=3.9"
-authors = [{ name = "Lam Hoang" }]
+authors = [{ name = "Lam Phan" }]
 dependencies = []
 
 [project.optional-dependencies]
@@ -24,7 +24,8 @@ demo = [
   "streamlit>=1.32.0",
 ]
 dev = [
-  "pytest>=8.0.0",
+  "pytest>=8,<9",
+  "ruff>=0.11,<1",
 ]
 
 [project.scripts]
@@ -36,3 +37,18 @@ pythonpath = ["src"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+pharma_ocr_date_rag = ["schema.sql"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Standalone examples support running from an uninstalled source checkout.
+"scripts/*.py" = ["E402"]
+"demo_app.py" = ["E402"]

@@ -1,6 +1,6 @@
-from pharma_ocr_date_rag.rag import retrieve, split_chunks
 from pharma_ocr_date_rag.experiments import RetrievalCase, evaluate_chunk_sizes
 from pharma_ocr_date_rag.pipeline import process_folder
+from pharma_ocr_date_rag.rag import retrieve, split_chunks
 
 
 def test_retrieval_finds_expiry_chunk():

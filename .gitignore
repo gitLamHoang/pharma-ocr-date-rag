@@ -8,3 +8,6 @@ build/
 *.egg-info/
 outputs/
 *.sqlite
+
+.ruff_cache/
+*.sqlite-*

@@ -29,7 +29,11 @@ def process_document(path: str | Path, engine: str = "auto") -> ProcessedDocumen
 
 def process_folder(folder: str | Path, engine: str = "auto") -> list[ProcessedDocument]:
     folder = Path(folder)
-    paths = sorted(path for path in folder.iterdir() if path.suffix.lower() in {".txt", ".md", ".png", ".jpg", ".jpeg"})
+    paths = sorted(
+        path
+        for path in folder.iterdir()
+        if path.is_file() and path.suffix.lower() in {".txt", ".md", ".png", ".jpg", ".jpeg"}
+    )
     return [process_document(path, engine=engine) for path in paths]
 
 
@@ -47,7 +51,5 @@ def format_date_report(document: ProcessedDocument) -> str:
         return "\n".join(lines)
 
     for hit in document.dates:
-        lines.append(
-            f"  {hit.normalized:<10}  {hit.label:<11}  {hit.confidence:.2f}  {hit.context}"
-        )
+        lines.append(f"  {hit.normalized:<10}  {hit.label:<11}  {hit.confidence:.2f}  {hit.context}")
     return "\n".join(lines)

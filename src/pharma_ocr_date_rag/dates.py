@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import date
-import re
-
 
 MONTHS = {
     "jan": 1,
@@ -50,7 +49,17 @@ DATE_PATTERNS = [
 ]
 
 LABEL_KEYWORDS = {
-    "expiry": ["expiry", "expiration", "expires", "exp ", "exp:", "exp.", "use before", "valid until", "shelf life"],
+    "expiry": [
+        "expiry",
+        "expiration",
+        "expires",
+        "exp ",
+        "exp:",
+        "exp.",
+        "use before",
+        "valid until",
+        "shelf life",
+    ],
     "manufacture": ["manufacture", "manufactured", "mfg", "production", "packed"],
     "qa_check": ["qa", "qc", "quality", "check", "inspection", "reviewed", "verified", "released"],
     "audit": ["audit", "supplier visit", "vendor review"],
@@ -138,7 +147,9 @@ def _window(text: str, start: int, end: int, chars: int = 45) -> str:
     return " ".join(text[left:right].split())
 
 
-def classify_context(context: str, date_start: int | None = None, date_end: int | None = None) -> tuple[str, float]:
+def classify_context(
+    context: str, date_start: int | None = None, date_end: int | None = None
+) -> tuple[str, float]:
     lowered = context.lower()
     best_label = "unknown"
     best_distance = 10_000

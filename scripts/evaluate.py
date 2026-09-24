@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from pathlib import Path
 import json
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from pharma_ocr_date_rag.pipeline import process_folder
 from pharma_ocr_date_rag.evaluation import score_predictions
+from pharma_ocr_date_rag.pipeline import process_folder
 
 
 def main() -> None:
@@ -17,11 +17,7 @@ def main() -> None:
     expected = {(row["doc"], row["normalized"], row["label"]) for row in expected_rows}
 
     docs = process_folder(ROOT / "data" / "synthetic_docs")
-    predicted = {
-        (doc.path.name, hit.normalized, hit.label)
-        for doc in docs
-        for hit in doc.dates
-    }
+    predicted = {(doc.path.name, hit.normalized, hit.label) for doc in docs for hit in doc.dates}
 
     summary = score_predictions(expected, predicted)
 
@@ -37,10 +33,7 @@ def main() -> None:
     print(f"{'label':<14} {'support':>7} {'precision':>10} {'recall':>8} {'f1':>6}")
     for row in summary.by_label:
         support = row.true_positive + row.false_negative
-        print(
-            f"{row.label:<14} {support:>7} {row.precision:>10.2f} "
-            f"{row.recall:>8.2f} {row.f1:>6.2f}"
-        )
+        print(f"{row.label:<14} {support:>7} {row.precision:>10.2f} {row.recall:>8.2f} {row.f1:>6.2f}")
 
     missed = sorted(summary.missed)
     extra = sorted(summary.extra)
