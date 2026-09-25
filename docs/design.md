@@ -37,7 +37,9 @@ An unresolved date is represented with a null normalized value and two ISO candi
 - OCR repaired: inspect the original characters.
 - Unknown label: inspect the context before assigning a field type.
 
-The confidence value belongs to context classification. It is not a probability of the date being correct, and does not override review reasons. Selecting DMY/MDY in Streamlit applies to the loaded workspace; separate documents can need different policies. The browser supports a per-field interpretation as a separate review decision without changing the original extraction.
+The confidence value belongs to context classification. It is not a probability of the date being correct, and does not override review reasons. Streamlit offers per-document overrides for sample collections, with the workspace convention as the fallback. CLI folder commands accept an explicit filename-to-order map. Policies are supplied by the caller, never inferred from language or filenames; an explicit unconfirmed setting can override the workspace default. See the [convention contract](date-conventions.md).
+
+The browser supports a per-field interpretation as a separate review decision without changing the original extraction. It does not apply folder policy maps or synchronize with the local extraction sandbox.
 
 Both local stores require a reviewer label and reason. Browser decisions are associated with a source hash, field span and extractor version. SQL versions also include language/date-order settings. SQL history is protected against update/delete by triggers, but anyone with filesystem access can replace the database. Browser storage is editable and can be cleared. Neither store authenticates the reviewer or provides regulatory audit guarantees.
 

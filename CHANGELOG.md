@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-09-25 - Per-document numeric date conventions
+
+- Added validated filename-to-order JSON maps to `extract`, `ask` and `index`. Each document can use DMY, MDY or unconfirmed interpretation; missing entries inherit the batch default.
+- Added local Streamlit controls for individual sample-document conventions, session persistence/reset, and visible effective settings. CSV/JSON and retrieval use the same selected policy.
+- Added three synthetic mixed-convention fixtures. Five of eight candidates are ambiguous under the unconfirmed default; one remains ambiguous with the explicit authored policies. Impossible full dates do not leak valid suffixes, and month precision stays month-only.
+- Preserved SQLite version identity based on effective settings: only changed documents are reindexed, equivalent settings reuse reviews, older decisions remain in history, and a failed batch rolls back.
+- Added 30 regression tests covering policy parsing, duplicate/stale entries, CLI commands, source/export/retrieval consistency, database behavior and UI switching/reset. All 156 Python tests pass in Python 3.9 and a fresh locked Python 3.12 environment; nine browser unit tests and production-browser checks pass.
+- Original authored benchmarks are unchanged: 18/18 English field tuples, 42/42 multilingual cases in each mode, and 3/3 retrieval questions at each word budget. No new image-OCR or model-performance claim is made.
+
 ## 0.3.0 - 2026-09-24 - Multilingual browser workspace
 
 - Added a TypeScript/Vite review application with rendered source pages, clickable evidence highlights, zoom/text views, field interpretation, reasoned decisions, local history, a filterable register and benchmark lab.

@@ -4,15 +4,15 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
 from hashlib import sha256
 from importlib.resources import files
 from pathlib import Path
 
-from .dates import DATE_ORDERS
 from .languages import validate_language
-from .pipeline import process_document
+from .pipeline import document_paths, process_document
+from .policies import resolve_date_orders
 
 EXTRACTOR_VERSION = "dates-v2-multilingual"
 DECISIONS = {"accepted", "rejected", "needs_review"}
@@ -60,6 +60,7 @@ def index_folder(
     collection: str | None = None,
     language: str = "auto",
     date_order: str = "auto",
+    date_order_map: Mapping[str, str] | None = None,
 ) -> dict:
     """Atomically add/update files; identical versions retain their review history.
 
@@ -67,21 +68,17 @@ def index_folder(
     """
     folder = Path(folder)
     validate_language(language)
-    if date_order not in DATE_ORDERS:
-        raise ValueError(f"Unsupported date order: {date_order}")
-    extractor_version = f"{EXTRACTOR_VERSION};language={language};date_order={date_order}"
     collection = (collection or folder.name).strip()
     if not collection:
         raise ValueError("Collection must not be empty")
-    paths = sorted(
-        p
-        for p in folder.iterdir()
-        if p.is_file() and p.suffix.lower() in {".txt", ".md", ".png", ".jpg", ".jpeg"}
-    )
+    paths = document_paths(folder)
+    orders = resolve_date_orders(paths, date_order, date_order_map)
     result = {"collection": collection, "indexed": 0, "unchanged": 0, "reactivated": 0, "new_hits": 0}
     with database(db) as connection, connection:
         connection.execute("BEGIN IMMEDIATE")
         for path in paths:
+            order = orders[path.name]
+            extractor_version = f"{EXTRACTOR_VERSION};language={language};date_order={order}"
             digest = sha256(path.read_bytes()).hexdigest()
             existing = connection.execute(
                 "SELECT id, active FROM documents WHERE collection=? AND path=? "
@@ -100,8 +97,8 @@ def index_folder(
                 continue
             document = (
                 process_document(path)
-                if language == date_order == "auto"
-                else process_document(path, language=language, date_order=date_order)
+                if language == order == "auto"
+                else process_document(path, language=language, date_order=order)
             )
             if sha256(path.read_bytes()).hexdigest() != digest:
                 raise ValueError(f"Source changed during extraction: {path.name}")

@@ -19,6 +19,8 @@ A partial unique index enforces one active document version per `(collection, pa
 
 A version is `(collection, filename, content SHA-256, extractor version)`. The stored extractor identity combines a manually maintained semantic version with language and date-order settings. Bump the semantic version when extraction semantics or OCR configuration change. The stored OCR engine identifies what produced the candidates; it does not automatically detect every change in an optional OCR package.
 
+Folder extraction, retrieval and indexing resolve the same optional filename-to-date-order map before reading document contents. The map may be sparse; an explicit `auto` is distinct from inheriting the batch default. Validation rejects duplicate JSON keys, paths, unsupported orders and unknown files before database mutation. The identity records each file's effective settings, so changing one file's convention does not invalidate the entire collection. It does not store a policy confirmation reason or distinguish two configuration sources that resolve to the same settings. [Policy details](date-conventions.md).
+
 - An identical active version is skipped, preserving candidate IDs and reviews.
 - Changed content creates a new document version and deactivates the previous one.
 - Reverting to an already indexed version reactivates its earlier candidates **and earlier decisions**. This is deliberate reuse of identical evidence, not a fresh approval. Callers needing a new review cycle must append `needs_review` decisions.

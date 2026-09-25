@@ -1,0 +1,8 @@
+SYNTHETIC DOCUMENT - EU convention example
+This fixture declares day/month/year for numeric dates.
+
+Expiry: 09/10/2026
+Manufactured: 12/01/2025
+Quality check: 29/02/2024
+
+No real supplier, medicine or patient data.

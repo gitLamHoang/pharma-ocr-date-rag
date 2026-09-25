@@ -1,0 +1,5 @@
+{
+  "us_receipt.txt": "mdy",
+  "eu_receipt.txt": "dmy",
+  "unconfirmed_receipt.txt": "auto"
+}

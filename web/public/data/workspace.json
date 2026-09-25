@@ -2263,15 +2263,16 @@
   },
   "sourceSha256": {
     "src/pharma_ocr_date_rag/__init__.py": "ebeaf7c2603c84a32b19d5d21e49b1ea976be499683ad1044279d29744da98d8",
-    "src/pharma_ocr_date_rag/cli.py": "2517f81ce54f155ae0541cdb50d30e34474eaa208cc894a2c7646a89cc75157a",
+    "src/pharma_ocr_date_rag/cli.py": "c540709a00766dfd135c99332136ae7ce7c0c38d9cb67f9e8bae544a579f4031",
     "src/pharma_ocr_date_rag/dates.py": "b52962874f966f7012b6605967003e2029df4c092f58b38f8eb42495351aaf47",
     "src/pharma_ocr_date_rag/evaluation.py": "4e53ae7c26a77fd026071144f43787c5b4a3b841412912885f20fd925f443815",
     "src/pharma_ocr_date_rag/experiments.py": "e6d1b493b2850162708f13e10aba5497eb00dd7488251e7e600aad3691131cc0",
     "src/pharma_ocr_date_rag/languages.py": "6dc0105a524dd5de57a06092a48eb61fc5aa3a9d5b12e06afa2eb29ae5c082ec",
     "src/pharma_ocr_date_rag/ocr.py": "434d2300c5575a4f10d195596ec79850ca2b765775d58af38d31a04d08f6fcea",
-    "src/pharma_ocr_date_rag/pipeline.py": "8401e0b091f53cf81d7347ada8634782d03692dfa8f13bd95bb2f522f8ab5ed2",
+    "src/pharma_ocr_date_rag/pipeline.py": "6b3d579b8ef218d6a130519b077f2e17dbf998764a62dd1cca0f2e7a1a1f835d",
+    "src/pharma_ocr_date_rag/policies.py": "d27e9fefd85aaacca87a00ccc215868d711264d1010f1a4f647de069f4d174f8",
     "src/pharma_ocr_date_rag/rag.py": "77ab4953a69fd6d6e9de3a7c5bd5179d88fabd63193be5d649b453cc10fe9a44",
     "src/pharma_ocr_date_rag/reporting.py": "e65f20c2f83c65256708ecdb55c0fb12b9ef820208156a11ea0263af62962917",
-    "src/pharma_ocr_date_rag/review.py": "e7ae09d25e83f19662cebbe7bc2b05772718a5770d7b7e9662f65598690c9e15"
+    "src/pharma_ocr_date_rag/review.py": "69ab8a2a3b326da01ca5f6c80a2c8b5a0b69527c4062d14f292a06dee66ae534"
   }
 }

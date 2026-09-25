@@ -56,10 +56,10 @@ npm run dev
 | --- | --- |
 | Multilingual fields | Language-specific month names and field vocabularies for English, French, German, Spanish and Vietnamese; all-language or explicit-language mode |
 | Date normalization | ISO, numeric, named-month, Vietnamese `ngày … tháng … năm …`, and month/year dates; calendar validation |
-| Ambiguity handling | Two valid numeric interpretations produce `normalized: null` plus candidates; the reviewer can choose DMY or MDY |
+| Ambiguity handling | Two valid numeric interpretations produce `normalized: null` plus candidates; explicit conventions can differ by document in one batch |
 | Evidence | Original date text, unchanged source character offsets, line number, document text hash, parser settings and review reasons |
 | Browser workspace | Source-page highlights and zoom, field inspector, explicit date interpretations, reasoned decisions, local history, register filters and CSV/JSON exports |
-| Local extraction UI | Streamlit sandbox for sample collections, pasted/uploaded UTF-8 text, parser settings and source highlighting |
+| Local extraction UI | Streamlit sandbox for sample collections, pasted/uploaded UTF-8 text, per-document numeric conventions and source highlighting |
 | Persistent review | SQLite document versions, parameterized queries, append-only review events, active queue, atomic indexing and tested schema migration |
 | Retrieval | Bounded word chunks, exact source slices, lexical ranking with shared date-field vocabulary across languages, and no-match responses |
 | Evaluation | Per-label precision/recall/F1, multilingual exact-case checks, chunk-size experiments and automated tests |
@@ -99,6 +99,16 @@ python scripts/run_demo.py
 ```
 
 CSV and JSON use the same extractor records as the demos. JSON retains nulls, candidate lists and original text. CSV prefixes formula-like text cells with an apostrophe for spreadsheet export. Source offsets are zero-based, end-exclusive Unicode character positions in decoded text.
+
+### Mixed document conventions
+
+Folder commands accept `--date-order-map`, a JSON object mapping exact filenames to `auto`, `dmy` or `mdy`. A per-document entry overrides the batch `--date-order`; missing entries inherit it. An explicit `auto` keeps that file's numeric convention unconfirmed, even when the batch default is DMY or MDY. Unknown filenames and malformed maps fail before processing.
+
+```bash
+pharma-date-rag extract data/mixed_conventions --date-order-map data/mixed_conventions/date_orders.json --format json
+```
+
+In the three authored examples, `09/10/2026` becomes September 10 for one file, October 9 for another, and stays unresolved for the third. The effective setting is visible in reports and exports. The same map works with `ask` and `index`; Streamlit has document-specific controls and a **Mixed conventions** collection. [Policy contract and walkthrough](docs/date-conventions.md).
 
 ### Persistent local review
 
@@ -168,6 +178,7 @@ flowchart LR
 src/pharma_ocr_date_rag/
   languages.py   month names and field vocabularies
   dates.py       date candidates, normalization, source offsets, review flags
+  policies.py    explicit per-document numeric conventions and validation
   ocr.py         optional legacy Tesseract/PaddleOCR adapters
   pipeline.py    shared text/document processing
   reporting.py   evidence records and portable exports
@@ -182,6 +193,7 @@ src/pharma_ocr_date_rag/
 data/
   synthetic_docs/       four original English fixtures
   multilingual_docs/    four multilingual demo documents
+  mixed_conventions/    three adversarial convention fixtures and a policy map
   multilingual_cases.json
 
 web/            TypeScript/Vite app, rendered pages and browser tests

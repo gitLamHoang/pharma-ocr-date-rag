@@ -1,0 +1,8 @@
+SYNTHETIC DOCUMENT - US convention example
+This fixture declares month/day/year for numeric dates.
+
+Expiry: 09/10/2026
+Manufactured: 01/12/2025
+Quality check: 02/29/2024
+
+No real supplier, medicine or patient data.

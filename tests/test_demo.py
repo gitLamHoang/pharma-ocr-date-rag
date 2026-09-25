@@ -33,3 +33,36 @@ def test_paste_flow_resolves_an_explicit_date_convention():
     assert not app.exception
     assert app.metric[3].value == "0"
     assert app.dataframe[0].value.iloc[0]["Date"] == "2026-10-09"
+
+
+def test_document_conventions_persist_across_selection_and_collection_changes():
+    app = AppTest.from_file(str(ROOT / "demo_app.py"), default_timeout=20).run()
+    app.selectbox(key="collection").select("Mixed conventions").run()
+    assert app.metric[0].value == "3"
+    assert app.metric[3].value == "5"
+    for name, order in [
+        ("eu_receipt.txt", "dmy"),
+        ("us_receipt.txt", "mdy"),
+        ("unconfirmed_receipt.txt", "auto"),
+    ]:
+        app.selectbox(key="policy_document").select(name).run()
+        app.selectbox(key=f"document_order_choice_{name}").select(order).run()
+    assert not app.exception
+    assert app.metric[3].value == "1"
+    app.selectbox(key="date_order").select("mdy").run()
+    assert app.metric[3].value == "1"  # Explicit auto must not inherit a resolved global policy.
+    table = app.dataframe[0].value
+    expiry = table[table["Type"] == "expiry"].set_index("Document")
+    assert expiry.loc["eu_receipt.txt"]["Date"] == "2026-10-09"
+    assert expiry.loc["us_receipt.txt"]["Date"] == "2026-09-10"
+    app.selectbox(key="policy_document").select("eu_receipt.txt").run()
+    assert app.selectbox(key="document_order_choice_eu_receipt.txt").value == "dmy"
+    app.selectbox(key="collection").select("French").run()
+    app.selectbox(key="collection").select("Mixed conventions").run()
+    assert not app.exception
+    assert app.metric[3].value == "1"
+    app.selectbox(key="date_order").select("auto").run()
+    app.button[0].click().run()
+    assert not app.exception
+    assert app.metric[3].value == "5"
+    assert app.session_state["document_orders"] == {}

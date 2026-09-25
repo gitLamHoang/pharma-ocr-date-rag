@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
 from .dates import DateHit, extract_dates
+from .languages import validate_language
 from .ocr import OCRResult, read_document
+from .policies import resolve_date_orders
 from .rag import DocumentChunk, split_chunks
 
 
@@ -49,19 +52,29 @@ def process_document(
     return _process(path, ocr, language, date_order)
 
 
+def document_paths(folder: str | Path) -> list[Path]:
+    folder = Path(folder)
+    return sorted(
+        path
+        for path in folder.iterdir()
+        if path.is_file() and path.suffix.lower() in {".txt", ".md", ".png", ".jpg", ".jpeg"}
+    )
+
+
 def process_folder(
     folder: str | Path,
     engine: str = "auto",
     language: str = "auto",
     date_order: str = "auto",
+    date_order_map: Mapping[str, str] | None = None,
 ) -> list[ProcessedDocument]:
-    folder = Path(folder)
-    paths = sorted(
-        path
-        for path in folder.iterdir()
-        if path.is_file() and path.suffix.lower() in {".txt", ".md", ".png", ".jpg", ".jpeg"}
-    )
-    return [process_document(path, engine=engine, language=language, date_order=date_order) for path in paths]
+    validate_language(language)
+    paths = document_paths(folder)
+    orders = resolve_date_orders(paths, date_order, date_order_map)
+    return [
+        process_document(path, engine=engine, language=language, date_order=orders[path.name])
+        for path in paths
+    ]
 
 
 def all_chunks(documents: list[ProcessedDocument]) -> list[DocumentChunk]:
@@ -72,7 +85,10 @@ def all_chunks(documents: list[ProcessedDocument]) -> list[DocumentChunk]:
 
 
 def format_date_report(document: ProcessedDocument) -> str:
-    lines = [f"{document.path.name} ({document.ocr.engine})"]
+    lines = [
+        f"{document.path.name} ({document.ocr.engine}; language={document.language}; "
+        f"date_order={document.date_order})"
+    ]
     if not document.dates:
         lines.append("  no dates found")
         return "\n".join(lines)

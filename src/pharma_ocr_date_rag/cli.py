@@ -8,6 +8,7 @@ from pathlib import Path
 from .dates import DATE_ORDERS
 from .languages import LANGUAGES
 from .pipeline import all_chunks, format_date_report, process_folder
+from .policies import load_date_order_map
 from .rag import answer_question
 from .reporting import date_rows, export_csv, export_json
 from .review import DECISIONS, history, index_folder, queue, review
@@ -46,11 +47,23 @@ def main() -> None:
     for subparser in (extract_parser, ask_parser, index_parser):
         subparser.add_argument("--language", choices=LANGUAGES, default="auto")
         subparser.add_argument("--date-order", choices=DATE_ORDERS, default="auto")
+        subparser.add_argument(
+            "--date-order-map",
+            type=Path,
+            help="JSON object of exact filenames to auto/dmy/mdy; overrides the batch default",
+        )
     args = parser.parse_args()
     try:
+        policy_path = getattr(args, "date_order_map", None)
+        policies = load_date_order_map(policy_path) if policy_path is not None else None
         if args.command == "index":
             result = index_folder(
-                args.folder, args.db, args.collection, language=args.language, date_order=args.date_order
+                args.folder,
+                args.db,
+                args.collection,
+                language=args.language,
+                date_order=args.date_order,
+                date_order_map=policies,
             )
         elif args.command == "queue":
             result = queue(
@@ -70,7 +83,12 @@ def main() -> None:
         if result is not None:
             print(json.dumps(result, indent=2))
             return
-        documents = process_folder(args.folder, language=args.language, date_order=args.date_order)
+        documents = process_folder(
+            args.folder,
+            language=args.language,
+            date_order=args.date_order,
+            date_order_map=policies,
+        )
     except (ValueError, OSError, RuntimeError, sqlite3.Error) as error:
         parser.error(str(error))
 

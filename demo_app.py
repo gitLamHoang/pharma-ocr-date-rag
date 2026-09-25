@@ -11,6 +11,7 @@ import streamlit as st
 
 from pharma_ocr_date_rag.languages import LANGUAGES
 from pharma_ocr_date_rag.pipeline import all_chunks, process_document, process_text
+from pharma_ocr_date_rag.policies import resolve_date_orders
 from pharma_ocr_date_rag.rag import retrieve
 from pharma_ocr_date_rag.reporting import date_rows, export_csv, export_json
 
@@ -43,21 +44,62 @@ with st.sidebar:
     st.divider()
     st.caption("Research prototype. Synthetic examples. Human review required.")
 
+
+def save_document_order(name: str, key: str) -> None:
+    value = st.session_state[key]
+    if value == "inherit":
+        st.session_state.document_orders.pop(name, None)
+    else:
+        st.session_state.document_orders[name] = value
+
+
+def clear_document_orders() -> None:
+    st.session_state.document_orders = {}
+    for key in list(st.session_state):
+        if key.startswith("document_order_choice_"):
+            del st.session_state[key]
+
+
 docs = []
 if source == "Sample library":
     collection = st.selectbox(
         "Collection",
-        ["All samples", "English", "French", "German", "Spanish", "Vietnamese"],
+        ["All samples", "English", "French", "German", "Spanish", "Vietnamese", "Mixed conventions"],
         key="collection",
     )
     paths = sorted((ROOT / "data" / "synthetic_docs").glob("*.txt"))
     multi_paths = sorted((ROOT / "data" / "multilingual_docs").glob("*.txt"))
     if collection == "All samples":
         paths += multi_paths
+    elif collection == "Mixed conventions":
+        paths = sorted((ROOT / "data" / "mixed_conventions").glob("*.txt"))
     elif collection != "English":
         code = {"French": "fr", "German": "de", "Spanish": "es", "Vietnamese": "vi"}[collection]
         paths = [path for path in multi_paths if path.name.startswith(code + "_")]
-    docs = [process_document(path, language=language, date_order=date_order) for path in paths]
+    st.session_state.setdefault("document_orders", {})
+    with st.expander("Document date conventions", expanded=collection == "Mixed conventions"):
+        name = st.selectbox("Policy document", [path.name for path in paths], key="policy_document")
+        choices = {"inherit": f"Workspace default ({orders[date_order]})", **orders}
+        key = f"document_order_choice_{name}"
+        st.selectbox(
+            "Convention for this document",
+            list(choices),
+            format_func=choices.get,
+            index=list(choices).index(st.session_state.document_orders.get(name, "inherit")),
+            key=key,
+            on_change=save_document_order,
+            args=(name, key),
+        )
+        st.button("Reset document overrides", icon=":material/restart_alt:", on_click=clear_document_orders)
+    current = {
+        path.name: st.session_state.document_orders[path.name]
+        for path in paths
+        if path.name in st.session_state.document_orders
+    }
+    resolved_orders = resolve_date_orders(paths, date_order, current)
+    docs = [
+        process_document(path, language=language, date_order=resolved_orders[path.name]) for path in paths
+    ]
 elif source == "Paste text":
     text = st.text_area("Document text", height=180, key="document_text")
     if text:
@@ -106,6 +148,7 @@ with review_tab:
             "Date": row["normalized"] or "Unresolved",
             "Type": row["label"],
             "Source text": row["raw_text"],
+            "Date convention": orders[row["date_order"]],
             "Review": ", ".join(reason.replace("_", " ") for reason in row["review_reasons"]) or "Clear",
         }
         for row in visible
@@ -130,6 +173,7 @@ with review_tab:
 with evidence_tab:
     name = st.selectbox("Document", [doc.path.name for doc in docs], key="evidence_document")
     doc = next(doc for doc in docs if doc.path.name == name)
+    st.caption(f"Numeric date convention: {orders[doc.date_order]}")
     if doc.dates:
         index = st.selectbox(
             "Date field",

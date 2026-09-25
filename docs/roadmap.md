@@ -17,11 +17,22 @@ Each date is a planned work session, not a promise that an untested feature alre
 - Nine browser unit tests plus production-browser checks for image assets, persistence, exports and desktop/mobile layouts. Python regression coverage includes both UIs and database migration.
 - Product/design notes, a demo walkthrough, real UI screenshots and explicit limits on public-project claims.
 
+## Delivered: September 25
+
+- Added explicit per-document date-order maps shared by folder extraction, retrieval and SQLite indexing. Sparse maps inherit the batch default; an explicit `auto` preserves uncertainty even under a DMY/MDY default.
+- Added document convention controls to the local Streamlit sandbox, including session-persistent overrides, reset, and effective settings in the register/evidence view. The hosted browser demo remains a fixed snapshot with separate per-field decisions.
+- Added three synthetic mixed-convention documents with eight date candidates, including leap-day, invalid-calendar and month-precision cases. Explicit source-confirmed policies reduce unresolved candidates from five to one without altering source text; this is policy application, not a model accuracy measurement.
+- Reject duplicate JSON keys, malformed policies, paths and missing/unsupported filenames before extraction or database mutation. Changing one document's effective setting versions only that document; prior review history, unchanged documents and atomic rollback are covered.
+- Verification: 156 Python tests pass on Python 3.9 and a fresh locked Python 3.12 environment (30 added); nine TypeScript tests and the production-browser smoke flow pass. Original evaluation remains 18/18 field tuples, multilingual regression remains 42/42 in each mode, and retrieval remains 3/3 at all three word budgets.
+- Exercised the local UI in Chrome, checked desktop/mobile layout and source-policy display, and inspected an actual eight-field JSON download with one unresolved date. Added a screenshot and [policy walkthrough](date-conventions.md).
+
+Explanation point: the same date token can legitimately have different meanings in two documents. Confirming one file's convention must not silently resolve every other file in the batch.
+
 ## Planned Work Sessions
 
 | Date | Priority | Completion evidence |
 | --- | --- | --- |
-| September 25 | Broaden adversarial date fixtures and per-document convention handling | Mixed-convention examples, regression tests, visible source policy |
+| September 25 | Completed: per-document conventions and adversarial fixtures | See the delivered milestone above |
 | September 26 | Exercise real image OCR, starting with Tesseract language configuration | Synthetic rendered image, installed-pack checks, measured extraction results; distinguish missing dependencies |
 | September 27 | Build harder multilingual retrieval evaluation | Gold questions, distractors, no-answer cases, top-k metrics and recorded failures |
 | September 28 | Extend review-cycle semantics | Explicit re-review and source retirement behavior; preserve existing browser and SQL decision history |

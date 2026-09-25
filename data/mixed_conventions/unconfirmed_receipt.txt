@@ -1,0 +1,8 @@
+SYNTHETIC DOCUMENT - Unconfirmed convention example
+The numeric date order has not been confirmed.
+
+Expiry: 09/10/2026
+Quality check: 31/02/2026
+Expiry: 12/2028
+
+The quality-check date is intentionally invalid. No real vendor data.
