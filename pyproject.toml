@@ -12,6 +12,10 @@ authors = [{ name = "Lam Phan" }]
 dependencies = []
 
 [project.optional-dependencies]
+tesseract = [
+  "pillow>=10.0.0",
+  "pytesseract>=0.3.13,<0.4",
+]
 ocr = [
   "pillow>=10.0.0",
   "pytesseract>=0.3.10",

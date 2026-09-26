@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-26 - Measured multilingual image OCR
+
+- Added explicit Tesseract language packs, page segmentation, language-directory selection and recognition timeout, with separate unavailable/execution errors and image cleanup. Plain text remains dependency-free; a small `tesseract` extra is available independently of PaddleOCR.
+- Added a reproducible six-input experiment using three manually annotated synthetic pages and three pinned, checksum-verified upstream language packs. Clean image OCR recovered 16/16 fields; degraded image OCR recovered 8/16 with four extra predictions. All six recognizer runs completed. This is controlled development evidence, not general vendor-scan accuracy.
+- Preserved raw OCR text, field evidence, errors, settings, environment details and hashes in `reports/image_ocr.json`. Added saved-report verification and a separate CI image-OCR job with a downloadable report.
+- Added 43 regression tests; all 199 Python tests pass on Python 3.9 and a fresh Python 3.12 environment. Repeated native image measurements had the same field counts in both environments. Nine TypeScript tests, production build, formatting, source-evidence checks and desktop/mobile browser flows pass.
+- Documented valid-looking wrong-date failures, measured scope and setup. The hosted browser remains a text-backed snapshot; PaddleOCR, German/Spanish image OCR, real scans and model comparisons remain unverified.
+
 ## 2026-09-25 - Per-document numeric date conventions
 
 - Added validated filename-to-order JSON maps to `extract`, `ask` and `index`. Each document can use DMY, MDY or unconfirmed interpretation; missing entries inherit the batch default.

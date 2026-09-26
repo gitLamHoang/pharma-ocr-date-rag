@@ -24,7 +24,7 @@ A useful explanation, in your own words:
 
 Then explain the trade-off:
 
-"The current core is deterministic and runs locally. That makes errors easier to reproduce, but its vocabulary and layout coverage are limited. The multilingual tests are synthetic development examples. My next step is to test actual image OCR and a more challenging retrieval dataset."
+"The current core is deterministic and runs locally. That makes errors easier to reproduce, but its vocabulary and layout coverage are limited. A separate Tesseract experiment recovers 16 of 16 fields on three clean synthetic pages and only 8 of 16 after degradation. Some wrong OCR dates still look valid, so source review matters. My next step is a more challenging retrieval dataset and broader, independently labeled image coverage."
 
 Be ready to explain how the parser distinguishes month precision from a complete date, why language and date order are separate settings, and why a perfect score on 42 authored cases is not a real-world accuracy claim.
 

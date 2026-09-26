@@ -1,0 +1,788 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-26T20:54:28.495851+00:00",
+  "scope": "Real Tesseract OCR of three synthetic rendered pages in two conditions; not held-out, scanner, clinical, or model-training evidence",
+  "metric": "Occurrence-aware exact (label, normalized, candidates) match per page; no cross-page pooling of matches",
+  "settings": {
+    "oem": 1,
+    "psm": 6,
+    "timeout_seconds": 30,
+    "repair_ocr": true
+  },
+  "conditions": {
+    "clean": "Original committed RGB PNG, unchanged",
+    "degraded": "Grayscale; resize to 55% (floor, bilinear); Gaussian blur radius 0.4; rotate 1.2 degrees (bicubic, expanded, white fill)"
+  },
+  "environment": {
+    "python": "3.9.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "pillow": "11.3.0",
+    "tesseract": {
+      "engine": "5.5.3",
+      "adapter": "0.3.13",
+      "languages": [
+        "eng",
+        "fra",
+        "vie"
+      ]
+    }
+  },
+  "model_sha256": {
+    "eng": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2",
+    "fra": "ced037562e8c80c13122dece28dd477d399af80911a28791a66a63ac1e3445ca",
+    "vie": "79df64caf7bcfb2a27df5042ecb6121e196eada34da774956995747636d5bfa1"
+  },
+  "input_and_source_sha256": {
+    "data/multilingual_docs/fr_certificat.txt": "8d37c8ca9437153a335a5d5d4727c848824652cb93b5c73bb96c8dbf984d6bea",
+    "data/multilingual_docs/vi_phieu_kiem_tra.txt": "2abcbf8dce1986067e2a910482eb35a80690e50de4076a91f62c0f6a7e86beac",
+    "data/ocr_cases.json": "eed6262999ccf6360167cd4e1c5f09afbcd9aa096f364d791d87b0db03544792",
+    "data/ocr_models.json": "6c18b5d6567ff7970e7f1087bdbbc588b99197f27d1d358066f9e9ac855dd3a4",
+    "data/synthetic_docs/alpha_packaging_coa.txt": "c01dc6af8731cd8f95868c5352dbe0e11313b298b95f9eeabba8a15064b95867",
+    "scripts/benchmark_ocr.py": "36288de443349ad4029e76275a218dc6820791e6549ddf568e170131e2e4a8de",
+    "scripts/fetch_ocr_models.py": "eb1ebc1d9bf2c6b123fc92ffb2d09dc15d5ac186e3416c4773367a28ada7ece3",
+    "src/pharma_ocr_date_rag/dates.py": "b52962874f966f7012b6605967003e2029df4c092f58b38f8eb42495351aaf47",
+    "src/pharma_ocr_date_rag/languages.py": "6dc0105a524dd5de57a06092a48eb61fc5aa3a9d5b12e06afa2eb29ae5c082ec",
+    "src/pharma_ocr_date_rag/ocr.py": "8135ea2eaf22c5dcc309bad1143264a9119d2516b9396357c850072546090531",
+    "web/public/documents/alpha_packaging_coa.png": "dceaea5c2c684f291086bf84685024a680a638eeb8b104f4124c147cf276d749",
+    "web/public/documents/fr_certificat.png": "0c627627e421bfd84c5dbcd5d30be3fadb3da76cbb67013e37c923fe7944e7aa",
+    "web/public/documents/vi_phieu_kiem_tra.png": "e457d4d65509c08e89fb50c902f210cf232e0f56e85484b6965439b81790e957"
+  },
+  "summary": {
+    "clean": {
+      "attempted": 3,
+      "measured": 3,
+      "unavailable": 0,
+      "failed": 0,
+      "exact_pages": 3,
+      "expected_fields_all_pages": 16,
+      "expected_fields_measured_pages": 16,
+      "true_positive": 16,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "degraded": {
+      "attempted": 3,
+      "measured": 3,
+      "unavailable": 0,
+      "failed": 0,
+      "exact_pages": 0,
+      "expected_fields_all_pages": 16,
+      "expected_fields_measured_pages": 16,
+      "true_positive": 8,
+      "false_positive": 4,
+      "false_negative": 8
+    }
+  },
+  "results": [
+    {
+      "id": "en-packaging",
+      "condition": "clean",
+      "language": "en",
+      "ocr_language": "eng",
+      "date_order": "auto",
+      "expected_fields": 4,
+      "text_baseline": {
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "image_sha256": "dceaea5c2c684f291086bf84685024a680a638eeb8b104f4124c147cf276d749",
+      "status": "measured",
+      "ocr_text": "Nene...\nSYNTHETIC SOURCE DOCUMENT\nalpha_packaging_coa.txt\nALPHA PACKAGING MATERIALS\nCertificate of Analysis - Synthetic Training Sample\nMaterial: HDPE Bottle 60 mL\nLot Number: APM-260414-7\nManufacture Date: 15 Apr 2026\nExpiry Date: 14 Apr 2028\nQA check completed on 04/22/2026 by incoming quality.\nDocument issued 2026-04-23 for vendor upload.\nNotes:\nSeal integrity passed. Label area was clean. No broken cartons were observed.\nPUBLIC TEST FIXTURE / No real vendor or patient data o1/0t\n",
+      "predicted": [
+        {
+          "raw_text": "15 Apr 2026",
+          "normalized": "2026-04-15",
+          "label": "manufacture",
+          "confidence": 0.9,
+          "context": "Manufacture Date: 15 Apr 2026",
+          "start": 207,
+          "end": 218,
+          "candidates": [
+            "2026-04-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "14 Apr 2028",
+          "normalized": "2028-04-14",
+          "label": "expiry",
+          "confidence": 0.9,
+          "context": "Expiry Date: 14 Apr 2028",
+          "start": 232,
+          "end": 243,
+          "candidates": [
+            "2028-04-14"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "04/22/2026",
+          "normalized": "2026-04-22",
+          "label": "qa_check",
+          "confidence": 0.9,
+          "context": "QA check completed on 04/22/2026 by incoming quality.",
+          "start": 266,
+          "end": 276,
+          "candidates": [
+            "2026-04-22"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "2026-04-23",
+          "normalized": "2026-04-23",
+          "label": "document",
+          "confidence": 0.9,
+          "context": "Document issued 2026-04-23 for vendor upload.",
+          "start": 314,
+          "end": 324,
+          "candidates": [
+            "2026-04-23"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ],
+      "score": {
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "elapsed_seconds": 0.2493
+    },
+    {
+      "id": "en-packaging",
+      "condition": "degraded",
+      "language": "en",
+      "ocr_language": "eng",
+      "date_order": "auto",
+      "expected_fields": 4,
+      "text_baseline": {
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "image_sha256": "50cee6ec77ed5e78815b425071d6fb58efc19a846b454d769784be76845679c0",
+      "status": "measured",
+      "ocr_text": "alpha_packaging_coa tt\n\n[ALPHA PACKAGING MATERIALS.\n\nCertcate of Analysis - Synthetic Training Sample\nMateria: HOPE Botte 60 mL\n\nLot Number: APM-260414-7\n\nManutacture Date: 18 Ape 2026\n\nExpiry Date: 14 Apr 2028\n\n‘QA check completed on 04/2272026 by Incoming quay.\nDocument issued 2026-06-23 for vendor upload.\n\nNotes:\n\n‘Seal ntegrty passed. Label area was clean. No broken cartons were observed.\n",
+      "predicted": [
+        {
+          "raw_text": "14 Apr 2028",
+          "normalized": "2028-04-14",
+          "label": "expiry",
+          "confidence": 0.9,
+          "context": "Expiry Date: 14 Apr 2028",
+          "start": 199,
+          "end": 210,
+          "candidates": [
+            "2028-04-14"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "2026-06-23",
+          "normalized": "2026-06-23",
+          "label": "document",
+          "confidence": 0.9,
+          "context": "Document issued 2026-06-23 for vendor upload.",
+          "start": 280,
+          "end": 290,
+          "candidates": [
+            "2026-06-23"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ],
+      "score": {
+        "true_positive": 1,
+        "false_positive": 1,
+        "false_negative": 3,
+        "precision": 0.5,
+        "recall": 0.25,
+        "f1": 0.3333333333333333,
+        "exact": false,
+        "missing": [
+          {
+            "candidates": [
+              "2026-04-15"
+            ],
+            "label": "manufacture",
+            "normalized": "2026-04-15"
+          },
+          {
+            "candidates": [
+              "2026-04-22"
+            ],
+            "label": "qa_check",
+            "normalized": "2026-04-22"
+          },
+          {
+            "candidates": [
+              "2026-04-23"
+            ],
+            "label": "document",
+            "normalized": "2026-04-23"
+          }
+        ],
+        "extra": [
+          {
+            "candidates": [
+              "2026-06-23"
+            ],
+            "label": "document",
+            "normalized": "2026-06-23"
+          }
+        ]
+      },
+      "elapsed_seconds": 0.1207
+    },
+    {
+      "id": "fr-certificate",
+      "condition": "clean",
+      "language": "fr",
+      "ocr_language": "fra",
+      "date_order": "auto",
+      "expected_fields": 6,
+      "text_baseline": {
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "image_sha256": "0c627627e421bfd84c5dbcd5d30be3fadb3da76cbb67013e37c923fe7944e7aa",
+      "status": "measured",
+      "ocr_text": "aa\nSYNTHETIC SOURCE DOCUMENT\nfr_certificat.txt\nATELIER F - EXEMPLE SYNTHÉTIQUE\nCertificat de contrôle / matériau d'emballage\nLot: FR-2409-A\nDate de fabrication: 15 février 2026\nDate de péremption: 28 février 2028\nContrôle qualité: 21 mars 2026\nRéception: 24 mars 2026\nDate du rapport: 25 mars 2026\nProchaine visite fournisseur: 09/10/2026\nCe document est fictif. Convention jour/mois non confirmée pour la visite.\nPUBLIC TEST FIXTURE / No real vendor or patient data 01/01\n",
+      "predicted": [
+        {
+          "raw_text": "15 février 2026",
+          "normalized": "2026-02-15",
+          "label": "manufacture",
+          "confidence": 0.9,
+          "context": "Date de fabrication: 15 février 2026",
+          "start": 161,
+          "end": 176,
+          "candidates": [
+            "2026-02-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "28 février 2028",
+          "normalized": "2028-02-28",
+          "label": "expiry",
+          "confidence": 0.9,
+          "context": "Date de péremption: 28 février 2028",
+          "start": 197,
+          "end": 212,
+          "candidates": [
+            "2028-02-28"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "21 mars 2026",
+          "normalized": "2026-03-21",
+          "label": "qa_check",
+          "confidence": 0.9,
+          "context": "Contrôle qualité: 21 mars 2026",
+          "start": 231,
+          "end": 243,
+          "candidates": [
+            "2026-03-21"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "24 mars 2026",
+          "normalized": "2026-03-24",
+          "label": "received",
+          "confidence": 0.9,
+          "context": "Réception: 24 mars 2026",
+          "start": 255,
+          "end": 267,
+          "candidates": [
+            "2026-03-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "25 mars 2026",
+          "normalized": "2026-03-25",
+          "label": "document",
+          "confidence": 0.9,
+          "context": "Date du rapport: 25 mars 2026",
+          "start": 285,
+          "end": 297,
+          "candidates": [
+            "2026-03-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "09/10/2026",
+          "normalized": null,
+          "label": "audit",
+          "confidence": 0.9,
+          "context": "Prochaine visite fournisseur: 09/10/2026",
+          "start": 328,
+          "end": 338,
+          "candidates": [
+            "2026-09-10",
+            "2026-10-09"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ],
+      "score": {
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "elapsed_seconds": 0.2116
+    },
+    {
+      "id": "fr-certificate",
+      "condition": "degraded",
+      "language": "fr",
+      "ocr_language": "fra",
+      "date_order": "auto",
+      "expected_fields": 6,
+      "text_baseline": {
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "image_sha256": "42e21267ba7a7ce4fe9934e95df3957a5559eaacb5dcc9b39b7ac6889fc7da30",
+      "status": "measured",
+      "ocr_text": "fr_certficat et\n\nATELIER F - EXEMPLE SYNTHÉTIQUE\nCeres de contrée / matériau c'embalage\nLot FR 2408 A\n\nDate de fabrication: 15 février 2026\n\n(Date de péremption: 28 février 2028\nContrôle quité: 21 mars 2026\n\nRéception: 24 mars 2025\n\n(Dste au rapport: 25 mars 2028\n\nProchaine vit fournisseur: 09/10/2026\n(Ce document est fief. Convention jourmois non confiée pour a vise.\n",
+      "predicted": [
+        {
+          "raw_text": "15 février 2026",
+          "normalized": "2026-02-15",
+          "label": "manufacture",
+          "confidence": 0.9,
+          "context": "Date de fabrication: 15 février 2026",
+          "start": 124,
+          "end": 139,
+          "candidates": [
+            "2026-02-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "28 février 2028",
+          "normalized": "2028-02-28",
+          "label": "expiry",
+          "confidence": 0.9,
+          "context": "(Date de péremption: 28 février 2028",
+          "start": 162,
+          "end": 177,
+          "candidates": [
+            "2028-02-28"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "21 mars 2026",
+          "normalized": "2026-03-21",
+          "label": "qa_check",
+          "confidence": 0.9,
+          "context": "Contrôle quité: 21 mars 2026",
+          "start": 194,
+          "end": 206,
+          "candidates": [
+            "2026-03-21"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "24 mars 2025",
+          "normalized": "2025-03-24",
+          "label": "received",
+          "confidence": 0.9,
+          "context": "Réception: 24 mars 2025",
+          "start": 219,
+          "end": 231,
+          "candidates": [
+            "2025-03-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "25 mars 2028",
+          "normalized": "2028-03-25",
+          "label": "document",
+          "confidence": 0.9,
+          "context": "(Dste au rapport: 25 mars 2028",
+          "start": 251,
+          "end": 263,
+          "candidates": [
+            "2028-03-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "09/10/2026",
+          "normalized": null,
+          "label": "unknown",
+          "confidence": 0.35,
+          "context": "Prochaine vit fournisseur: 09/10/2026",
+          "start": 292,
+          "end": 302,
+          "candidates": [
+            "2026-09-10",
+            "2026-10-09"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date",
+            "unknown_label"
+          ]
+        }
+      ],
+      "score": {
+        "true_positive": 3,
+        "false_positive": 3,
+        "false_negative": 3,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "exact": false,
+        "missing": [
+          {
+            "candidates": [
+              "2026-03-24"
+            ],
+            "label": "received",
+            "normalized": "2026-03-24"
+          },
+          {
+            "candidates": [
+              "2026-03-25"
+            ],
+            "label": "document",
+            "normalized": "2026-03-25"
+          },
+          {
+            "candidates": [
+              "2026-09-10",
+              "2026-10-09"
+            ],
+            "label": "audit",
+            "normalized": null
+          }
+        ],
+        "extra": [
+          {
+            "candidates": [
+              "2025-03-24"
+            ],
+            "label": "received",
+            "normalized": "2025-03-24"
+          },
+          {
+            "candidates": [
+              "2026-09-10",
+              "2026-10-09"
+            ],
+            "label": "unknown",
+            "normalized": null
+          },
+          {
+            "candidates": [
+              "2028-03-25"
+            ],
+            "label": "document",
+            "normalized": "2028-03-25"
+          }
+        ]
+      },
+      "elapsed_seconds": 0.1109
+    },
+    {
+      "id": "vi-inspection",
+      "condition": "clean",
+      "language": "vi",
+      "ocr_language": "vie",
+      "date_order": "auto",
+      "expected_fields": 6,
+      "text_baseline": {
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "image_sha256": "e457d4d65509c08e89fb50c902f210cf232e0f56e85484b6965439b81790e957",
+      "status": "measured",
+      "ocr_text": "—ề>>—=ễ=ềẳằ=ẳằ=——_—————\nSYNTHETIC SOURCE DOCUMENT\nvị_phieu_ kiem _tra.txt\nXƯỞNG V - MẪU GIẢ LẬP.\nPhiếu kiểm tra vật liệu đóng gói\nMã lô: VI-2409-D.\nNgày sản xuất: ngày 15 tháng 2 năm 2026\nHạn sử dụng: ngày 28 tháng 2 năm 2028\nKiểm tra chất lượng: ngày 22 tháng 3 năm 2026\nNgày nhận: ngày 24 tháng 3 năm 2026\nNgày phát hành: ngày 25 tháng 3 năm 2026\nĐánh giá nhà cung cấp: 09/10/2026\nTài liệu giả lập dùng để kiểm thử phần mềm.\nPUBLIC TEST FIXTURE / No real vendor or patient data 01/01\n",
+      "predicted": [
+        {
+          "raw_text": "ngày 15 tháng 2 năm 2026",
+          "normalized": "2026-02-15",
+          "label": "manufacture",
+          "confidence": 0.9,
+          "context": "Ngày sản xuất: ngày 15 tháng 2 năm 2026",
+          "start": 163,
+          "end": 187,
+          "candidates": [
+            "2026-02-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "ngày 28 tháng 2 năm 2028",
+          "normalized": "2028-02-28",
+          "label": "expiry",
+          "confidence": 0.9,
+          "context": "Hạn sử dụng: ngày 28 tháng 2 năm 2028",
+          "start": 201,
+          "end": 225,
+          "candidates": [
+            "2028-02-28"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "ngày 22 tháng 3 năm 2026",
+          "normalized": "2026-03-22",
+          "label": "qa_check",
+          "confidence": 0.9,
+          "context": "Kiểm tra chất lượng: ngày 22 tháng 3 năm 2026",
+          "start": 247,
+          "end": 271,
+          "candidates": [
+            "2026-03-22"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "ngày 24 tháng 3 năm 2026",
+          "normalized": "2026-03-24",
+          "label": "received",
+          "confidence": 0.9,
+          "context": "Ngày nhận: ngày 24 tháng 3 năm 2026",
+          "start": 283,
+          "end": 307,
+          "candidates": [
+            "2026-03-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "ngày 25 tháng 3 năm 2026",
+          "normalized": "2026-03-25",
+          "label": "document",
+          "confidence": 0.9,
+          "context": "Ngày phát hành: ngày 25 tháng 3 năm 2026",
+          "start": 324,
+          "end": 348,
+          "candidates": [
+            "2026-03-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "09/10/2026",
+          "normalized": null,
+          "label": "audit",
+          "confidence": 0.9,
+          "context": "Đánh giá nhà cung cấp: 09/10/2026",
+          "start": 372,
+          "end": 382,
+          "candidates": [
+            "2026-09-10",
+            "2026-10-09"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ],
+      "score": {
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "elapsed_seconds": 0.2273
+    },
+    {
+      "id": "vi-inspection",
+      "condition": "degraded",
+      "language": "vi",
+      "ocr_language": "vie",
+      "date_order": "auto",
+      "expected_fields": 6,
+      "text_baseline": {
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "exact": true,
+        "missing": [],
+        "extra": []
+      },
+      "image_sha256": "4f1c2b0a9d3bc970abde2e5af0a4bd22ada259a9138606799d24c0114c4b6f02",
+      "status": "measured",
+      "ocr_text": "vị_phieu_kiem_tra.xt\n\"XƯỞNG V - MẪU GIÁ LẬP.\n\nPhu kiểm tra vật lậu đóng gõ!\n\nMã: V-2409-D,\n\nNgây sản xuắt ngây 15 tháng 2 năm 2026\nHạn sử dụng: ngày 28 tháng 2 năm 2028\nKiểm re chất lượng: ngây 22 tháng 3 nêm 2026\nNgày nhận: ngày 24 tháng 3 năm 2026\n\"Ngày phát hành: ngày 25 tháng 3 năm 2026\n'Đánh giá nhà cung cấp: 0/10/2026\n\n“Tải lệu giả lập đùng để kểm trừ phần mềm,\n",
+      "predicted": [
+        {
+          "raw_text": "ngây 15 tháng 2 năm 2026",
+          "normalized": "2026-02-15",
+          "label": "manufacture",
+          "confidence": 0.9,
+          "context": "Ngây sản xuắt ngây 15 tháng 2 năm 2026",
+          "start": 106,
+          "end": 130,
+          "candidates": [
+            "2026-02-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "ngày 28 tháng 2 năm 2028",
+          "normalized": "2028-02-28",
+          "label": "expiry",
+          "confidence": 0.9,
+          "context": "Hạn sử dụng: ngày 28 tháng 2 năm 2028",
+          "start": 144,
+          "end": 168,
+          "candidates": [
+            "2028-02-28"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "ngày 24 tháng 3 năm 2026",
+          "normalized": "2026-03-24",
+          "label": "received",
+          "confidence": 0.9,
+          "context": "Ngày nhận: ngày 24 tháng 3 năm 2026",
+          "start": 225,
+          "end": 249,
+          "candidates": [
+            "2026-03-24"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        },
+        {
+          "raw_text": "ngày 25 tháng 3 năm 2026",
+          "normalized": "2026-03-25",
+          "label": "document",
+          "confidence": 0.9,
+          "context": "\"Ngày phát hành: ngày 25 tháng 3 năm 2026",
+          "start": 267,
+          "end": 291,
+          "candidates": [
+            "2026-03-25"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ],
+      "score": {
+        "true_positive": 4,
+        "false_positive": 0,
+        "false_negative": 2,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "f1": 0.8,
+        "exact": false,
+        "missing": [
+          {
+            "candidates": [
+              "2026-03-22"
+            ],
+            "label": "qa_check",
+            "normalized": "2026-03-22"
+          },
+          {
+            "candidates": [
+              "2026-09-10",
+              "2026-10-09"
+            ],
+            "label": "audit",
+            "normalized": null
+          }
+        ],
+        "extra": []
+      },
+      "elapsed_seconds": 0.1152
+    }
+  ]
+}

@@ -28,12 +28,24 @@ Each date is a planned work session, not a promise that an untested feature alre
 
 Explanation point: the same date token can legitimately have different meanings in two documents. Confirming one file's convention must not silently resolve every other file in the batch.
 
+## Delivered: September 26
+
+- Added an explicit Tesseract API for language packs, page segmentation, language-directory selection and bounded recognition time. Missing packages/executable/packs are distinct from image or recognizer failures; automatic fallback does not swallow execution errors. The optional `tesseract` extra avoids installing the unverified PaddleOCR stack.
+- Added three manually annotated synthetic image cases in English, French and Vietnamese, each tested clean and with a fixed downsampling/blur/rotation recipe. Downloaded and verified only the three required upstream language packs at a pinned revision; no trained model or confidential data was used.
+- Measured actual Tesseract 5.5.3 image recognition: all six runs completed. Clean pages recovered 16/16 fields with no extras; degraded pages recovered 8/16 with four extras (micro precision 0.667, recall 0.500, F1 0.571). The 16-field original-text baseline is exact. These are three development pages, not six independent documents or real-scan accuracy evidence.
+- Saved raw OCR text, source spans, missed/extra fields, settings, package/engine versions, timing and input/source/model hashes. Added a dependency-free saved-evidence check and a separate CI job that performs fresh image recognition and uploads its results. Execution completeness is distinct from extraction correctness.
+- Added 43 regression tests. All 199 Python tests pass on Python 3.9 and a fresh locked Python 3.12 environment. Both environments produced the same field counts in the image experiment; the checked-in measurement is the Python 3.9/Pillow 11.3 run. Native missing-pack and forced-timeout probes returned the intended distinct errors, and the default English image pipeline recovered four fields.
+- Ruff, nine TypeScript tests, type checking/production build, browser formatting and production-browser desktop/mobile flows pass. Original benchmarks remain 18/18 English field tuples, 42/42 multilingual cases in each mode, and 3/3 retrieval questions at every word budget. Refreshed existing source-hashed reports without changing the browser's text-backed behavior.
+- Added the [image experiment protocol and failure analysis](image-ocr.md), updated portfolio talking points and kept unsupported OCR/model claims explicit. German/Spanish OCR, real scans, complex layouts and PaddleOCR remain unmeasured.
+
+Explanation point: OCR changed an April 23 document date into June 23. Both are valid calendar dates, so passing a parser does not establish transcription accuracy. Reviewable source evidence matters even when the clean-page score is perfect.
+
 ## Planned Work Sessions
 
 | Date | Priority | Completion evidence |
 | --- | --- | --- |
 | September 25 | Completed: per-document conventions and adversarial fixtures | See the delivered milestone above |
-| September 26 | Exercise real image OCR, starting with Tesseract language configuration | Synthetic rendered image, installed-pack checks, measured extraction results; distinguish missing dependencies |
+| September 26 | Completed: measured multilingual Tesseract image OCR | See the delivered milestone above and the image-OCR report |
 | September 27 | Build harder multilingual retrieval evaluation | Gold questions, distractors, no-answer cases, top-k metrics and recorded failures |
 | September 28 | Extend review-cycle semantics | Explicit re-review and source retirement behavior; preserve existing browser and SQL decision history |
 | September 29 | Compare retrieval/model alternatives if prerequisites exist | Reproducible measured comparison; never invent unavailable model results or spend on APIs without authorization |
@@ -45,6 +57,6 @@ Explanation point: the same date token can legitimately have different meanings 
 
 Inspect the current worktree and instructions, preserve user changes, pull safely, choose the next useful milestone, implement, verify, review the diff, and commit/push with the actual timestamp. Update this file with measured results and unresolved gaps.
 
-Keep the README synchronized with what runs. The multilingual path currently consumes text; real image OCR is not yet validated. The public repository has no LlamaIndex index, trained model, Mistral/Phi-2 benchmark or measured customer impact.
+Keep the README synchronized with what runs. The five-language demo consumes text; a separate English/French/Vietnamese Tesseract experiment measures clean/degraded synthetic images. Its small development set does not validate real vendor scans. The public repository has no LlamaIndex index, trained model, Mistral/Phi-2 benchmark or measured customer impact.
 
 The daily Codex schedule runs at 9:00 a.m. America/Los_Angeles through October 2. It depends on the local machine and app being available. Stop the automation after the final session; do not create backdated or empty activity commits.

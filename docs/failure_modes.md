@@ -2,6 +2,18 @@
 
 These notes are from the public synthetic version of the project.
 
+## September 26 Image Findings
+
+Actual Tesseract recognition on the three synthetic English/French/Vietnamese pages matched 16/16 fields when clean and 8/16 after fixed degradation, with four extra predictions. The full [image experiment](image-ocr.md) retains the raw text and wrong predictions. All six OCR runs completed.
+
+- `2026-04-23` became `2026-06-23`: both pass calendar validation. Valid syntax cannot establish transcription accuracy.
+- `24 mars 2026` became `24 mars 2025`: the right label and day/month still hide a wrong year.
+- A damaged French audit label produced an unknown label even while the date's numeric ambiguity was preserved.
+- Vietnamese `09/10/2026` became invalid `0/10/2026` and was rejected. That is a missed field, not a correctly recovered date.
+- Missing packs and execution failures are recorded separately from measured extraction misses. Neither is counted as a successful page.
+
+These are controlled rendered pages, not real scans or an independently held-out benchmark. The findings motivate source review, not an accuracy claim about production documents.
+
 ## September 24 Findings
 
 - Numeric dates with two valid interpretations now stay unresolved until the user chooses a convention. The original English evaluation explicitly uses MDY.

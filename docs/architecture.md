@@ -58,7 +58,9 @@ None of these scale steps has been implemented or load-tested. The repository av
 
 ## Evaluation boundaries
 
-The public data is a developer-authored synthetic fixture set. Extraction scoring uses sets of unique `(document, date, label)` tuples; repeated occurrences of the same tuple count once. Retrieval scoring tests whether a top-three chunk has both the expected document and date label; it does not verify the exact answer, causal usefulness, or safe reviewer behavior.
+The [image-OCR experiment](image-ocr.md) separately tests real Tesseract recognition on three synthetic rendered pages in clean/degraded conditions. It uses a manually specified gold file, counts field occurrences (including duplicates), and preserves each raw OCR transcript. Missing dependencies/packs are `unavailable`; recognition/image failures are `failed`; completed recognition is `measured`, even when no fields match. The report includes both attempted and measured denominators. It does not measure OCR boxes or character-error rate, and its field offsets refer to the recognized text. Explicit OCR packs are configured through `read_tesseract`, not inferred from the CLI's extraction-language setting.
+
+The public data is a developer-authored synthetic fixture set. The original English text evaluation uses sets of unique `(document, date, label)` tuples; repeated occurrences of the same tuple count once. Retrieval scoring tests whether a top-three chunk has both the expected document and date label; it does not verify the exact answer, causal usefulness, or safe reviewer behavior.
 
 Chunks obey bounded word counts and exact overlap-word counts. Each chunk retains an original text slice and its start/end offsets. These are word budgets, not model-token budgets. A boundary can still split a contextual field, and three benchmark questions are insufficient to choose a general optimum.
 

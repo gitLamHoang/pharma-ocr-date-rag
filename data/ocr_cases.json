@@ -1,0 +1,51 @@
+{
+  "scope": "Three authored synthetic pages; clean and degraded variants share the same gold. Not held-out scans.",
+  "cases": [
+    {
+      "id": "en-packaging",
+      "source": "data/synthetic_docs/alpha_packaging_coa.txt",
+      "image": "web/public/documents/alpha_packaging_coa.png",
+      "language": "en",
+      "ocr_language": "eng",
+      "date_order": "auto",
+      "expected": [
+        {"label": "manufacture", "normalized": "2026-04-15", "candidates": ["2026-04-15"]},
+        {"label": "expiry", "normalized": "2028-04-14", "candidates": ["2028-04-14"]},
+        {"label": "qa_check", "normalized": "2026-04-22", "candidates": ["2026-04-22"]},
+        {"label": "document", "normalized": "2026-04-23", "candidates": ["2026-04-23"]}
+      ]
+    },
+    {
+      "id": "fr-certificate",
+      "source": "data/multilingual_docs/fr_certificat.txt",
+      "image": "web/public/documents/fr_certificat.png",
+      "language": "fr",
+      "ocr_language": "fra",
+      "date_order": "auto",
+      "expected": [
+        {"label": "manufacture", "normalized": "2026-02-15", "candidates": ["2026-02-15"]},
+        {"label": "expiry", "normalized": "2028-02-28", "candidates": ["2028-02-28"]},
+        {"label": "qa_check", "normalized": "2026-03-21", "candidates": ["2026-03-21"]},
+        {"label": "received", "normalized": "2026-03-24", "candidates": ["2026-03-24"]},
+        {"label": "document", "normalized": "2026-03-25", "candidates": ["2026-03-25"]},
+        {"label": "audit", "normalized": null, "candidates": ["2026-09-10", "2026-10-09"]}
+      ]
+    },
+    {
+      "id": "vi-inspection",
+      "source": "data/multilingual_docs/vi_phieu_kiem_tra.txt",
+      "image": "web/public/documents/vi_phieu_kiem_tra.png",
+      "language": "vi",
+      "ocr_language": "vie",
+      "date_order": "auto",
+      "expected": [
+        {"label": "manufacture", "normalized": "2026-02-15", "candidates": ["2026-02-15"]},
+        {"label": "expiry", "normalized": "2028-02-28", "candidates": ["2028-02-28"]},
+        {"label": "qa_check", "normalized": "2026-03-22", "candidates": ["2026-03-22"]},
+        {"label": "received", "normalized": "2026-03-24", "candidates": ["2026-03-24"]},
+        {"label": "document", "normalized": "2026-03-25", "candidates": ["2026-03-25"]},
+        {"label": "audit", "normalized": null, "candidates": ["2026-09-10", "2026-10-09"]}
+      ]
+    }
+  ]
+}

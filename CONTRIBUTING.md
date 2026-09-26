@@ -10,6 +10,7 @@ uv run ruff format --check .
 uv run python scripts/export_evidence.py --check
 uv run python scripts/benchmark_multilingual.py --check
 uv run python scripts/export_web.py --check
+uv run python scripts/benchmark_ocr.py --check-report
 ```
 
 Browser development requires Node 24.12+:
@@ -40,6 +41,8 @@ python scripts/export_web.py
 
 The public snapshot hashes Python source, so unrelated formatting changes also require regeneration. If source text or date positions change, rerender pages first with `python scripts/export_web.py --render --font /path/to/unicode-font.ttf` (requires Pillow). The checked-in pages use Arial. Font choice affects pixels and boxes; image hashes make that visible, and CI does not pretend every font produces byte-identical images. The viewer's rectangles represent known fixture layout, not model-detected OCR boxes.
 
+The separate [image-OCR experiment](docs/image-ocr.md) hashes its three parser/adapter modules, scripts, models manifest and inputs. When those change, install the `tesseract` extra and native executable, fetch the pinned packs, then rerun `python scripts/benchmark_ocr.py --require-complete`. Review the measured report and update the documented results. `--check-report` only rescores saved OCR text; it is not a new engine measurement. The image-OCR CI job performs fresh recognition and uploads its own report, without overwriting the checked-in macOS measurement.
+
 For database changes, preserve existing review history, add a schema migration, and test upgrades and rollback behavior. Never rewrite an earlier decision to represent a later decision; append a review event.
 
-Small contributions with a concrete failing example are easiest to review. Useful next steps include explicit review cycles, real image OCR evaluation and a bounded independently labeled test set.
+Small contributions with a concrete failing example are easiest to review. Useful next steps include explicit review cycles, broader image-OCR coverage and a bounded independently labeled test set.

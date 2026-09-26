@@ -63,6 +63,7 @@ npm run dev
 | Persistent review | SQLite document versions, parameterized queries, append-only review events, active queue, atomic indexing and tested schema migration |
 | Retrieval | Bounded word chunks, exact source slices, lexical ranking with shared date-field vocabulary across languages, and no-match responses |
 | Evaluation | Per-label precision/recall/F1, multilingual exact-case checks, chunk-size experiments and automated tests |
+| Image OCR experiment | Explicit Tesseract packs, missing-dependency diagnostics and six measured synthetic image inputs in English, French and Vietnamese |
 
 The language setting controls recognized vocabulary, not numeric date order. A French or English document can still have an unconfirmed numeric convention. Month-only expiry dates stay month-only; no day is invented.
 
@@ -155,6 +156,17 @@ npm run test:browser
 
 The browser test starts and stops its own production preview, checks all eight page assets, exercises review persistence and exports, and captures screenshots. See [contributing](CONTRIBUTING.md) for snapshot regeneration and dependency details.
 
+### Separate image-OCR experiment
+
+Actual Tesseract recognition of three synthetic pages recovered **16/16 fields on clean images**, but only **8/16 after fixed downsampling, blur and rotation**, with four extra predictions. All six recognition runs completed. Some errors produced valid-looking but wrong dates, which is why calendar validation is insufficient for automatic acceptance.
+
+The experiment uses pinned English, French and Vietnamese language packs, manually specified gold, occurrence-aware scoring and saved raw OCR output. It does not establish real-scan accuracy or change the text-backed browser demo. [Protocol, failure examples and reproduction commands](docs/image-ocr.md) · [Measured JSON report](reports/image_ocr.json).
+
+```bash
+# Check saved evidence without OCR dependencies; this does not rerun recognition
+python scripts/benchmark_ocr.py --check-report
+```
+
 ## Architecture
 
 ```mermaid
@@ -179,7 +191,7 @@ src/pharma_ocr_date_rag/
   languages.py   month names and field vocabularies
   dates.py       date candidates, normalization, source offsets, review flags
   policies.py    explicit per-document numeric conventions and validation
-  ocr.py         optional legacy Tesseract/PaddleOCR adapters
+  ocr.py         verified Tesseract adapter; unverified legacy PaddleOCR adapter
   pipeline.py    shared text/document processing
   reporting.py   evidence records and portable exports
   rag.py         source-preserving chunks and lexical retrieval
@@ -195,6 +207,8 @@ data/
   multilingual_docs/    four multilingual demo documents
   mixed_conventions/    three adversarial convention fixtures and a policy map
   multilingual_cases.json
+  ocr_cases.json         manual gold for three synthetic image-OCR pages
+  ocr_models.json        pinned Tesseract language packs and SHA-256 checksums
 
 web/            TypeScript/Vite app, rendered pages and browser tests
 demo_app.py     local Streamlit extraction sandbox
@@ -207,7 +221,7 @@ docs/
 
 This is an independent public prototype using only synthetic data. It contains no Pfizer-confidential documents, patient records, real vendor data, or production deployment results. It is a later public reconstruction of the document-workflow idea, not a release of an employer's system. Development uses AI coding assistance; the code, tests and design notes are available for inspection.
 
-The tested multilingual path starts from text. Tesseract and PaddleOCR adapters exist for optional image input, but image OCR, non-English OCR language packs, and OCR engine accuracy have not been validated in this version. They are not required for the demo.
+The five-language demo starts from text. A separate Tesseract experiment has been run on three synthetic pages in English, French and Vietnamese, both clean and degraded. It does not validate German/Spanish OCR, mixed-language scans, complex layouts or real vendor documents. The PaddleOCR adapter remains unverified. Optional OCR packages and system dependencies are not required for the demo.
 
 Despite the historical repository name, the current retrieval output is extractive evidence, not an LLM-generated answer. There is no trained model, working LlamaIndex index, or Mistral/Phi-2 benchmark in this public version. Those comparisons must be implemented and measured before being claimed.
 

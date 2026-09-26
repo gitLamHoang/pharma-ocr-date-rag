@@ -12,6 +12,10 @@ The live demo is intentionally easy to inspect. It begins with a French audit da
 2. **Evidence must survive change.** SQL versions include content hashes and parser settings. Reindexing identical evidence preserves decisions; changed evidence creates a separate version. The migration preserves historical IDs and events and rolls back on failure.
 3. **A metric needs a denominator and a scope.** The multilingual report is 42 authored development cases, not 42 vendor documents. Both language modes pass, but the fixtures were used during implementation and do not establish generalization or image-OCR accuracy.
 
+## An experiment to discuss
+
+The [image-OCR experiment](image-ocr.md) measures a different boundary: actual Tesseract recognition of three synthetic pages in English, French and Vietnamese. Clean images recover 16/16 fields; after a fixed degradation, only 8/16 match and four predictions are extra. One document date changes from April 23 to June 23, a plausible value that calendar validation cannot catch. Explain why this led to preserving source evidence and treating recognition output as reviewable candidates, not automatic approval. It is a small controlled experiment, not a trained model or real-vendor accuracy claim.
+
 ## Product questions still open
 
 - Do supplier-quality reviewers spend enough time on date review to justify a separate tool?
