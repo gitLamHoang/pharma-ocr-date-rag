@@ -296,44 +296,44 @@
     "feature_count": 181,
     "top_features": {
       "batch": [
-        "atc",
-        "tch ",
-        "atch",
-        "o. ",
-        "no. ",
-        "no.",
+        " ba",
+        " bat",
+        " batc",
+        " no",
+        " no.",
         " no. ",
-        " no."
+        "atc",
+        "atch"
       ],
       "distribution": [
-        "ibute",
-        "strib",
-        "str",
-        "st ",
+        " di",
+        " dis",
+        " dist",
+        " fi",
+        " fir",
+        " firs",
         "but",
-        "bute",
-        "rst ",
-        "istr"
+        "bute"
       ],
       "expiry": [
-        "date",
-        "iry",
-        "xpiry",
+        " da",
+        " dat",
+        " date",
+        " ex",
         " exp",
         " expi",
-        "iry ",
-        " date",
-        " dat"
+        "ate ",
+        "dat"
       ],
       "other": [
-        "ze ",
+        " pa",
+        " pac",
+        " pack",
+        " si",
         " siz",
-        "siz",
-        "ck ",
-        "ize",
-        "ize ",
-        "size ",
-        "ack"
+        " size",
+        "ack",
+        "ack "
       ]
     }
   },
@@ -2590,7 +2590,7 @@
     "data/public_mhra/documents.json": "54282b79c3a90fe852113612fd1ab32f6a6a015c7c94981d70fba99cce8c8899",
     "data/public_mhra/header_labels.json": "6a82be44b62250a3884b104e5fca25a7e55cb840915c9231c6380c1ea8c394f1",
     "data/public_mhra/protocol.json": "82234e6362996a343e8d94cf681e44e7a5d302d91b82dd19421a2a8ba6cb3950",
-    "scripts/train_mhra.py": "5f9517221ffe886fabf97fb4a4025a40016072f947255c8f77cb537395ed4cd3",
+    "scripts/train_mhra.py": "44f3c506919b4bbc38e48b070dc88708fb8e3ed44874aaa696dde3a23b4c55c3",
     "src/pharma_ocr_date_rag/public_data.py": "6964040b24ee6e3ab6c42852229c39ec0f071782931eca9f4677f25db21fc4a7",
     "src/pharma_ocr_date_rag/recalls.py": "3acb3bfb21e4148e7ab255f9c59efde4a14f0f0c143ecb628773df13f55a8129",
     "src/pharma_ocr_date_rag/dates.py": "b52962874f966f7012b6605967003e2029df4c092f58b38f8eb42495351aaf47",

@@ -55,6 +55,8 @@ The user explicitly expanded the scope to real public pharmaceutical documents a
 
 Explanation point: the important discovery was not a perfect model score. Real notices mostly repeat the same headings, so keyword rules work equally well. The useful engineering is source-linked batch/date evidence, honest uncertainty, and an evaluation that reveals when machine learning adds no demonstrated value.
 
+Release follow-up: the Linux retraining check exposed unstable ordering in the top-feature explanation, where many coefficients tie. Added an explicit rounded-weight/alphabetical tie-break, a regression test, and useful comparison diagnostics. Fitting and prediction checks remain unchanged; the explanation is not a model improvement. The complete Python 3.12 suite now has 234 tests.
+
 ## Planned Work Sessions
 
 | Date | Priority | Completion evidence |

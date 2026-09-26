@@ -19,6 +19,19 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/public_mhra"
 
 
+def test_feature_explanation_has_stable_ties_across_numerical_noise(monkeypatch):
+    monkeypatch.syspath_prepend(str(ROOT / "scripts"))
+    experiment = importlib.import_module("train_mhra")
+    names = ["zzz", "aaa", "bbb", "ccc"]
+    assert experiment.top_features(names, [0.6, 0.6, 0.7, 0.4]) == ["bbb", "aaa", "zzz", "ccc"]
+    assert experiment.top_features(names, [0.6 + 1e-12, 0.6 - 1e-12, 0.7, 0.4]) == [
+        "bbb",
+        "aaa",
+        "zzz",
+        "ccc",
+    ]
+
+
 def corpus():
     return json.loads((DATA / "documents.json").read_text(encoding="utf-8"))["documents"]
 

@@ -93,6 +93,8 @@ uv run python scripts/collect_mhra.py --count 60 \
 
 Never load untrusted joblib/pickle files. Fresh collection may change source content and selection; annotate and version it separately before drawing new comparisons. CI retrains from the checked-in snapshot without network collection. Dependency versions, protocol, source hashes, split membership, predictions and top learned character features are in [the training report](../reports/mhra_training.json).
 
+Top-feature explanations sort coefficients rounded to six decimals, then break ties alphabetically. Repeated headings produce equal weights, so raw array sort order is not meaningful. This presentation rule does not change model fitting, predictions, thresholds or the strict report comparison.
+
 ## Remaining Gaps
 
 Public MHRA English is not a substitute for multilingual supplier documents. Five-language parsing and English/French/Vietnamese degraded-image checks remain **synthetic** experiments. There is no PaddleOCR verification, LlamaIndex deployment, Mistral/Phi-2 benchmark, trained OCR recognizer, independently measured user benefit, or production medical validation. Next steps are template-diverse public sources, independent annotations, explicit range/non-date handling, and occurrence-level PDF batch/date association tests.

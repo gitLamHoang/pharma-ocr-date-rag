@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import difflib
 import hashlib
 import json
 import platform
@@ -23,6 +24,12 @@ from pharma_ocr_date_rag.recalls import (
 DATA = ROOT / "data/public_mhra"
 REPORT = ROOT / "reports/mhra_training.json"
 PUBLIC = ROOT / "web/public/data/recalls.json"
+
+
+def top_features(names, weights) -> list[str]:
+    # Repeated templates give equal coefficients; do not let CPU sort order rank ties.
+    indices = sorted(range(len(names)), key=lambda i: (-round(float(weights[i]), 6), str(names[i])))
+    return [str(names[i]) for i in indices[:8]]
 
 
 def build() -> tuple[dict, dict, object]:
@@ -69,7 +76,7 @@ def build() -> tuple[dict, dict, object]:
             "name": "Character TF-IDF + balanced logistic regression",
             "feature_count": len(feature_names),
             "top_features": {
-                str(role): [str(feature_names[i]) for i in weights.argsort()[-8:][::-1]]
+                str(role): top_features(feature_names, weights)
                 for role, weights in zip(classifier.classes_, classifier.coef_)
             },
         },
@@ -118,6 +125,13 @@ def main() -> None:
             saved.pop("environment", None)
             comparable = {key: item for key, item in value.items() if key != "environment"}
             if saved != comparable:
+                difference = difflib.unified_diff(
+                    json.dumps(saved, indent=2, sort_keys=True).splitlines(),
+                    json.dumps(comparable, indent=2, sort_keys=True).splitlines(),
+                    fromfile="saved",
+                    tofile="fresh",
+                )
+                print("\n".join(list(difference)[:60]), file=sys.stderr)
                 parser.exit(
                     1,
                     f"{path.relative_to(ROOT)} differs from a fresh training run; inspect before updating.\n",

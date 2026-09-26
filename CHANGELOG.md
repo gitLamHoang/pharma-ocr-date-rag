@@ -2,6 +2,7 @@
 
 ## 2026-09-26 - Real public notices, training and source-linked UI
 
+- Stabilized explanatory top-feature tie ordering across CPU platforms without changing model fitting or relaxing prediction checks. Added a regression test and report-difference diagnostics (234 Python tests with all relevant extras).
 - Collected 60 real public MHRA recall/defect notices through bounded, robots-aware official API requests. Published attributed batch-table excerpts, explicit heading labels and a fixed evaluation protocol, with source hashes and OGL licence boundaries.
 - Trained a character TF-IDF/logistic-regression column classifier on 36 documents (182 examples), reserving 12 documents each for validation/test. Test roles score 80/80, tied by keyword rules; 76 test heading instances repeat training templates. No advantage over rules or trained OCR is claimed.
 - Added 742 source-linked date-column candidates, including 123 ambiguous and 80 unparsed/non-date cells. Added a default public-notice UI with batch search, source rows, dataset-split filters, pagination and exports; kept the synthetic multilingual review flow separate.
