@@ -52,7 +52,10 @@ try {
   assert.equal(await page.locator('.document-item').count(), 8);
   assert.equal(await page.locator('.field-value h3').innerText(), 'Unresolved date');
   assert.ok(
-    await page.locator('.paper img').evaluate((image) => image.complete && image.naturalWidth > 0),
+    await page.locator('.paper img').evaluate(async (image) => {
+      await image.decode();
+      return image.complete && image.naturalWidth > 0;
+    }),
   );
   await checkLayout();
   await page.screenshot({ path: resolve(screenshots, 'review-workspace.png'), fullPage: true });

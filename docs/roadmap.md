@@ -57,6 +57,8 @@ Explanation point: the important discovery was not a perfect model score. Real n
 
 Release follow-up: the Linux retraining check exposed unstable ordering in the top-feature explanation, where many coefficients tie. Added an explicit rounded-weight/alphabetical tie-break, a regression test, and useful comparison diagnostics. Fitting and prediction checks remain unchanged; the explanation is not a model improvement. The complete Python 3.12 suite now has 234 tests.
 
+Hosted-site verification also exposed a browser-test race: source highlights render before an image finishes loading over the network. The test now waits for image decoding before checking dimensions, without treating a broken image as success. The complete browser flow then passed against GitHub Pages; the hosted public snapshot also matched all committed source hashes and 742 records.
+
 ## Planned Work Sessions
 
 | Date | Priority | Completion evidence |
