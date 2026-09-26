@@ -1,4 +1,5 @@
 import './style.css';
+import { parseRecalls, filterRecalls, type RecallData } from './recalls.ts';
 import {
   createIcons,
   ScanLine,
@@ -70,9 +71,21 @@ const root = document.querySelector<HTMLDivElement>('#app')!;
 const repository = 'https://github.com/gitLamHoang/pharma-ocr-date-rag';
 const storeKey = 'pharma-date-review.events.v1';
 let data: Workspace;
+let publicData: RecallData | null = null;
+let publicError = '';
 let events: ReviewEvent[] = [];
 const state = {
-  view: 'workspace' as View,
+  view: (['recalls', 'workspace', 'register', 'benchmarks', 'history'].includes(
+    location.hash.slice(1),
+  )
+    ? location.hash.slice(1)
+    : 'recalls') as View,
+  recallQuery: '',
+  recallRole: '',
+  recallSplit: '',
+  recallUnresolved: false,
+  recallPage: 0,
+  recallSelected: '',
   docId: 'fr_certificat',
   fieldId: '',
   query: '',
@@ -632,8 +645,187 @@ function historyView() {
         '<h3>No review decisions yet</h3><p>Current source versions have no recorded decisions in this browser.</p><button data-view="workspace">Open workspace</button></div>')
   );
 }
+function publicRows() {
+  return publicData
+    ? filterRecalls(
+        publicData,
+        state.recallQuery,
+        state.recallRole,
+        state.recallSplit,
+        state.recallUnresolved,
+      )
+    : [];
+}
+function publicView() {
+  if (!publicData)
+    return (
+      '<div class="large-empty"><h2>Public notices unavailable</h2><p>' +
+      escape(publicError) +
+      '</p></div>'
+    );
+  const matches = publicRows();
+  const pageCount = Math.max(1, Math.ceil(matches.length / 25));
+  state.recallPage = Math.min(state.recallPage, pageCount - 1);
+  const pageRows = matches.slice(state.recallPage * 25, (state.recallPage + 1) * 25);
+  const selected = pageRows.find((row) => row.id === state.recallSelected) ?? pageRows[0];
+  const doc = publicData.documents.find((doc) => doc.id === selected?.document_id);
+  const table = doc?.tables.find((table) => table.table_index === selected?.table_index);
+  const evaluation = publicData.evaluation.test;
+  return (
+    '<div class="metrics"><div><span>Official notices</span><strong>' +
+    publicData.corpus.documents +
+    '<small>MHRA / GOV.UK</small></strong></div><div><span>Batch/date cells</span><strong>' +
+    publicData.records.length +
+    '<small>source-linked candidates</small></strong></div><div><span>Training documents</span><strong>' +
+    publicData.corpus.document_splits.train +
+    '<small>' +
+    publicData.corpus.document_splits.validation +
+    ' validation / ' +
+    publicData.corpus.document_splits.test +
+    ' test</small></strong></div><div><span>No single date</span><strong>' +
+    publicData.records.filter((row) => row.normalized === null).length +
+    '<small>ambiguous or unparsed</small></strong></div></div>' +
+    '<div class="public-scope"><span>' +
+    icon('circle-alert') +
+    'Static research snapshot · ' +
+    escape(publicData.snapshotRetrievedAt.slice(0, 10)) +
+    ' · Not current recall advice. All values require source review.</span><a href="' +
+    repository +
+    '/blob/main/docs/public-data.md" target="_blank" rel="noreferrer">Dataset & model card ' +
+    icon('arrow-up-right') +
+    '</a></div>' +
+    '<div class="filter-bar"><label class="search">' +
+    icon('search') +
+    '<input id="recall-query" type="search" placeholder="Medicine, batch or source date" aria-label="Search public notices" value="' +
+    escape(state.recallQuery) +
+    '"></label>' +
+    '<select id="recall-role" aria-label="Public date type">' +
+    options(
+      { expiry: 'Expiry', distribution: 'Distribution' },
+      state.recallRole,
+      'All date types',
+    ) +
+    '</select>' +
+    '<select id="recall-split" aria-label="Dataset split">' +
+    options(
+      { train: 'Training', validation: 'Validation', test: 'Held-out test' },
+      state.recallSplit,
+      'All splits',
+    ) +
+    '</select>' +
+    '<label class="public-checkbox"><input type="checkbox" id="recall-unresolved" ' +
+    (state.recallUnresolved ? 'checked' : '') +
+    '> No single date</label></div>' +
+    '<div class="table-toolbar"><h2>Public batch register <span>' +
+    matches.length +
+    '</span></h2><button data-action="export-public-csv">' +
+    icon('download') +
+    ' Export CSV</button></div>' +
+    (pageRows.length
+      ? '<div class="table-scroll public-register"><table><thead><tr><th>Notice / Batch</th><th>Field</th><th>Source value</th><th>Interpretation</th><th>Review flags</th><th>Split</th></tr></thead><tbody>' +
+        pageRows
+          .map(
+            (row) =>
+              '<tr class="' +
+              (selected?.id === row.id ? 'public-selected' : '') +
+              '"><td><button class="table-link" data-public-field="' +
+              escape(row.id) +
+              '">' +
+              escape(row.batch || 'No batch text') +
+              '</button><small>' +
+              escape(row.title) +
+              '</small></td><td>' +
+              escape(row.role) +
+              '</td><td>' +
+              escape(row.raw_text) +
+              '</td><td class="date-cell">' +
+              escape(row.normalized ?? 'Unresolved') +
+              '</td><td>' +
+              escape(
+                row.review_reasons.join(', ').replaceAll('_', ' ') || 'Source review required',
+              ) +
+              '</td><td>' +
+              escape(row.split) +
+              '</td></tr>',
+          )
+          .join('') +
+        '</tbody></table></div>'
+      : '<div class="large-empty"><h3>No matching public records</h3></div>') +
+    '<div class="public-pagination">' +
+    button(
+      'recall-prev',
+      'chevron-left',
+      'Previous public records',
+      state.recallPage === 0 ? 'disabled' : '',
+    ) +
+    '<span>Page ' +
+    (state.recallPage + 1) +
+    ' / ' +
+    pageCount +
+    '</span>' +
+    button(
+      'recall-next',
+      'chevron-right',
+      'Next public records',
+      state.recallPage + 1 >= pageCount ? 'disabled' : '',
+    ) +
+    '</div>' +
+    (doc && table && selected
+      ? '<section class="public-source"><div class="table-toolbar"><h2>Source table</h2><a href="' +
+        escape(doc.url) +
+        '" target="_blank" rel="noreferrer">Original GOV.UK notice ' +
+        icon('arrow-up-right') +
+        '</a></div><h3>' +
+        escape(doc.title) +
+        '</h3><p>Table ' +
+        (table.table_index + 1) +
+        ', row ' +
+        (selected.row_index + 1) +
+        ' · Classifier score ' +
+        selected.model_score.toFixed(3) +
+        ' (uncalibrated) · Source SHA-256 <code>' +
+        escape(doc.source.sha256) +
+        '</code></p>' +
+        '<div class="table-scroll"><table><thead><tr>' +
+        table.headers.map((header) => '<th>' + escape(header) + '</th>').join('') +
+        '</tr></thead><tbody><tr>' +
+        table.rows[selected.row_index]
+          .map(
+            (value, index) =>
+              '<td' +
+              (index === selected.column_index ? ' class="source-cell-selected"' : '') +
+              '>' +
+              escape(value) +
+              '</td>',
+          )
+          .join('') +
+        '</tr></tbody></table></div>' +
+        (selected.candidates.length > 1
+          ? '<p>Possible dates: ' + selected.candidates.map(escape).join(' / ') + '</p>'
+          : '') +
+        '</section>'
+      : '') +
+    '<section class="public-method"><h2>Measured model comparison</h2><p>Held-out column roles: model ' +
+    Math.round(evaluation.model.accuracy * 100) +
+    '%; keyword baseline ' +
+    Math.round(evaluation.keywords.accuracy * 100) +
+    '% on ' +
+    evaluation.model.count +
+    ' columns. ' +
+    evaluation.seen_heading_count +
+    ' headings already occur in training. At the review threshold, ' +
+    evaluation.abstention.classified +
+    '/' +
+    evaluation.abstention.total +
+    ' receive a role; the rest are unclassified.</p><p>English templates only. This is not date-value accuracy, independently annotated clinical validation, or evidence that the learned model improves on rules.</p><small>' +
+    escape(publicData.attribution) +
+    '</small></section>'
+  );
+}
 function render() {
+  if (location.hash !== '#' + state.view) history.replaceState(null, '', '#' + state.view);
   const titles: Record<View, string> = {
+    recalls: 'Public medicine notices',
     workspace: 'Document review',
     register: 'Date register',
     benchmarks: 'Benchmark lab',
@@ -649,6 +841,7 @@ function render() {
     '<span class="nav-label">Workspace</span><nav aria-label="Main navigation">' +
     (
       [
+        ['recalls', 'globe', 'Public notices'],
         ['workspace', 'files', 'Document review'],
         ['register', 'rows-3', 'Date register'],
         ['benchmarks', 'chart-no-axes-combined', 'Benchmark lab'],
@@ -672,7 +865,7 @@ function render() {
           '</button>',
       )
       .join('') +
-    '</nav><div class="sidebar-bottom"><div class="dataset-label"><span class="live-dot"></span>Public sample workspace</div><p>8 synthetic documents<br>5 languages · 42 candidate dates</p>' +
+    '</nav><div class="sidebar-bottom"><div class="dataset-label"><span class="live-dot"></span>Research workspace</div><p>Public MHRA notices<br>8 synthetic multilingual samples</p>' +
     '<a href="' +
     repository +
     '" target="_blank" rel="noreferrer">Source & methodology ' +
@@ -683,27 +876,33 @@ function render() {
     '<div class="breadcrumb">Workspace <span>/</span> ' +
     titles[state.view] +
     '</div>' +
-    '<div class="top-actions"><span class="environment">Synthetic data</span><button data-action="export-json">' +
+    '<div class="top-actions"><span class="environment">' +
+    (state.view === 'recalls' ? 'Public source data' : 'Synthetic data') +
+    '</span><button data-action="' +
+    (state.view === 'recalls' ? 'export-public-json' : 'export-json') +
+    '">' +
     icon('download') +
     '<span>Export session</span></button></div></header>' +
     '<main><div class="page-heading"><div><p class="eyebrow">Vendor document intelligence</p><h1>' +
     titles[state.view] +
     '</h1></div><span class="workspace-version">Source-backed candidates <span>v0.3</span></span></div>' +
-    summary() +
+    (state.view === 'recalls' ? '' : summary()) +
     (state.message
       ? '<div class="notice" role="status">' +
         icon('check-check') +
         escape(state.message) +
         '</div>'
       : '') +
-    (state.view === 'workspace'
-      ? workspace()
-      : state.view === 'register'
-        ? register()
-        : state.view === 'benchmarks'
-          ? benchmarks()
-          : historyView()) +
-    '</main><footer><span>Public prototype · Synthetic development evidence</span><a href="' +
+    (state.view === 'recalls'
+      ? publicView()
+      : state.view === 'workspace'
+        ? workspace()
+        : state.view === 'register'
+          ? register()
+          : state.view === 'benchmarks'
+            ? benchmarks()
+            : historyView()) +
+    '</main><footer><span>Research prototype · Source review required</span><a href="' +
     repository +
     '/blob/main/docs/design.md" target="_blank" rel="noreferrer">Methodology ' +
     icon('arrow-up-right') +
@@ -723,6 +922,8 @@ root.addEventListener('click', async (event) => {
     state.view = target.dataset.view as View;
     state.sidebar = false;
     state.message = '';
+  } else if (target.dataset.publicField) {
+    state.recallSelected = target.dataset.publicField;
   } else if (target.dataset.doc) {
     if (state.view === 'history')
       Object.assign(state, { query: '', language: '', label: '', status: '' });
@@ -738,6 +939,49 @@ root.addEventListener('click', async (event) => {
   else if (target.dataset.mode) state.benchmarkMode = target.dataset.mode;
   else if (target.dataset.action) {
     const action = target.dataset.action;
+    if (action === 'recall-prev') state.recallPage = Math.max(0, state.recallPage - 1);
+    if (action === 'recall-next') state.recallPage++;
+    if (action === 'export-public-json' && publicData) {
+      download(
+        'public-mhra-evidence.json',
+        JSON.stringify(
+          {
+            attribution: publicData.attribution,
+            licence: publicData.licence,
+            scope: 'Static public-source research snapshot; review required',
+            records: publicRows(),
+          },
+          null,
+          2,
+        ),
+        'application/json',
+      );
+      return;
+    }
+    if (action === 'export-public-csv') {
+      download(
+        'public-mhra-register.csv',
+        csvText(
+          publicRows().map((row) => ({
+            source: row.url,
+            batch: row.batch,
+            type: row.role,
+            raw: row.raw_text,
+            normalized: row.normalized,
+            candidates: row.candidates.join(' | '),
+            table: row.table_index + 1,
+            row: row.row_index + 1,
+            split: row.split,
+            status: row.status,
+            source_sha256: row.source_sha256,
+            attribution: publicData?.attribution,
+            licence: publicData?.licence,
+          })),
+        ),
+        'text/csv',
+      );
+      return;
+    }
     if (action === 'sidebar') state.sidebar = !state.sidebar;
     if (action === 'zoom-in') state.zoom = Math.min(150, state.zoom + 10);
     if (action === 'zoom-out') state.zoom = Math.max(70, state.zoom - 10);
@@ -813,7 +1057,13 @@ root.addEventListener('click', async (event) => {
 });
 root.addEventListener('change', (event) => {
   const target = event.target as HTMLInputElement;
-  if (target.id === 'language') state.language = target.value;
+  if (['recall-role', 'recall-split', 'recall-unresolved'].includes(target.id)) {
+    if (target.id === 'recall-role') state.recallRole = target.value;
+    if (target.id === 'recall-split') state.recallSplit = target.value;
+    if (target.id === 'recall-unresolved') state.recallUnresolved = target.checked;
+    state.recallPage = 0;
+    state.recallSelected = '';
+  } else if (target.id === 'language') state.language = target.value;
   else if (target.id === 'label') state.label = target.value;
   else if (target.id === 'status') state.status = target.value;
   else if (target.id === 'field')
@@ -832,6 +1082,17 @@ root.addEventListener('input', (event) => {
   const target = event.target as HTMLInputElement;
   if (target.id === 'reviewer') state.reviewer = target.value;
   if (target.id === 'reason') state.reason = target.value;
+  if (target.id === 'recall-query') {
+    const start = target.selectionStart,
+      end = target.selectionEnd;
+    state.recallQuery = target.value;
+    state.recallPage = 0;
+    state.recallSelected = '';
+    render();
+    const input = document.querySelector<HTMLInputElement>('#recall-query')!;
+    input.focus();
+    input.setSelectionRange(start, end);
+  }
   if (target.id === 'query') {
     const start = target.selectionStart,
       end = target.selectionEnd;
@@ -872,6 +1133,13 @@ async function start() {
     const response = await fetch('data/workspace.json');
     if (!response.ok) throw new Error('The evidence snapshot could not be loaded.');
     data = parseWorkspace(await response.json());
+    try {
+      const publicResponse = await fetch('data/recalls.json');
+      if (!publicResponse.ok) throw new Error('Public-source evidence could not be loaded.');
+      publicData = parseRecalls(await publicResponse.json());
+    } catch (error) {
+      publicError = error instanceof Error ? error.message : 'Public notices could not be loaded.';
+    }
     try {
       const saved: unknown = JSON.parse(localStorage.getItem(storeKey) ?? '[]');
       if (!Array.isArray(saved)) throw new Error();

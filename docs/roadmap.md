@@ -40,13 +40,28 @@ Explanation point: the same date token can legitimately have different meanings 
 
 Explanation point: OCR changed an April 23 document date into June 23. Both are valid calendar dates, so passing a parser does not establish transcription accuracy. Reviewable source evidence matters even when the clean-page score is perfect.
 
+## Delivered: September 26, Public-Data Milestone
+
+The user explicitly expanded the scope to real public pharmaceutical documents and actual training. This supersedes the earlier synthetic-only collection policy; confidentiality and honest measurement remain required.
+
+- Collected 60 real public MHRA medicine recall/defect notices through official GOV.UK APIs. The bounded collector checks robots rules, limits requests and downloads, verifies cached bytes and retains retrieval/source hashes. Published 83 tables (six headings-only negatives) and 371 batch rows with OGL attribution; raw downloads and models stay ignored locally.
+- Added an explicit 15-heading annotation map and fixed experiment protocol. Fitted a character TF-IDF/logistic-regression column classifier on 182 column instances from 36 training documents; validation and test each contain 12 chronologically separated notices. Duplicate whole-table payloads are grouped, and a regression test confirms held-out headings never enter fitting.
+- Measured 80/80 forced test role predictions, tied by keyword rules; majority baseline scores 23/80. Disclosed that 76/80 test headings repeat training templates and the four unseen examples are all `other`. The fixed 0.60 threshold abstains on four test columns. This does not establish an advantage over rules, date accuracy or OCR fine-tuning.
+- Built 742 batch-linked date-column candidates with exact source cells, batch-column indices, precision, ambiguity and review flags. 123 cells are ambiguous and 80 are unparsed/non-date; no single date is invented for them. Every public record still requires review.
+- Ran actual Tesseract on the first two pages of three original test PDF attachments. OCR and native text each recover 11/11 supported unique HTML-table date interpretations; five non-date cells are excluded explicitly. Saved six page transcripts and source/model hashes. The checker recomputes protocol selection and HTML reference values; tests reject altered references, exclusions, sources, pages and duplicated documents. Coverage is not precision, batch-link accuracy or independent gold.
+- Added a default Public notices view with batch/medicine search, split/type/unresolved filters, pagination, source table evidence, original links and CSV/JSON exports. Retained the separate synthetic review UI. Fixed a search-input change event that caused recursive rerendering in browser testing.
+- Verification: 233 Python tests pass in the locked Python 3.12 research/demo environment; Python 3.9 passes 228 with five optional research-dependency tests skipped. Twelve TypeScript tests, production build and browser workflows cover original evidence, attributed exports, empty results, typing and responsive layouts. Source-hashed reports were regenerated; CI retrains from frozen data without crawling.
+- Added a dataset/model card, source licence boundaries, reproducible crawl/train/OCR commands, actual UI screenshot and portfolio walkthrough. Updated the daily automation to prioritize evidence-driven public-data work while retaining synthetic multilingual regressions.
+
+Explanation point: the important discovery was not a perfect model score. Real notices mostly repeat the same headings, so keyword rules work equally well. The useful engineering is source-linked batch/date evidence, honest uncertainty, and an evaluation that reveals when machine learning adds no demonstrated value.
+
 ## Planned Work Sessions
 
 | Date | Priority | Completion evidence |
 | --- | --- | --- |
 | September 25 | Completed: per-document conventions and adversarial fixtures | See the delivered milestone above |
-| September 26 | Completed: measured multilingual Tesseract image OCR | See the delivered milestone above and the image-OCR report |
-| September 27 | Build harder multilingual retrieval evaluation | Gold questions, distractors, no-answer cases, top-k metrics and recorded failures |
+| September 26 | Completed: synthetic image OCR plus real public-data training/UI | See both delivered milestones and their separate reports |
+| September 27 | Improve public-date handling and evaluation diversity | Range/non-date cases from frozen public tables; independent labels or template-diverse sources where available; retain multilingual regressions |
 | September 28 | Extend review-cycle semantics | Explicit re-review and source retirement behavior; preserve existing browser and SQL decision history |
 | September 29 | Compare retrieval/model alternatives if prerequisites exist | Reproducible measured comparison; never invent unavailable model results or spend on APIs without authorization |
 | September 30 | Refine demo flow and visual documentation | Browser checks on desktop/mobile, reproducible screenshots, concise walkthrough |
@@ -57,6 +72,6 @@ Explanation point: OCR changed an April 23 document date into June 23. Both are 
 
 Inspect the current worktree and instructions, preserve user changes, pull safely, choose the next useful milestone, implement, verify, review the diff, and commit/push with the actual timestamp. Update this file with measured results and unresolved gaps.
 
-Keep the README synchronized with what runs. The five-language demo consumes text; a separate English/French/Vietnamese Tesseract experiment measures clean/degraded synthetic images. Its small development set does not validate real vendor scans. The public repository has no LlamaIndex index, trained model, Mistral/Phi-2 benchmark or measured customer impact.
+Keep the README synchronized with what runs. The five-language demo consumes synthetic text; separate experiments measure synthetic multilingual images and three original English MHRA PDFs. A real-data column classifier is trained, but no OCR recognizer is fine-tuned. There is no LlamaIndex index, Mistral/Phi-2 benchmark, clinical validation or measured customer impact. New real sources require documented reuse terms, attribution, bounded collection and reviewable provenance. Preserve frozen test data and disclose template overlap rather than treating repeated headings as proof of generalization.
 
 The daily Codex schedule runs at 9:00 a.m. America/Los_Angeles through October 2. It depends on the local machine and app being available. Stop the automation after the final session; do not create backdated or empty activity commits.

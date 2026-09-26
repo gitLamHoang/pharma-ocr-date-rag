@@ -21,6 +21,10 @@ A useful pilot measure would be median time to prepare a correct date register, 
 | One extractor for CLI and both UIs | Exports and displayed results share parser semantics | The browser uses a generated snapshot, not a live Python service |
 | Separate local review stores | Static browser demo is easy to try; SQL provides persistent local indexing | Browser localStorage and SQLite do not synchronize |
 | Synthetic public corpus | Reproducible examples can be shared and inspected | Scores do not estimate real vendor-document accuracy |
+| Separate real public notice corpus | Batch/date tables give a concrete source-linked search problem without private data | One English agency's templates do not represent multilingual suppliers |
+| Rules versus learned column classifier | A frozen grouped split makes the comparison reproducible | Both score 80/80 test roles, with repeated headings; no model advantage demonstrated |
+
+The public-notice workflow is now the default browser view. It has its own table-cell evidence contract, documented in the [dataset/model card](public-data.md). It does not mix public candidates with synthetic approval demonstrations. Original-PDF OCR is separately measured; native extraction performs equally well on the limited selected date-coverage task.
 
 ## Data Contract
 
@@ -54,7 +58,7 @@ The corpus contains 30 multilingual field examples and 12 additional English edg
 ## Next Decision Gates
 
 1. Validate date review as a user problem before calling this a viable product.
-2. Add actual image fixtures and test installed OCR language packs before claiming multilingual OCR.
+2. Extend the measured synthetic image and original-PDF experiments with independent annotations and harder layouts before generalizing the results.
 3. Expand retrieval questions with distractors and no-answer cases before selecting a retriever.
 4. Run optional model comparisons under the same schema and record hardware, model version, latency, cost and accuracy before making model recommendations.
 5. Evaluate review-cycle, identity, synchronization and per-document settings before describing a shared operational workflow.

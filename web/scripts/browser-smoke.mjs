@@ -46,7 +46,7 @@ try {
       'Page overflows viewport',
     );
   };
-  await page.goto(base);
+  await page.goto(new URL('#workspace', base).href);
   await page.locator('.source-highlight.selected').waitFor();
   await page.evaluate(() => document.fonts.ready);
   assert.equal(await page.locator('.document-item').count(), 8);
@@ -157,12 +157,59 @@ try {
   assert.deepEqual(errors, []);
   for (const width of [320, 768, 1024, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.reload();
+    await page.goto(new URL('?viewport=' + width + '#workspace', base).href);
     await page.locator('.source-highlight.selected').waitFor();
     await checkLayout();
   }
+  await page.locator('nav [data-view=recalls]').click();
+  await page.locator('.public-register tbody tr').first().waitFor();
+  assert.equal(await page.locator('.public-register tbody tr').count(), 25);
+  await page.getByRole('button', { name: 'Next public records', exact: true }).click();
+  assert.match(await page.locator('.public-pagination').innerText(), /Page 2/);
+  await page.locator('#recall-query').pressSequentially('0162858');
+  assert.equal(await page.locator('.public-register tbody tr').count(), 2);
+  await page.selectOption('#recall-role', 'expiry');
+  assert.equal(await page.locator('.public-register tbody tr').count(), 1);
+  assert.equal(await page.locator('.source-cell-selected').innerText(), '05/2028');
+  assert.match(
+    await page.locator('.public-source a').getAttribute('href'),
+    /^https:\/\/www.gov.uk\/drug-device-alerts\//,
+  );
+  const publicDownload = page.waitForEvent('download');
+  await page.locator('[data-action=export-public-json]').click();
+  const publicSaved = await publicDownload;
+  const exportedPublic = JSON.parse(await readFile(await publicSaved.path(), 'utf8'));
+  assert.equal(exportedPublic.records.length, 1);
+  assert.equal(exportedPublic.records[0].batch, '0162858');
+  assert.match(exportedPublic.attribution, /Open Government Licence/);
+  const publicCsvDownload = page.waitForEvent('download');
+  await page.locator('[data-action=export-public-csv]').click();
+  const publicCsv = await publicCsvDownload;
+  const publicCsvText = await readFile(await publicCsv.path(), 'utf8');
+  assert.match(publicCsvText, /0162858/);
+  assert.match(publicCsvText, /Open Government Licence/);
+  await page.locator('#recall-query').fill('not-a-real-medicine-name');
+  assert.equal(await page.locator('.public-source').count(), 0);
+  await page.locator('#recall-query').fill('');
+  await page.selectOption('#recall-role', '');
+  await page.selectOption('#recall-split', 'test');
+  await page.locator('#recall-unresolved').check();
+  assert.ok(await page.locator('.public-register tbody tr').count());
+  for (const width of [1512, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(new URL('?publicViewport=' + width + '#recalls', base).href);
+    await page.locator('.public-register tbody tr').first().waitFor();
+    await page.locator('#recall-query').fill('0162858');
+    await page.selectOption('#recall-role', 'expiry');
+    await checkLayout();
+    await page.screenshot({
+      path: resolve(screenshots, `public-notices-${width}.png`),
+      fullPage: true,
+    });
+  }
+  assert.deepEqual(errors, []);
   console.log(
-    'Browser checks passed: 8 rendered pages; source highlights; date ambiguity; reviews and reload persistence; JSON/CSV; filters; benchmarks; desktop/mobile layouts.',
+    'Browser checks passed: synthetic review/persistence; public MHRA search, filters, pagination, original table evidence and export; desktop/mobile layouts.',
   );
 } finally {
   await browser?.close();

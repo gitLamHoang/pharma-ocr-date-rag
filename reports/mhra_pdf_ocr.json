@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "scope": "Original public MHRA PDFs, not synthetic pages. Coverage of supported unique HTML-table date interpretations within the first two PDF pages. Not field precision, independent date gold, batch-link accuracy or trained OCR.",
+  "protocol": {
+    "selection": "Three newest test notices with PDFs",
+    "dpi": 150,
+    "max_pages_per_document": 2,
+    "psm": 3,
+    "oem": 1,
+    "language": "eng",
+    "date_order": "auto",
+    "repair_ocr": false
+  },
+  "environment": {
+    "python": "3.12.13",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "pillow": "12.3.0",
+    "pdfplumber": "0.11.10",
+    "tesseract": {
+      "engine": "5.5.3",
+      "adapter": "0.3.13",
+      "languages": [
+        "eng",
+        "fra",
+        "vie"
+      ]
+    }
+  },
+  "model_sha256": {
+    "eng": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2",
+    "fra": "ced037562e8c80c13122dece28dd477d399af80911a28791a66a63ac1e3445ca",
+    "vie": "79df64caf7bcfb2a27df5042ecb6121e196eada34da774956995747636d5bfa1"
+  },
+  "source_sha256": {
+    "data/public_mhra/documents.json": "54282b79c3a90fe852113612fd1ab32f6a6a015c7c94981d70fba99cce8c8899",
+    "data/public_mhra/header_labels.json": "6a82be44b62250a3884b104e5fca25a7e55cb840915c9231c6380c1ea8c394f1",
+    "data/public_mhra/protocol.json": "82234e6362996a343e8d94cf681e44e7a5d302d91b82dd19421a2a8ba6cb3950",
+    "scripts/benchmark_mhra_pdf.py": "62edfd3526c8499b4592e39c79fb048344771d35eacae010167315feff7485ae",
+    "src/pharma_ocr_date_rag/ocr.py": "8135ea2eaf22c5dcc309bad1143264a9119d2516b9396357c850072546090531",
+    "src/pharma_ocr_date_rag/dates.py": "b52962874f966f7012b6605967003e2029df4c092f58b38f8eb42495351aaf47",
+    "src/pharma_ocr_date_rag/languages.py": "6dc0105a524dd5de57a06092a48eb61fc5aa3a9d5b12e06afa2eb29ae5c082ec",
+    "src/pharma_ocr_date_rag/public_data.py": "6964040b24ee6e3ab6c42852229c39ec0f071782931eca9f4677f25db21fc4a7",
+    "src/pharma_ocr_date_rag/recalls.py": "3acb3bfb21e4148e7ab255f9c59efde4a14f0f0c143ecb628773df13f55a8129"
+  },
+  "results": [
+    {
+      "document_id": "5945f7e8-86f9-4428-9126-dcc9f5192a84",
+      "title": "Class 4 Medicines Defect Notification: B. Braun Melsungen AG, Meropenem 1000 mg powder and solvent for solution for infusion, EL(26)A/39 ",
+      "url": "https://www.gov.uk/drug-device-alerts/class-4-medicines-defect-notification-b-braun-melsungen-ag-meropenem-1000-mg-powder-and-solvent-for-solution-for-infusion-el-26-a-slash-39",
+      "split": "test",
+      "expected_date_keys": [
+        [
+          "2025-06-20"
+        ],
+        [
+          "2026-01-12",
+          "2026-12-01"
+        ],
+        [
+          "2026-10-31"
+        ],
+        [
+          "2027-01-31"
+        ],
+        [
+          "2027-03-31"
+        ]
+      ],
+      "unsupported_html_cells": [
+        "Not yet distributed",
+        "Not yet distributed",
+        "Not yet distributed",
+        "Not yet distributed",
+        "Not yet distributed"
+      ],
+      "pdf_source": {
+        "url": "https://assets.publishing.service.gov.uk/media/6ab2c3288cb3c0580e501004/Class_4_Medicines_Defect_Notification_B._Braun_Melsungen_AG__Meropenem_1000_mg_powder_and_solvent_for_solution_for_infusion__EL_26_A39_.pdf",
+        "sha256": "1e24dee9a0fa097715cc20297174c46e2601ccdd28e901f054f16f3a49695982",
+        "retrieved_at": "2026-09-26T21:18:39.084200+00:00"
+      },
+      "total_pdf_pages": 4,
+      "status": "measured",
+      "pages": [
+        {
+          "page": 1,
+          "image_sha256": "4209853eeeb1f64da72e5cc80b6c9759e3c7f522f3fdcc6d0cc90fb351e8b6b8",
+          "ocr_text": "MEDICINES NOTIFICATION\n\nMEDICINES NOTIFICATION\n\nCLASS 4 MEDICINES DEFECT INFORMATION, EL(26)A/39\nCaution In Use\nIssued 23 September 2026\n\nDistribute to Pharmacy/Wholesaler Level\n\nMARKETING AUTHORISATION HOLDER (MAH)\n\nB. Braun Melsungen AG\n\nMEDICINE DETAILS\n\nMeropenem 1000 mg powder and solvent for solution for infusion\n\nPL: 03551/0167\n\nActive Ingredient: meropenem\n\nSNOMED code: 44947011000001108 (24 pack)\nGTIN: 4030539225526 (24 pack)\n\nAFFECTED LOT BATCH NUMBERS\n\nBatch No. Expiry Date Pack Size First Distributed\n25J00360 31/10/2026 24 20/06/2025\n\n25301305 31/01/2027 24 Not yet distributed\n25302333 31/03/2027 24 12/01/2026\n\n25302595 31/03/2027 24 Not yet distributed\n2502331 31/03/2027 24 Not yet distributed\n25302332 31/03/2027 24 Not yet distributed\n25302335 31/03/2027 24 Not yet distributed\n\nPage 1 of 4 DMRC Ref: 40832810 EL(26)A/39\n",
+          "native_text": "MEDICINES NOTIFICATION\nMEDICINES NOTIFICATION\nCLASS 4 MEDICINES DEFECT INFORMATION, EL(26)A/39\nCaution In Use\nIssued 23 September 2026\nDistribute to Pharmacy/Wholesaler Level\nMARKETING AUTHORISATION HOLDER (MAH)\nB. Braun Melsungen AG\nMEDICINE DETAILS\nMeropenem 1000 mg powder and solvent for solution for infusion\nPL: 03551/0167\nActive Ingredient: meropenem\nSNOMED code: 44947011000001108 (24 pack)\nGTIN: 4030539225526 (24 pack)\nAFFECTED LOT BATCH NUMBERS\nBatch No. Expiry Date Pack Size First Distributed\n25J00360 31/10/2026 24 20/06/2025\n25J01305 31/01/2027 24 Not yet distributed\n25J02333 31/03/2027 24 12/01/2026\n25J02595 31/03/2027 24 Not yet distributed\n25J02331 31/03/2027 24 Not yet distributed\n25J02332 31/03/2027 24 Not yet distributed\n25J02335 31/03/2027 24 Not yet distributed\nPage 1 of 4 DMRC Ref: 40832810 EL(26)A/39"
+        },
+        {
+          "page": 2,
+          "image_sha256": "f202f49fc25db96bc0b62f145eaad95792aafc1fdb8ebdd7c6cac931d5fc6b34",
+          "ocr_text": "MEDICINES NOTIFICATION\n\nBackground\n\nB. Braun Melsungen AG has notified the MHRA that errors have been identified in the\nPatient Information Leaflet (PIL) included in some batches of Meropenem 1000 mg powder\n\nand solvent for solution for infusion. The PIL\n\nprovides incorrect information regarding the\n\nsodium content and product strength in the sections outlined below. Currently all available\nstock contains the affected version of the PIL.\n\nTo minimise the risk of supply disruption, certain batches that have not yet been distributed\nare also included in this notification. Following discussions between the MHRA and the\n\nDepartment of Health and Social Care, these\npatients. Therefore, the affected batches will\nand are included in this notification.\n\nIn section 2 the sodium content was reflected incorrec'\n\nproducts have been considered critical for\ncontinue to be supplied without repackaging\n\nly:\n\nIncorrect information\n\nCorrect information\n\nMeropenem contains sodium\n\nThis medicinal product contains 245 mq\nsodium (main component of cooking/table\nsalt) per bag, equivalent to 12.3 % of the\nrecommended maximum daily dietary\nintake of sodium for an adult.\n\nIf you have a condition which requires you\nto monitor your sodium intake, please\ninform your doctor or pharmacist.\n\nMeropenem contains sodium\n\nThis medicinal product contains 290 mg\nsodium (main component of cooking/table\nsalt) per bag, equivalent to 14.5 % of the\nfecommended maximum daily dietary\nintake of sodium for an adult.\n\nIf you have a condition which requires you\nto monitor your sodium intake, please\ninform your doctor or pharmacist.\n\nIn the section 6 the strength of the product w:\n\nas stated incorrectly:\n\nIncorrect information\n\nCorrect information\n\nWi\nThe active substance is meropenem.\n\nOne two-chamber bag contains\nmeropenem trihydrate equivalent to 500\nmg anhydrous meropenem.\n\nThe other ingredients are sodium chloride,\nwater for injections and sodium carbonate.\n\nhat Meropenem contains\n\nWhat Meropenem contains\nThe active substance is meropenem.\n\nOne two-chamber bag contains\nmeropenem trihydrate equivalent to_1000\nmg anhydrous meropenem.\n\nThe other ingredients are sodium chloride,\nwater for injections and sodium carbonate.\n\nAll information on the Label and in the SmPC is correct and all other sections in the PIL\n\nare also correct.\n\nPage 2 of 4 DMRC Ref:\n\n40832810 EL(26)A/39\n\n",
+          "native_text": "MEDICINES NOTIFICATION\nBackground\nB. Braun Melsungen AG has notified the MHRA that errors have been identified in the\nPatient Information Leaflet (PIL) included in some batches of Meropenem 1000 mg powder\nand solvent for solution for infusion. The PIL provides incorrect information regarding the\nsodium content and product strength in the sections outlined below. Currently all available\nstock contains the affected version of the PIL.\nTo minimise the risk of supply disruption, certain batches that have not yet been distributed\nare also included in this notification. Following discussions between the MHRA and the\nDepartment of Health and Social Care, these products have been considered critical for\npatients. Therefore, the affected batches will continue to be supplied without repackaging\nand are included in this notification.\nIn section 2 the sodium content was reflected incorrectly:\nIncorrect information Correct information\nMeropenem contains sodium Meropenem contains sodium\nThis medicinal product contains 245 mg This medicinal product contains 290 mg\nsodium (main component of cooking/table sodium (main component of cooking/table\nsalt) per bag, equivalent to 12.3 % of the salt) per bag, equivalent to 14.5 % of the\nrecommended maximum daily dietary recommended maximum daily dietary\nintake of sodium for an adult. intake of sodium for an adult.\nIf you have a condition which requires you If you have a condition which requires you\nto monitor your sodium intake, please to monitor your sodium intake, please\ninform your doctor or pharmacist. inform your doctor or pharmacist.\nIn the section 6 the strength of the product was stated incorrectly:\nIncorrect information Correct information\nWhat Meropenem contains What Meropenem contains\nThe active substance is meropenem. The active substance is meropenem.\nOne two-chamber bag contains One two-chamber bag contains\nmeropenem trihydrate equivalent to 500 meropenem trihydrate equivalent to 1000\nmg anhydrous meropenem. mg anhydrous meropenem.\nThe other ingredients are sodium chloride, The other ingredients are sodium chloride,\nwater for injections and sodium carbonate. water for injections and sodium carbonate.\nAll information on the Label and in the SmPC is correct and all other sections in the PIL\nare also correct.\nPage 2 of 4 DMRC Ref: 40832810 EL(26)A/39"
+        }
+      ],
+      "ocr_matched": [
+        [
+          "2025-06-20"
+        ],
+        [
+          "2026-01-12",
+          "2026-12-01"
+        ],
+        [
+          "2026-10-31"
+        ],
+        [
+          "2027-01-31"
+        ],
+        [
+          "2027-03-31"
+        ]
+      ],
+      "ocr_missing": [],
+      "native_matched": [
+        [
+          "2025-06-20"
+        ],
+        [
+          "2026-01-12",
+          "2026-12-01"
+        ],
+        [
+          "2026-10-31"
+        ],
+        [
+          "2027-01-31"
+        ],
+        [
+          "2027-03-31"
+        ]
+      ],
+      "native_missing": []
+    },
+    {
+      "document_id": "da0f8daa-3cd8-40d9-828d-c0ff559966c4",
+      "title": "Class 4 Medicines Defect Notification: Martindale Pharmaceuticals Ltd, Clobazam Martindale Pharma 5 mg/5 mL  and 10 mg/5 mL  Oral Suspension 150ml, EL(26)A/38",
+      "url": "https://www.gov.uk/drug-device-alerts/class-4-medicines-defect-notification-martindale-pharmaceuticals-ltd-clobazam-martindale-pharma-5-mg-slash-5-ml-and-10-mg-slash-5-ml-oral-suspension-150ml-el-26-a-slash-38",
+      "split": "test",
+      "expected_date_keys": [
+        [
+          "2026-08-18"
+        ],
+        [
+          "2026-09-14"
+        ],
+        [
+          "2028-05"
+        ],
+        [
+          "2028-07"
+        ]
+      ],
+      "unsupported_html_cells": [],
+      "pdf_source": {
+        "url": "https://assets.publishing.service.gov.uk/media/6aabae5ff1f8d2a39605f92d/Class_4_Medicines_Defect_Notification_Martindale_Pharmaceuticals_Ltd__Clobazam_Martindale_Pharma_5_mg5_mL_and_10_mg5_mL_Oral_Suspension_150ml__EL_26_A38.pdf",
+        "sha256": "668794fcd5fac16a34c4bd88bf526abe29f6161f11311781901e7337c865be39",
+        "retrieved_at": "2026-09-26T21:18:41.946656+00:00"
+      },
+      "total_pdf_pages": 3,
+      "status": "measured",
+      "pages": [
+        {
+          "page": 1,
+          "image_sha256": "6083e7d9c479f78a1e399e1628faf398e4c08f6ce528e4684168161868254e60",
+          "ocr_text": "MEDICINES NOTIFICATION\n\nMEDICINES NOTIFICATION\n\nCLASS 4 MEDICINES DEFECT INFORMATION, EL(26)A/38\nCaution In Use\nIssued 17 September 2026\n\nDistribute to Pharmacy/Wholesaler Level\n\nMARKETING AUTHORISATION HOLDER (MAH)\n\nMartindale Pharmaceuticals Ltd\n\nMEDICINE DETAILS\n\nClobazam Martindale Pharma 5 mg/5 mL Oral Suspension 150ml\nPL 00156/0322\n\nActive Ingredient: clobazam\n\nSNOMED code: 42289011000001100\n\nGTIN: 5014124144224\n\nAFFECTED LOT BATCH NUMBERS\n\nBatch No. Expiry Date Pack Size First Distributed\n0162858 05/2028 1 18/08/2026\n0163605 07/2028 1 14/09/2026\n\nMEDICINE DETAILS\n\nClobazam Martindale Pharma 10 mg/5 mL Oral Suspension 150ml\nPL 00156/0323\n\nActive Ingredient: clobazam\n\nSNOMED code: 42289711000001100\n\nGTIN: 5014124144231\n\nAFFECTED LOT BATCH NUMBERS\n\nBatch No. Expiry Date Pack Size First Distributed\n0163858 07/2028 1 14/09/2026\n\nPage 1 of 3 DMRC Ref: 40754020 EL(26)A/38\n",
+          "native_text": "MEDICINES NOTIFICATION\nMEDICINES NOTIFICATION\nCLASS 4 MEDICINES DEFECT INFORMATION, EL(26)A/38\nCaution In Use\nIssued 17 September 2026\nDistribute to Pharmacy/Wholesaler Level\nMARKETING AUTHORISATION HOLDER (MAH)\nMartindale Pharmaceuticals Ltd\nMEDICINE DETAILS\nClobazam Martindale Pharma 5 mg/5 mL Oral Suspension 150ml\nPL 00156/0322\nActive Ingredient: clobazam\nSNOMED code: 42289011000001100\nGTIN: 5014124144224\nAFFECTED LOT BATCH NUMBERS\nBatch No. Expiry Date Pack Size First Distributed\n0162858 05/2028 1 18/08/2026\n0163605 07/2028 1 14/09/2026\nMEDICINE DETAILS\nClobazam Martindale Pharma 10 mg/5 mL Oral Suspension 150ml\nPL 00156/0323\nActive Ingredient: clobazam\nSNOMED code: 42289711000001100\nGTIN: 5014124144231\nAFFECTED LOT BATCH NUMBERS\nBatch No. Expiry Date Pack Size First Distributed\n0163858 07/2028 1 14/09/2026\nPage 1 of 3 DMRC Ref: 40754020 EL(26)A/38"
+        },
+        {
+          "page": 2,
+          "image_sha256": "c2764029ccfaf5d33df9cc5e77b24393a94f8d9875e2167e3401d462fab2d992",
+          "ocr_text": "MEDICINES NOTIFICATION\n\nBackground\n\nMartindale Pharmaceuticals has informed the MHRA of an error with the linear barcode of\nsome batches of Clobazam 5mg/5mL and 10mg/5mL Oral Suspension 150mL.\n\nThe above batches were packaged in cartons containing an incorrect pre-printed linear\nbarcode. The linear barcode present represents the GTIN for the branded version of the\nproduct (Tapclob). It should instead reflect the generic name: Clobazam. The code in the\n2D printed barcode is correct.\n\nExample for 5mg/5mL 150mL pack:\n\nEach Smlof the oral suspension contains Smg clobaram\n\n‘THIS MEDICINE CAN MAKE YOU FEEL SLEEPY\n(May cause addiction, dependence and withdrawal\nreactions\n\nDo not drive whle taking this medicine unt you know\nbrow at makes you a\n\nSee the leatet inside fr mare infarmatian.\n\nAsp conats son, E29 shim pany:\n{E217}, sodium methyl hydramyberanae (2\n\nPlace EGP QUTOF THe SIGHT AND REACHOF CHILDREN\ndispensing label Donor storeabove 25°C\nhere se wthin 28 ays of pening\n‘This pack contains:\n+1500 oral selution\n+ Easy follow\ninstructors\n+Spinge\nadaptor\n\nIncorrect GTIN in\nlinear barcode\nslozessal 754168)\n\n(6026468754168) LB teenestense® | + sod rng\n\nPL.00156/0322 + Imloral syringe\nMartindale Pharina\n\nBampton Roud.Harold Hal,\n\nRomford,\n\nEssex, RM BUG, UK\n\nCorrect GTIN would\nbe in 2D barcode\n\n(5014124144224)\n\nThe associated strength and bottle size documented on the pre-printed package remain\ncorrect and unchanged.\n\nFull batch quantities:\n\nBatch 0162858: 5,544 units\nBatch 0163605: 2,277 units\nBatch 0163858: 4,631 units\n\nFuture batches of Clobazam for both strengths and pack size will have the barcode\ncorrected via the application of a sticker until new cartons are available to maintain supply\nfor patients.\n\nPage 2 of 3 DMRC Ref: 40754020 EL(26)A/38\n",
+          "native_text": "MEDICINES NOTIFICATION\nBackground\nMartindale Pharmaceuticals has informed the MHRA of an error with the linear barcode of\nsome batches of Clobazam 5mg/5mL and 10mg/5mL Oral Suspension 150mL.\nThe above batches were packaged in cartons containing an incorrect pre-printed linear\nbarcode. The linear barcode present represents the GTIN for the branded version of the\nproduct (Tapclob). It should instead reflect the generic name: Clobazam. The code in the\n2D printed barcode is correct.\nExample for 5mg/5mL 150mL pack:\nIncorrect GTIN in\nlinear barcode\n(5026468754168)\nCorrect GTIN would\nbe in 2D barcode\n(5014124144224)\nThe associated strength and bottle size documented on the pre-printed package remain\ncorrect and unchanged.\nFull batch quantities:\nBatch 0162858: 5,544 units\nBatch 0163605: 2,277 units\nBatch 0163858: 4,631 units\nFuture batches of Clobazam for both strengths and pack size will have the barcode\ncorrected via the application of a sticker until new cartons are available to maintain supply\nfor patients.\nPage 2 of 3 DMRC Ref: 40754020 EL(26)A/38"
+        }
+      ],
+      "ocr_matched": [
+        [
+          "2026-08-18"
+        ],
+        [
+          "2026-09-14"
+        ],
+        [
+          "2028-05"
+        ],
+        [
+          "2028-07"
+        ]
+      ],
+      "ocr_missing": [],
+      "native_matched": [
+        [
+          "2026-08-18"
+        ],
+        [
+          "2026-09-14"
+        ],
+        [
+          "2028-05"
+        ],
+        [
+          "2028-07"
+        ]
+      ],
+      "native_missing": []
+    },
+    {
+      "document_id": "47011eac-842f-4f80-a083-58f5bcb0808f",
+      "title": "Class 2 Medicines Recall: Zentiva Pharma UK Limited, Fingolimod Zentiva 0.5 mg Capsules, EL(26)A/37",
+      "url": "https://www.gov.uk/drug-device-alerts/class-2-medicines-recall-zentiva-pharma-uk-limited-fingolimod-zentiva-0-dot-5-mg-capsules-el-26-a-slash-37",
+      "split": "test",
+      "expected_date_keys": [
+        [
+          "2025-01-28"
+        ],
+        [
+          "2027-11"
+        ]
+      ],
+      "unsupported_html_cells": [],
+      "pdf_source": {
+        "url": "https://assets.publishing.service.gov.uk/media/6a86d55954bcee010d5145b9/Class_2_Medicines_Recall_Zentiva_Pharma_UK_Limited__Fingolimod_Zentiva_0.5_mg_Capsules__EL26A37.pdf",
+        "sha256": "0eef4bbdea31aa51736e1572336996263d5e1a8589d9c2c1bdb7d699da291a2a",
+        "retrieved_at": "2026-09-26T21:18:43.889175+00:00"
+      },
+      "total_pdf_pages": 2,
+      "status": "measured",
+      "pages": [
+        {
+          "page": 1,
+          "image_sha256": "589a474fc925f2a54d33b8d9a1a79124f1d1a74f928638a30184365de60589af",
+          "ocr_text": "MEDICINES NOTIFICATION\n\nMEDICINES RECALL\n\nCLASS 2 MEDICINES RECALL, EL(26)A/37\nAction within 48 hours\nIssued 20 August 2026\n\nDistribute to Pharmacy/Wholesaler Level\n\nMARKETING AUTHORISATION HOLDER (MAH)\nZentiva Pharma UK Limited\n\nMEDICINE DETAILS\n\nFingolimod Zentiva 0.5 mg Capsules\nPL: 17780/0858\n\nActive Ingredient: Fingolimod\nSNOMED code: 40459211000001106\nGTIN: 8594739260931\n\nAFFECTED LOT BATCH NUMBERS\n\nBatch No. Expiry Date Pack Size First Distributed\n4L01372H 11/2027 28 28 January 2025\nBackground\n\nZentiva UK Pharma Limited are recalling one batch of Fingolimod Zentiva 0.5 mg\nCapsules (BN 4L01372H) as a precautionary measure due to a potential risk of\ncontamination with metal particles. The particles, if present, are known to be small and\npose a low risk to the safety or efficacy of the capsules. No reports have been received to\ndate, the particles were identified during shelf-life testing.\n\nAdvice for Healthcare Professionals:\n\nStop supplying the affected batch. Quarantine all remaining stock and return it to your\nsupplier using your supplier's approved process.\n\nPage 1 of 2 DMRC Ref: 39754868 EL(26)A/37\n",
+          "native_text": "C2-Internal\nMEDICINES NOTIFICATION\nMEDICINES RECALL\nCLASS 2 MEDICINES RECALL, EL(26)A/37\nAction within 48 hours\nIssued 20 August 2026\nDistribute to Pharmacy/Wholesaler Level\nMARKETING AUTHORISATION HOLDER (MAH)\nZentiva Pharma UK Limited\nMEDICINE DETAILS\nFingolimod Zentiva 0.5 mg Capsules\nPL: 17780/0858\nActive Ingredient: Fingolimod\nSNOMED code: 40459211000001106\nGTIN: 8594739260931\nAFFECTED LOT BATCH NUMBERS\nBatch No. Expiry Date Pack Size First Distributed\n4L01372H 11/2027 28 28 January 2025\nBackground\nZentiva UK Pharma Limited are recalling one batch of Fingolimod Zentiva 0.5 mg\nCapsules (BN 4L01372H) as a precautionary measure due to a potential risk of\ncontamination with metal particles. The particles, if present, are known to be small and\npose a low risk to the safety or efficacy of the capsules. No reports have been received to\ndate, the particles were identified during shelf-life testing.\nAdvice for Healthcare Professionals:\nStop supplying the affected batch. Quarantine all remaining stock and return it to your\nsupplier using your supplier’s approved process.\nPage 1 of 2 DMRC Ref: 39754868 EL(26)A/37"
+        },
+        {
+          "page": 2,
+          "image_sha256": "c3ee80e324613b4faf7f2128939d46dce387f53f41527835eaa1390029d6aba4",
+          "ocr_text": "MEDICINES NOTIFICATION\n\nAdvice for Healthcare Professionals to Provide to Patients:\n\nIf patients have the affected batch they should contact their pharmacy in the first\ninstance. Do not stop taking your medication without speaking to your healthcare\nprofessional first. The particles, if present, are known to be small and pose a low risk to\nthe safety of the product. Patients with this batch are not considered at risk and no\nreports of harm have been reported for this batch of capsules.\n\nPatients who experience adverse reactions or have any questions about the medication\n\nshould seek medical attention. Any suspected adverse reactions should also be reported\nvia the MHRA Yellow Card scheme.\n\nAdditional information:\n\nFor all medical information enquiries and information on this product, please email\nUKMedInfo@zentiva.com, or telephone 0800 090 2408.\n\nFor stock control enquiries please email ukcustomerservices@zentiva.com, or telephone\n01371 822022.\n\nRecipients of this Medicines Recall should bring it to the attention of relevant contacts by\ncopy of this notice. NHS regional teams are asked to forward this to community\npharmacists and dispensing general practitioners for information.\n\nYours faithfully\n\nDefective Medicines Report Centre\n10 South Colonnade\n\nCanary Wharf\n\nLondon\n\nE14 4PuU\n\nTelephone +44 (0)20 3080 6574\n\nDMRC@mhra.gov.uk\n\nPage 2 of 2 DMRC Ref: 39754868 EL(26)A/37\n",
+          "native_text": "C2-Internal\nMEDICINES NOTIFICATION\nAdvice for Healthcare Professionals to Provide to Patients:\nIf patients have the affected batch they should contact their pharmacy in the first\ninstance. Do not stop taking your medication without speaking to your healthcare\nprofessional first. The particles, if present, are known to be small and pose a low risk to\nthe safety of the product. Patients with this batch are not considered at risk and no\nreports of harm have been reported for this batch of capsules.\nPatients who experience adverse reactions or have any questions about the medication\nshould seek medical attention. Any suspected adverse reactions should also be reported\nvia the MHRA Yellow Card scheme.\nAdditional information:\nFor all medical information enquiries and information on this product, please email\nUKMedInfo@zentiva.com, or telephone 0800 090 2408.\nFor stock control enquiries please email ukcustomerservices@zentiva.com, or telephone\n01371 822022.\nRecipients of this Medicines Recall should bring it to the attention of relevant contacts by\ncopy of this notice. NHS regional teams are asked to forward this to community\npharmacists and dispensing general practitioners for information.\nYours faithfully\nDefective Medicines Report Centre\n10 South Colonnade\nCanary Wharf\nLondon\nE14 4PU\nTelephone +44 (0)20 3080 6574\nDMRC@mhra.gov.uk\nPage 2 of 2 DMRC Ref: 39754868 EL(26)A/37"
+        }
+      ],
+      "ocr_matched": [
+        [
+          "2025-01-28"
+        ],
+        [
+          "2027-11"
+        ]
+      ],
+      "ocr_missing": [],
+      "native_matched": [
+        [
+          "2025-01-28"
+        ],
+        [
+          "2027-11"
+        ]
+      ],
+      "native_missing": []
+    }
+  ]
+}

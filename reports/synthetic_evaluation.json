@@ -144,7 +144,9 @@
     "src/pharma_ocr_date_rag/ocr.py": "8135ea2eaf22c5dcc309bad1143264a9119d2516b9396357c850072546090531",
     "src/pharma_ocr_date_rag/pipeline.py": "6b3d579b8ef218d6a130519b077f2e17dbf998764a62dd1cca0f2e7a1a1f835d",
     "src/pharma_ocr_date_rag/policies.py": "d27e9fefd85aaacca87a00ccc215868d711264d1010f1a4f647de069f4d174f8",
+    "src/pharma_ocr_date_rag/public_data.py": "6964040b24ee6e3ab6c42852229c39ec0f071782931eca9f4677f25db21fc4a7",
     "src/pharma_ocr_date_rag/rag.py": "77ab4953a69fd6d6e9de3a7c5bd5179d88fabd63193be5d649b453cc10fe9a44",
+    "src/pharma_ocr_date_rag/recalls.py": "3acb3bfb21e4148e7ab255f9c59efde4a14f0f0c143ecb628773df13f55a8129",
     "src/pharma_ocr_date_rag/reporting.py": "e65f20c2f83c65256708ecdb55c0fb12b9ef820208156a11ea0263af62962917",
     "src/pharma_ocr_date_rag/review.py": "69ab8a2a3b326da01ca5f6c80a2c8b5a0b69527c4062d14f292a06dee66ae534"
   }

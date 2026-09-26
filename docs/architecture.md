@@ -36,7 +36,11 @@ New extraction records preserve original text, character offsets and context eve
 
 ## Browser and local UI boundary
 
-The TypeScript/Vite app has four views: document review, date register, benchmark lab and review history. `scripts/export_web.py` runs the Python extractor against the eight public fixtures and exports exact source text, field spans, alternatives, input hashes and parser-source hashes. Its `--check` mode fails if the committed browser evidence is stale.
+The TypeScript/Vite app has five views: public notices, document review, date register, benchmark lab and review history. `scripts/export_web.py` runs the Python extractor against the eight synthetic fixtures and exports exact source text, field spans, alternatives, input hashes and parser-source hashes. Its `--check` mode fails if the committed browser evidence is stale.
+
+The separate public-data path uses `public_data.py` to collect attributed MHRA API tables with bounded requests and verified cache bytes. `recalls.py` groups documents chronologically, fits TF-IDF and logistic regression only on training headings, applies an abstention threshold, and joins predicted date columns to batch columns while retaining exact cell indices. `scripts/train_mhra.py` generates a separate source-hashed `recalls.json`; the browser validates cell/batch identity before rendering it. Public records have search/filter/export controls but no approval action. They are not indexed into SQLite or mixed with synthetic review decisions. See the [dataset/model card](public-data.md) for why repeated headings limit the experiment.
+
+`scripts/benchmark_mhra_pdf.py` is a separate original-PDF experiment, not the source of the web register. It downloads three protocol-selected PDF attachments, renders two pages each, runs Tesseract, and compares date coverage with native text and HTML table references. This does not infer PDF table links or OCR bounding boxes.
 
 Pillow optionally renders source-page PNGs from those text fixtures using a supplied Unicode font. Highlight rectangles are computed from source offsets and font metrics. They are not OCR predictions. CI verifies PNG hashes, source spans and snapshot reproducibility without requiring Pillow. A browser smoke test loads every image, checks desktop/mobile layouts, and exercises selection, ambiguity, persistence, filtering and downloads.
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-26 - Real public notices, training and source-linked UI
+
+- Collected 60 real public MHRA recall/defect notices through bounded, robots-aware official API requests. Published attributed batch-table excerpts, explicit heading labels and a fixed evaluation protocol, with source hashes and OGL licence boundaries.
+- Trained a character TF-IDF/logistic-regression column classifier on 36 documents (182 examples), reserving 12 documents each for validation/test. Test roles score 80/80, tied by keyword rules; 76 test heading instances repeat training templates. No advantage over rules or trained OCR is claimed.
+- Added 742 source-linked date-column candidates, including 123 ambiguous and 80 unparsed/non-date cells. Added a default public-notice UI with batch search, source rows, dataset-split filters, pagination and exports; kept the synthetic multilingual review flow separate.
+- Measured actual OCR and native extraction on three original public PDF attachments / six pages. Both recover 11/11 supported unique HTML date interpretations. Saved transcripts and exclusions; tests verify selection, references and rescored coverage. This is not full-document accuracy or independent date gold.
+- Added 34 Python tests (233 total with research/demo dependencies) and three TypeScript tests (12 total), plus desktop/mobile production-browser flows. Added offline training reproduction to CI and a dataset/model card with honest baselines, reuse terms and remaining gaps.
+
 ## 2026-09-26 - Measured multilingual image OCR
 
 - Added explicit Tesseract language packs, page segmentation, language-directory selection and recognition timeout, with separate unavailable/execution errors and image cleanup. Plain text remains dependency-free; a small `tesseract` extra is available independently of PaddleOCR.

@@ -1017,6 +1017,91 @@ td:first-child {
   font-size: 10px;
   margin-bottom: 3px;
 }
+.public-scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px 0;
+  color: #755515;
+  font-size: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.public-scope svg,
+.public-source a svg {
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+}
+.public-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.public-checkbox input {
+  width: 16px;
+  min-height: 16px;
+  accent-color: var(--teal);
+}
+.public-register {
+  max-height: 540px;
+}
+.public-register td:first-child {
+  min-width: 230px;
+  max-width: 340px;
+}
+.public-register td small {
+  font-size: 11px;
+  line-height: 1.45;
+}
+.public-selected {
+  background: #eef6f1;
+}
+.public-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 12px 0;
+}
+.public-pagination span {
+  min-width: 90px;
+  text-align: center;
+  font-size: 12px;
+}
+.public-source,
+.public-method {
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.public-source h3 {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.public-source p,
+.public-method p {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+.public-source code {
+  font-size: 11px;
+}
+.public-source .source-cell-selected {
+  background: #fff0bb;
+  color: #3a3825;
+}
+.public-method h2 {
+  font-size: 18px;
+  font-weight: 500;
+}
+.public-method small {
+  color: var(--muted);
+  font-size: 11px;
+}
 .benchmark-heading {
   display: flex;
   align-items: center;

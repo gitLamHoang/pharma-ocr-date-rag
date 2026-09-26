@@ -24,6 +24,18 @@ jobs:
       - run: uv run python scripts/benchmark_multilingual.py --check
       - run: uv run python scripts/export_web.py --check
       - run: uv run python scripts/benchmark_ocr.py --check-report
+      - run: uv run python scripts/benchmark_mhra_pdf.py --check-report
+  public-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.21"
+          enable-cache: true
+      - run: uv sync --frozen --python 3.12 --extra dev --extra research
+      - run: uv run pytest tests/test_public_data.py tests/test_recalls.py -q
+      - run: uv run python scripts/train_mhra.py --check
   image-ocr:
     runs-on: ubuntu-latest
     steps:

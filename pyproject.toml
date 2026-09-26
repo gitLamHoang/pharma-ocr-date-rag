@@ -12,6 +12,11 @@ authors = [{ name = "Lam Phan" }]
 dependencies = []
 
 [project.optional-dependencies]
+research = [
+  "beautifulsoup4>=4.12,<5",
+  "scikit-learn>=1.6,<2",
+  "pdfplumber>=0.11,<0.12",
+]
 tesseract = [
   "pillow>=10.0.0",
   "pytesseract>=0.3.13,<0.4",

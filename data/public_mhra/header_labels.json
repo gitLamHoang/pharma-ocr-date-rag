@@ -1,0 +1,20 @@
+{
+  "annotation_method": "Explicit AI-assisted review of the collected source column headings. These are schema-role labels, not date-value or clinical annotations.",
+  "labels": {
+    "batch no.": "batch",
+    "expiry date": "expiry",
+    "pack size": "other",
+    "first distributed": "distribution",
+    "incorrect information": "other",
+    "correct information": "other",
+    "product": "other",
+    "issue": "other",
+    "correct braille": "other",
+    "": "other",
+    "incorrect braille": "other",
+    "pil section": "other",
+    "new pil wording (actual text)": "other",
+    "incorrect active content statement": "other",
+    "correct active content statement": "other"
+  }
+}

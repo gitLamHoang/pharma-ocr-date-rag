@@ -5,17 +5,19 @@
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-168577)](LICENSE)
 
-A multilingual document review prototype that turns pharmaceutical-style vendor text into a searchable date register, with source evidence and explicit uncertainty.
+A pharmaceutical date-review prototype with **60 real public MHRA notices**, a trained table-column classifier, original-PDF OCR measurements, and a searchable batch/date register. Every candidate links back to source evidence; uncertain values remain unresolved.
 
 **English / French / German / Spanish / Vietnamese. Python + TypeScript + SQL.**
 
 ### [Open the Interactive Workspace](https://gitlamhoang.github.io/pharma-ocr-date-rag/)
 
-No installation or API key. Inspect eight synthetic documents, review 42 candidate dates, and explore the benchmark evidence.
+No installation or API key. Search 742 candidate date-column cells from public medicine notices, inspect original batch rows, and compare model evidence. A separate workspace contains eight synthetic multilingual documents and 42 candidate dates.
 
-![Browser document workspace with a highlighted French source and ambiguous-date inspector](docs/images/review-workspace.png)
+![Public MHRA notices workspace with batch search, date candidates and source evidence](docs/images/public-notices.png)
 
 ## The Problem
+
+A medicine notice can list many affected batches, expiry values and distribution dates. A flat OCR transcript loses the relationship between them. The public-data workflow retains that relationship and supports searching batches across notices. It is a historical research snapshot, not a live recall service or medication-safety decision tool.
 
 A vendor document can contain manufacturing, expiry, inspection, audit, arrival, and report dates. Finding a date is only part of the task: a reviewer needs to know what it refers to and where it came from. A value such as `09/01/2026` adds another question: which date convention does this document use?
 
@@ -54,6 +56,10 @@ npm run dev
 
 | Capability | Current implementation |
 | --- | --- |
+| Real public corpus | Bounded, cached GOV.UK API collector; 60 MHRA recall/defect notices, 371 batch rows, source hashes and OGL attribution |
+| Trained classifier | Character TF-IDF + logistic regression fitted on 36 notices; chronological document-group splits, keyword/majority baselines and abstention |
+| Public-notice register | 742 source-linked candidate cells; medicine/batch search, split and unresolved filters, original rows and exports |
+| Original-PDF experiment | Actual Tesseract and native-text extraction on 3 public PDFs / 6 pages, with saved transcripts and explicit coverage limits |
 | Multilingual fields | Language-specific month names and field vocabularies for English, French, German, Spanish and Vietnamese; all-language or explicit-language mode |
 | Date normalization | ISO, numeric, named-month, Vietnamese `ngày … tháng … năm …`, and month/year dates; calendar validation |
 | Ambiguity handling | Two valid numeric interpretations produce `normalized: null` plus candidates; explicit conventions can differ by document in one batch |
@@ -125,6 +131,27 @@ Indexing the same source and parser settings retains its candidate IDs and decis
 
 ## Reproduce the Results
 
+### Real public-document experiment
+
+```bash
+uv sync --frozen --python 3.12 --extra dev --extra research
+uv run python scripts/train_mhra.py --check
+uv run python scripts/benchmark_mhra_pdf.py --check-report
+```
+
+The first command below the install **re-trains** from the frozen corpus without network access; the PDF checker verifies saved evidence without rerunning OCR. [Dataset/model card, source licence, crawl and actual OCR commands](docs/public-data.md).
+
+| Measurement | Actual result | Important boundary |
+| --- | --- | --- |
+| Training | 182 columns from 36 notices; 12 validation / 12 test notices | Trained column classifier, not OCR fine-tuning |
+| Test column roles | Model 80/80; keyword rules also 80/80; majority 23/80 | 76/80 heading instances occur in training; no demonstrated advantage over rules |
+| Original-PDF date coverage | OCR 11/11; native text also 11/11 | Supported unique HTML-table date interpretations in 3 PDFs, not whole-document OCR accuracy |
+| Public register | 742 candidate cells; 123 ambiguous and 80 unparsed/non-date | All require review; not independently validated date labels |
+
+All public notices are English. Five-language claims below apply to synthetic parser tests, not real multilingual document accuracy. The simpler rule baseline is competitive here; template-diverse, independently annotated data is the next research priority.
+
+### Synthetic regression suite
+
 ```bash
 pytest
 python scripts/evaluate.py
@@ -144,7 +171,7 @@ Measured on the current **authored synthetic development fixtures**, not held-ou
 | Multilingual breakdown | EN 18/18; FR, DE, ES, VI each 6/6 | English includes 12 edge cases; coverage is intentionally uneven |
 | Retrieval chunk experiment | 3/3 questions hit at 35, 60 and 90 words | A small smoke benchmark, not evidence that chunk size never matters |
 
-[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, nine unit tests, a production build and Playwright desktop/mobile checks before deploying.
+[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, twelve unit tests, a production build and Playwright desktop/mobile checks before deploying. A separate CI job retrains the public-data classifier from the frozen corpus.
 
 ```bash
 cd web
@@ -171,6 +198,11 @@ python scripts/benchmark_ocr.py --check-report
 
 ```mermaid
 flowchart LR
+    N[Official MHRA APIs / public PDFs] --> O[Bounded collection + source hashes]
+    O --> P[Train-only TF-IDF column classifier]
+    P --> Q[Batch-linked dates + uncertainty]
+    Q --> L
+    O --> R[Original-PDF OCR / native-text coverage]
     A[UTF-8 text / optional OCR] --> B[Scoped OCR repair]
     B --> C[Multilingual date candidates]
     C --> D[Calendar validation + date-order policy]
@@ -189,6 +221,8 @@ flowchart LR
 ```text
 src/pharma_ocr_date_rag/
   languages.py   month names and field vocabularies
+  public_data.py bounded public collection, robots checks and source tables
+  recalls.py     grouped splits, learned column roles and batch/date evidence
   dates.py       date candidates, normalization, source offsets, review flags
   policies.py    explicit per-document numeric conventions and validation
   ocr.py         verified Tesseract adapter; unverified legacy PaddleOCR adapter
@@ -203,6 +237,7 @@ src/pharma_ocr_date_rag/
   cli.py         extraction, search and review commands
 
 data/
+  public_mhra/          real notice tables, explicit heading labels and protocol
   synthetic_docs/       four original English fixtures
   multilingual_docs/    four multilingual demo documents
   mixed_conventions/    three adversarial convention fixtures and a policy map
@@ -219,14 +254,14 @@ docs/
 
 ## Scope and Limitations
 
-This is an independent public prototype using only synthetic data. It contains no Pfizer-confidential documents, patient records, real vendor data, or production deployment results. It is a later public reconstruction of the document-workflow idea, not a release of an employer's system. Development uses AI coding assistance; the code, tests and design notes are available for inspection.
+This independent prototype combines attributed public MHRA notices with clearly marked synthetic fixtures. It contains no Pfizer-confidential documents, patient records, private vendor data, or production deployment results. It is a later public reconstruction of the document-workflow idea, not a release of an employer's system. Development and schema annotation use AI assistance; the code, tests and design notes are available for inspection. Code is MIT; source public-sector content retains its [OGL attribution and exclusions](data/public_mhra/LICENSE.md).
 
-The five-language demo starts from text. A separate Tesseract experiment has been run on three synthetic pages in English, French and Vietnamese, both clean and degraded. It does not validate German/Spanish OCR, mixed-language scans, complex layouts or real vendor documents. The PaddleOCR adapter remains unverified. Optional OCR packages and system dependencies are not required for the demo.
+The five-language demo starts from text. A separate Tesseract experiment has been run on three synthetic pages in English, French and Vietnamese, both clean and degraded. Original-PDF OCR has also been measured on three English MHRA notices, with limited coverage scoring. Neither validates German/Spanish OCR, mixed-language scans or unseen vendor layouts. The PaddleOCR adapter remains unverified. Optional OCR packages and system dependencies are not required for the hosted demo.
 
-Despite the historical repository name, the current retrieval output is extractive evidence, not an LLM-generated answer. There is no trained model, working LlamaIndex index, or Mistral/Phi-2 benchmark in this public version. Those comparisons must be implemented and measured before being claimed.
+Despite the historical repository name, retrieval is extractive evidence, not an LLM-generated answer. The public-data column classifier is trained and measured, but no OCR recognizer has been fine-tuned. There is no working LlamaIndex index or Mistral/Phi-2 benchmark in this public version. Those comparisons must be implemented and measured before being claimed.
 
-Field classification and multilingual retrieval use small transparent vocabularies. Unknown phrasing, decomposed Unicode, document tables, page layout and complex mixed-language scans need more coverage. Label confidence is a rule heuristic, not a calibrated probability. Reviewer names are local labels, not verified identities; neither review store is a regulatory approval or clinical decision system.
+Multilingual text classification/retrieval use small vocabularies; public table roles use the measured classifier. Merged tables, unknown phrasing, page layout and mixed-language scans need more coverage. Rule confidence and classifier scores are not calibrated probabilities of a correct date. Reviewer names are local labels, not verified identities; neither review store is a regulatory approval or clinical decision system.
 
 ## Development
 
-See the [daily roadmap](docs/roadmap.md) and [failure-mode notes](docs/failure_modes.md). Contributions should include a minimal synthetic example, expected behavior and a regression check. Report what was actually tested and keep benchmark scope explicit.
+See the [daily roadmap](docs/roadmap.md), [public-data protocol](docs/public-data.md) and [failure-mode notes](docs/failure_modes.md). Contributions should include a minimal synthetic example or an attributed, reusable public source, expected behavior and a regression check. Report what was actually tested and keep benchmark scope explicit.
