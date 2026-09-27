@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-27 - Conditional dates and source statements
+
+- Separated single dates, ambiguous dates, expiry cutoffs, distribution statements and unsupported cells. Three inclusive cutoffs preserve month precision and null single-date values; 39 distribution statements remain source statements, not current status assertions. Unsupported cells now number 38 rather than mixing all 80 no-candidate cells together.
+- Preserved every original candidate list, normalized value, source identity and review status. Corpus bytes, model split, classifier results and protocol are unchanged. All 742 records still require review.
+- Added value-kind filters, explicit cutoff/status interpretations, source footnote warnings and schema-v2 JSON/CSV exports. The browser rejects contradictory value combinations.
+- Added six source-anchored development cases and 24 Python regression tests, including partial matches, role mismatches, invalid/ambiguous cutoff endpoints and additional qualifications. Added three frontend tests and browser flows for filters, footnotes and exported bounds. Re-ran the original three-PDF OCR experiment; date coverage remains 11/11 for both OCR and native text.
+
 ## 2026-09-26 - Real public notices, training and source-linked UI
 
 - Stabilized explanatory top-feature tie ordering across CPU platforms without changing model fitting or relaxing prediction checks. Added a regression test and report-difference diagnostics (234 Python tests with all relevant extras).

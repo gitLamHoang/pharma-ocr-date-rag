@@ -25,6 +25,7 @@ jobs:
       - run: uv run python scripts/export_web.py --check
       - run: uv run python scripts/benchmark_ocr.py --check-report
       - run: uv run python scripts/benchmark_mhra_pdf.py --check-report
+      - run: uv run python scripts/benchmark_cells.py --check
   public-data:
     runs-on: ubuntu-latest
     steps:

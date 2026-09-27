@@ -30,11 +30,39 @@ Published data retains notice metadata and batch tables. Non-batch tables retain
 | Column examples | 321 instances, only 15 distinct heading strings |
 | Unsupported tables | 3 without explicit header cells; recorded, not silently guessed |
 | Candidate date-column cells | 742; not 742 independently verified dates |
-| No single normalized value | 203: 123 ambiguous and 80 unparsed/non-date cells |
+| No single normalized value | 203: 123 ambiguous dates, 3 expiry cutoffs, 39 distribution statements and 38 unsupported cells |
 
 Every candidate stores notice URL, source response hash, table/row/date-column/batch-column indices, exact raw value and batch identifier, model score, date precision and review flags. Leading zeros in batch IDs are preserved. **All 742 records require review**, including normalized values. This register covers supported tables only; omitted layouts and notices without tables remain visible in the dataset/report, not fabricated into records.
 
 The 15 heading-to-role annotations in `header_labels.json` were explicitly reviewed with AI assistance. They label schema roles (`batch`, `expiry`, `distribution`, `other`), not independently adjudicated date values. There was no second annotator or agreement study. New headings must be annotated explicitly; training refuses unknown labels.
+
+## Conditional and Non-Date Cells
+
+The September 27 update separates five value kinds: `date`, `ambiguous_date`, `cutoff`, `non_date` and `unparsed`. The corpus and classifier split remain frozen. All 742 original candidate lists, normalized values, batch identifiers and source cells remain unchanged.
+
+Three cells describe an inclusive expiry cutoff, not a batch's exact expiry date. For example, `All lots with an expiry date up to and including 05/2029*` produces:
+
+```json
+{
+  "value_kind": "cutoff",
+  "normalized": null,
+  "candidates": [],
+  "cutoff": {"upper": "2029-05", "inclusive": true, "precision": "month"},
+  "statement": null
+}
+```
+
+The month remains a month. The parser does not invent a day or lower bound. It recognizes only the complete explicit phrase in an expiry column. Ambiguous dates, invalid dates, two-digit years, added exceptions and other range wording remain unsupported. A footnote marker in either the date cell or batch cell adds a visible source warning. The footnote's meaning is not inferred; the complete notice must be reviewed.
+
+There are 39 source statements in distribution columns: `Not yet distributed` (32), `Not Distributed` (3), and `Quarantined at wholesaler` (4). These receive a `non_date` kind and a machine-readable `statement`, with no date candidates. The UI identifies them as source statements, not current operational status. Similar wording with additional qualifications remains unsupported.
+
+Previously, all these 42 cells appeared among 80 generic parsing failures. The new breakdown leaves 38 unsupported cells, without resolving any additional dates or changing the 203-cell no-single-date count. This is better representation, not a measured increase in date accuracy. Hyphenated named dates, two-digit years and an invalid leap-day value remain examples for future work.
+
+The [six explicit cell cases](../data/mhra_cell_cases.json) reference exact frozen source coordinates and cover the six distinct phrases above. All six pass the [source-anchored report](../reports/mhra_cells.json). They were authored with AI assistance after inspecting all splits: they are development regressions, not independent annotations or held-out parsing accuracy. Additional tests reject partial matches, wrong-column roles, ambiguous cutoffs and unsupported qualifications.
+
+Public snapshot/export schema version 2 adds `value_kind`, `cutoff` and `statement`. Consumers must keep cutoff bounds separate from `normalized`; they are not interchangeable. CSV adds separate cutoff, statement and review-flag columns. The UI rejects incompatible schema versions and contradictory value combinations. Its Value kind filter separates these cases. All records still require source review; no approval action was added.
+
+![Expiry cutoff filter with source evidence and a visible footnote warning](images/public-cutoffs.png)
 
 ## What Was Actually Trained
 
@@ -77,6 +105,7 @@ Use Python 3.12 and the lockfile for the recorded model experiment. No API key o
 uv sync --frozen --python 3.12 --extra dev --extra research --extra tesseract
 uv run python scripts/train_mhra.py --check
 uv run python scripts/benchmark_mhra_pdf.py --check-report
+uv run python scripts/benchmark_cells.py --check
 uv run pytest tests/test_public_data.py tests/test_recalls.py -q
 
 # Fit locally and export the model plus reports from the frozen corpus
@@ -97,4 +126,4 @@ Top-feature explanations sort coefficients rounded to six decimals, then break t
 
 ## Remaining Gaps
 
-Public MHRA English is not a substitute for multilingual supplier documents. Five-language parsing and English/French/Vietnamese degraded-image checks remain **synthetic** experiments. There is no PaddleOCR verification, LlamaIndex deployment, Mistral/Phi-2 benchmark, trained OCR recognizer, independently measured user benefit, or production medical validation. Next steps are template-diverse public sources, independent annotations, explicit range/non-date handling, and occurrence-level PDF batch/date association tests.
+Public MHRA English is not a substitute for multilingual supplier documents. Five-language parsing and English/French/Vietnamese degraded-image checks remain **synthetic** experiments. There is no PaddleOCR verification, LlamaIndex deployment, Mistral/Phi-2 benchmark, trained OCR recognizer, independently measured user benefit, or production medical validation. Next steps are template-diverse public sources, independent annotations, broader date/range formats, and occurrence-level PDF batch/date association tests.

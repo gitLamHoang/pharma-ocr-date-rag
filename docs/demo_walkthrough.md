@@ -9,6 +9,7 @@ Open the [public browser workspace](https://gitlamhoang.github.io/pharma-ocr-dat
 1. In Public notices, search batch `0162858` and choose Expiry. Its source says `05/2028`; the interpretation preserves month precision as `2028-05`.
 2. Select the batch row and inspect the complete original table row, highlighted source value, response hash and original MHRA link. Explain that this register is a static research snapshot, not current recall advice.
 3. Clear the search/filter and select unresolved values. Inspect both ambiguous numeric dates and non-date entries. They remain unresolved; all public candidates still require review.
+   Select Value kind > Expiry cutoff to inspect three inclusive bounds and their footnote warnings. Then choose Distribution statement to see 39 source statements. A cutoff and `Not yet distributed` are different from an exact date; neither enters the exported `normalized` field.
 4. Filter to the test split. The model was fitted on 36 older notices, with 12 validation and 12 test notices. Both the classifier and keyword rules score 80/80 column roles; 76 test headings repeat training templates. This result supports a simple baseline, not a claim that machine learning is necessary.
 5. Export JSON or CSV. Point to batch, raw text, table/row indices, split and source hash. Public records do not have a clinical approval action.
 

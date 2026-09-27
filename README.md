@@ -58,7 +58,7 @@ npm run dev
 | --- | --- |
 | Real public corpus | Bounded, cached GOV.UK API collector; 60 MHRA recall/defect notices, 371 batch rows, source hashes and OGL attribution |
 | Trained classifier | Character TF-IDF + logistic regression fitted on 36 notices; chronological document-group splits, keyword/majority baselines and abstention |
-| Public-notice register | 742 source-linked candidate cells; medicine/batch search, split and unresolved filters, original rows and exports |
+| Public-notice register | 742 source-linked cells; separate dates, expiry cutoffs and distribution statements; value-kind filters, original rows and attributed exports |
 | Original-PDF experiment | Actual Tesseract and native-text extraction on 3 public PDFs / 6 pages, with saved transcripts and explicit coverage limits |
 | Multilingual fields | Language-specific month names and field vocabularies for English, French, German, Spanish and Vietnamese; all-language or explicit-language mode |
 | Date normalization | ISO, numeric, named-month, Vietnamese `ngày … tháng … năm …`, and month/year dates; calendar validation |
@@ -137,6 +137,7 @@ Indexing the same source and parser settings retains its candidate IDs and decis
 uv sync --frozen --python 3.12 --extra dev --extra research
 uv run python scripts/train_mhra.py --check
 uv run python scripts/benchmark_mhra_pdf.py --check-report
+uv run python scripts/benchmark_cells.py --check
 ```
 
 The first command below the install **re-trains** from the frozen corpus without network access; the PDF checker verifies saved evidence without rerunning OCR. [Dataset/model card, source licence, crawl and actual OCR commands](docs/public-data.md).
@@ -146,9 +147,11 @@ The first command below the install **re-trains** from the frozen corpus without
 | Training | 182 columns from 36 notices; 12 validation / 12 test notices | Trained column classifier, not OCR fine-tuning |
 | Test column roles | Model 80/80; keyword rules also 80/80; majority 23/80 | 76/80 heading instances occur in training; no demonstrated advantage over rules |
 | Original-PDF date coverage | OCR 11/11; native text also 11/11 | Supported unique HTML-table date interpretations in 3 PDFs, not whole-document OCR accuracy |
-| Public register | 742 candidate cells; 123 ambiguous and 80 unparsed/non-date | All require review; not independently validated date labels |
+| Public register | 742 cells: 539 single dates, 123 ambiguous dates, 3 cutoffs, 39 source statements, 38 unsupported | All require review; not independently validated date labels |
 
 All public notices are English. Five-language claims below apply to synthetic parser tests, not real multilingual document accuracy. The simpler rule baseline is competitive here; template-diverse, independently annotated data is the next research priority.
+
+An expiry cutoff is not an exact expiry date. The UI now separates `up to and including 05/2029` from a single date and preserves source footnote warnings. `Not yet distributed` stays a source statement. Neither creates a normalized date. Six source-anchored development cases and negative tests verify this contract; see the [cell semantics and schema](docs/public-data.md#conditional-and-non-date-cells).
 
 ### Synthetic regression suite
 
@@ -171,7 +174,7 @@ Measured on the current **authored synthetic development fixtures**, not held-ou
 | Multilingual breakdown | EN 18/18; FR, DE, ES, VI each 6/6 | English includes 12 edge cases; coverage is intentionally uneven |
 | Retrieval chunk experiment | 3/3 questions hit at 35, 60 and 90 words | A small smoke benchmark, not evidence that chunk size never matters |
 
-[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, twelve unit tests, a production build and Playwright desktop/mobile checks before deploying. A separate CI job retrains the public-data classifier from the frozen corpus.
+[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, fifteen unit tests, a production build and Playwright desktop/mobile checks before deploying. A separate CI job retrains the public-data classifier from the frozen corpus.
 
 ```bash
 cd web

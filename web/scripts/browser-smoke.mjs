@@ -198,6 +198,45 @@ try {
   await page.selectOption('#recall-split', 'test');
   await page.locator('#recall-unresolved').check();
   assert.ok(await page.locator('.public-register tbody tr').count());
+  await page.selectOption('#recall-split', '');
+  await page.selectOption('#recall-kind', 'cutoff');
+  assert.equal(await page.locator('.public-register tbody tr').count(), 3);
+  assert.equal(
+    await page.locator('.public-register .date-cell').first().innerText(),
+    'Up to 2029-05 (inclusive)',
+  );
+  assert.match(await page.locator('.source-cell-selected').innerText(), /05\/2029\*/);
+  assert.match(await page.locator('.public-qualifier').innerText(), /footnote/);
+  const cutoffDownload = page.waitForEvent('download');
+  await page.locator('[data-action=export-public-json]').click();
+  const cutoffFile = await cutoffDownload;
+  const cutoffExport = JSON.parse(await readFile(await cutoffFile.path(), 'utf8'));
+  assert.equal(cutoffExport.schemaVersion, 2);
+  assert.equal(cutoffExport.records.length, 3);
+  assert.ok(
+    cutoffExport.records.every(
+      (row) => row.normalized === null && row.candidates.length === 0 && row.cutoff.inclusive,
+    ),
+  );
+  const cutoffCsvDownload = page.waitForEvent('download');
+  await page.locator('[data-action=export-public-csv]').click();
+  const cutoffCsvFile = await cutoffCsvDownload;
+  const cutoffCsvText = await readFile(await cutoffCsvFile.path(), 'utf8');
+  assert.match(cutoffCsvText, /"cutoff_upper","cutoff_inclusive","cutoff_precision"/);
+  assert.match(cutoffCsvText, /"2029-05","true","month"/);
+  await page.selectOption('#recall-kind', 'non_date');
+  assert.equal(await page.locator('.public-register tbody tr').count(), 25);
+  assert.match(await page.locator('.public-pagination').innerText(), /Page 1 \/ 2/);
+  assert.equal(
+    await page.locator('.public-register .date-cell').first().innerText(),
+    'Source states: Not yet distributed',
+  );
+  assert.equal(await page.locator('.public-qualifier').count(), 0);
+  await page.selectOption('#recall-kind', 'unparsed');
+  assert.equal(
+    await page.locator('.public-register .date-cell').first().innerText(),
+    'Unsupported value',
+  );
   for (const width of [1512, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     await page.goto(new URL('?publicViewport=' + width + '#recalls', base).href);
@@ -207,6 +246,13 @@ try {
     await checkLayout();
     await page.screenshot({
       path: resolve(screenshots, `public-notices-${width}.png`),
+      fullPage: true,
+    });
+    await page.locator('#recall-query').fill('');
+    await page.selectOption('#recall-kind', 'cutoff');
+    await checkLayout();
+    await page.screenshot({
+      path: resolve(screenshots, `public-cutoffs-${width}.png`),
       fullPage: true,
     });
   }

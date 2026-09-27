@@ -13,6 +13,7 @@ uv run python scripts/export_web.py --check
 uv run python scripts/benchmark_ocr.py --check-report
 uv run python scripts/train_mhra.py --check
 uv run python scripts/benchmark_mhra_pdf.py --check-report
+uv run python scripts/benchmark_cells.py --check
 ```
 
 Browser development requires Node 24.12+:
@@ -48,5 +49,7 @@ The separate [image-OCR experiment](docs/image-ocr.md) hashes its three parser/a
 For database changes, preserve existing review history, add a schema migration, and test upgrades and rollback behavior. Never rewrite an earlier decision to represent a later decision; append a review event.
 
 Public-data reports hash their dataset, labels, protocol and implementation. After relevant edits and formatting, rerun `python scripts/train_mhra.py` with the `research` extra, inspect the comparison, and rerun the original PDF experiment when its hashed sources change. `--check` retrains from frozen data; the PDF `--check-report` only verifies saved transcripts. CI must never crawl fresh data to obtain a passing benchmark.
+
+For public cell semantics, keep source text, cutoff bounds and single dates separate. Add source-anchored expectations to `data/mhra_cell_cases.json`, negative tests to `tests/test_public_cells.py`, and regenerate `python scripts/benchmark_cells.py` after formatting. These cases were selected during development, not held out. Public snapshot schema v2 exposes value kinds, statements and bounds; never move a cutoff into the single-date `normalized` field.
 
 Small contributions with a concrete failing example are easiest to review. Useful next steps include explicit review cycles, broader image-OCR coverage and a bounded independently labeled test set.

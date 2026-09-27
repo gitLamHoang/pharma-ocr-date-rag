@@ -1039,6 +1039,23 @@ td:first-child {
   gap: 8px;
   font-size: 12px;
 }
+.public-filters {
+  grid-template-columns: minmax(170px, 1fr) 135px 145px 175px 145px;
+}
+.public-interpretation {
+  font-weight: 600;
+}
+.public-qualifier {
+  color: #7b550e;
+}
+@media (max-width: 1200px) {
+  .filter-bar.public-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .public-filters .search {
+    grid-column: 1 / -1;
+  }
+}
 .public-checkbox input {
   width: 16px;
   min-height: 16px;

@@ -10,4 +10,6 @@ Source: Medicines and Healthcare products Regulatory Agency (MHRA), GOV.UK.
 
 The source notice text and table excerpts in this directory, the derived public-notice browser snapshot, and source transcripts in `reports/mhra_pdf_ocr.json` are attributed under those source terms, not relicensed as MIT. The project's original code and annotations use the repository's MIT licence. Government logos, third-party rights and other exclusions remain outside the grant. MHRA and GOV.UK do not endorse this project.
 
+The same source terms apply to quoted source cells in `data/mhra_cell_cases.json` and `reports/mhra_cells.json`. Their original annotations and test code remain MIT; their public-source wording retains OGL attribution.
+
 The dataset is a bounded historical research snapshot. Consult the original publisher for current information. No medical advice, live recall completeness, or clinical validation is claimed.

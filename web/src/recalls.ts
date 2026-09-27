@@ -1,3 +1,15 @@
+export const valueKinds = {
+  date: 'Single date',
+  ambiguous_date: 'Ambiguous date',
+  cutoff: 'Expiry cutoff',
+  non_date: 'Distribution statement',
+  unparsed: 'Unsupported value',
+};
+export const statements = {
+  not_yet_distributed: 'Not yet distributed',
+  not_distributed: 'Not distributed',
+  quarantined_at_wholesaler: 'Quarantined at wholesaler',
+};
 export interface RecallDocument {
   id: string;
   title: string;
@@ -24,6 +36,9 @@ export interface RecallRecord {
   normalized: string | null;
   candidates: string[];
   precision: string;
+  value_kind: keyof typeof valueKinds;
+  cutoff: { upper: string; inclusive: true; precision: 'month' | 'day' } | null;
+  statement: keyof typeof statements | null;
   review_reasons: string[];
   model_score: number;
   status: 'needs_review';
@@ -50,7 +65,7 @@ export function parseRecalls(value: unknown): RecallData {
   const data = value as RecallData;
   if (
     !data ||
-    data.schemaVersion !== 1 ||
+    data.schemaVersion !== 2 ||
     !Array.isArray(data.documents) ||
     !Array.isArray(data.records)
   ) {
@@ -87,6 +102,9 @@ export function parseRecalls(value: unknown): RecallData {
       !['expiry', 'distribution'].includes(row.role) ||
       row.status !== 'needs_review' ||
       !Array.isArray(row.candidates) ||
+      row.candidates.some((candidate) => typeof candidate !== 'string') ||
+      !Array.isArray(row.review_reasons) ||
+      !validValue(row) ||
       (row.normalized !== null && !row.candidates.includes(row.normalized))
     ) {
       throw new Error('Public date evidence does not match its source table.');
@@ -95,12 +113,55 @@ export function parseRecalls(value: unknown): RecallData {
   }
   return data;
 }
+function validValue(row: RecallRecord): boolean {
+  if (row.value_kind === 'cutoff') {
+    const bound = row.cutoff;
+    return (
+      row.role === 'expiry' &&
+      row.normalized === null &&
+      row.candidates.length === 0 &&
+      row.statement === null &&
+      !!bound &&
+      bound.inclusive === true &&
+      typeof bound.upper === 'string' &&
+      ((bound.precision === 'month' && /^\d{4}-(0[1-9]|1[0-2])$/.test(bound.upper)) ||
+        (bound.precision === 'day' &&
+          /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(bound.upper))) &&
+      row.review_reasons.includes('inclusive_expiry_cutoff')
+    );
+  }
+  if (row.cutoff !== null) return false;
+  if (row.value_kind === 'non_date') {
+    return (
+      row.role === 'distribution' &&
+      row.normalized === null &&
+      !row.candidates.length &&
+      row.statement !== null &&
+      Object.hasOwn(statements, row.statement) &&
+      row.raw_text.trim().replace(/\s+/g, ' ').toLowerCase() ===
+        statements[row.statement].toLowerCase()
+    );
+  }
+  if (row.statement !== null) return false;
+  if (row.value_kind === 'date') return row.normalized !== null && row.candidates.length === 1;
+  if (row.value_kind === 'ambiguous_date')
+    return row.normalized === null && row.candidates.length > 1;
+  return row.value_kind === 'unparsed' && row.normalized === null && row.candidates.length === 0;
+}
+export function cellInterpretation(row: RecallRecord): string {
+  if (row.value_kind === 'cutoff' && row.cutoff) return `Up to ${row.cutoff.upper} (inclusive)`;
+  if (row.value_kind === 'non_date' && row.statement)
+    return `Source states: ${statements[row.statement]}`;
+  if (row.value_kind === 'unparsed') return 'Unsupported value';
+  return row.normalized ?? 'Ambiguous date';
+}
 export function filterRecalls(
   data: RecallData,
   query: string,
   role: string,
   split: string,
   unresolved: boolean,
+  kind = '',
 ): RecallRecord[] {
   const term = query.trim().toLocaleLowerCase();
   return data.records.filter(
@@ -108,6 +169,7 @@ export function filterRecalls(
       (!role || row.role === role) &&
       (!split || row.split === split) &&
       (!unresolved || row.normalized === null) &&
+      (!kind || row.value_kind === kind) &&
       (!term || `${row.title} ${row.batch} ${row.raw_text}`.toLocaleLowerCase().includes(term)),
   );
 }

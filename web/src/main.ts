@@ -1,5 +1,11 @@
 import './style.css';
-import { parseRecalls, filterRecalls, type RecallData } from './recalls.ts';
+import {
+  parseRecalls,
+  filterRecalls,
+  cellInterpretation,
+  valueKinds,
+  type RecallData,
+} from './recalls.ts';
 import {
   createIcons,
   ScanLine,
@@ -82,6 +88,7 @@ const state = {
     : 'recalls') as View,
   recallQuery: '',
   recallRole: '',
+  recallKind: '',
   recallSplit: '',
   recallUnresolved: false,
   recallPage: 0,
@@ -653,6 +660,7 @@ function publicRows() {
         state.recallRole,
         state.recallSplit,
         state.recallUnresolved,
+        state.recallKind,
       )
     : [];
 }
@@ -684,7 +692,7 @@ function publicView() {
     publicData.corpus.document_splits.test +
     ' test</small></strong></div><div><span>No single date</span><strong>' +
     publicData.records.filter((row) => row.normalized === null).length +
-    '<small>ambiguous or unparsed</small></strong></div></div>' +
+    '<small>ambiguous, conditional or non-date</small></strong></div></div>' +
     '<div class="public-scope"><span>' +
     icon('circle-alert') +
     'Static research snapshot · ' +
@@ -694,7 +702,7 @@ function publicView() {
     '/blob/main/docs/public-data.md" target="_blank" rel="noreferrer">Dataset & model card ' +
     icon('arrow-up-right') +
     '</a></div>' +
-    '<div class="filter-bar"><label class="search">' +
+    '<div class="filter-bar public-filters"><label class="search">' +
     icon('search') +
     '<input id="recall-query" type="search" placeholder="Medicine, batch or source date" aria-label="Search public notices" value="' +
     escape(state.recallQuery) +
@@ -712,6 +720,9 @@ function publicView() {
       state.recallSplit,
       'All splits',
     ) +
+    '</select>' +
+    '<select id="recall-kind" aria-label="Value kind">' +
+    options(valueKinds, state.recallKind, 'All value kinds') +
     '</select>' +
     '<label class="public-checkbox"><input type="checkbox" id="recall-unresolved" ' +
     (state.recallUnresolved ? 'checked' : '') +
@@ -739,7 +750,7 @@ function publicView() {
               '</td><td>' +
               escape(row.raw_text) +
               '</td><td class="date-cell">' +
-              escape(row.normalized ?? 'Unresolved') +
+              escape(cellInterpretation(row)) +
               '</td><td>' +
               escape(
                 row.review_reasons.join(', ').replaceAll('_', ' ') || 'Source review required',
@@ -800,6 +811,14 @@ function publicView() {
           )
           .join('') +
         '</tr></tbody></table></div>' +
+        '<p class="public-interpretation">' +
+        escape(valueKinds[selected.value_kind]) +
+        ': ' +
+        escape(cellInterpretation(selected)) +
+        '</p>' +
+        (selected.review_reasons.includes('source_footnote')
+          ? '<p class="public-qualifier">Source footnote marker present. Consult the complete notice for qualifications.</p>'
+          : '') +
         (selected.candidates.length > 1
           ? '<p>Possible dates: ' + selected.candidates.map(escape).join(' / ') + '</p>'
           : '') +
@@ -946,6 +965,7 @@ root.addEventListener('click', async (event) => {
         'public-mhra-evidence.json',
         JSON.stringify(
           {
+            schemaVersion: publicData.schemaVersion,
             attribution: publicData.attribution,
             licence: publicData.licence,
             scope: 'Static public-source research snapshot; review required',
@@ -969,6 +989,12 @@ root.addEventListener('click', async (event) => {
             raw: row.raw_text,
             normalized: row.normalized,
             candidates: row.candidates.join(' | '),
+            value_kind: row.value_kind,
+            cutoff_upper: row.cutoff?.upper ?? null,
+            cutoff_inclusive: row.cutoff?.inclusive ?? null,
+            cutoff_precision: row.cutoff?.precision ?? null,
+            source_statement: row.statement,
+            review_flags: row.review_reasons.join(' | '),
             table: row.table_index + 1,
             row: row.row_index + 1,
             split: row.split,
@@ -1057,8 +1083,9 @@ root.addEventListener('click', async (event) => {
 });
 root.addEventListener('change', (event) => {
   const target = event.target as HTMLInputElement;
-  if (['recall-role', 'recall-split', 'recall-unresolved'].includes(target.id)) {
+  if (['recall-role', 'recall-split', 'recall-unresolved', 'recall-kind'].includes(target.id)) {
     if (target.id === 'recall-role') state.recallRole = target.value;
+    if (target.id === 'recall-kind') state.recallKind = target.value;
     if (target.id === 'recall-split') state.recallSplit = target.value;
     if (target.id === 'recall-unresolved') state.recallUnresolved = target.checked;
     state.recallPage = 0;

@@ -57,7 +57,7 @@ def build() -> tuple[dict, dict, object]:
     vectorizer, classifier = model.steps[0][1], model.steps[1][1]
     feature_names = vectorizer.get_feature_names_out()
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "scope": "Trained table-heading classifier, not a trained OCR recognizer. English public MHRA templates; explicit AI-assisted labels, not independent clinical ground truth.",
         "environment": {"python": platform.python_version(), "scikit_learn": sklearn.__version__},
         "protocol": json.loads((DATA / "protocol.json").read_text(encoding="utf-8")),
@@ -83,14 +83,16 @@ def build() -> tuple[dict, dict, object]:
         "evaluation": evaluation,
         "register": {
             "candidates": len(records),
-            "unparsed": sum(not row["candidates"] for row in records),
+            "unparsed": sum(row["value_kind"] == "unparsed" for row in records),
+            "without_date_candidates": sum(not row["candidates"] for row in records),
+            "value_kinds": dict(sorted(Counter(row["value_kind"] for row in records).items())),
             "ambiguous": sum(len(row["candidates"]) > 1 for row in records),
             "excluded_tables": excluded,
         },
         "source_sha256": provenance,
     }
     public = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "attribution": dataset["attribution"],
         "licence": dataset["licence"],
         "snapshotRetrievedAt": dataset["selection"]["retrieved_at"],

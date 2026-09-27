@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Source: MHRA / GOV.UK.",
   "licence": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
   "snapshotRetrievedAt": "2026-09-26T21:12:36.785174+00:00",
@@ -5067,6 +5067,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5091,6 +5094,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5115,6 +5121,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5137,8 +5146,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -5163,6 +5175,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5190,6 +5205,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5214,6 +5232,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5236,8 +5257,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -5262,6 +5286,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5284,8 +5311,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -5310,6 +5340,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5332,8 +5365,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -5358,6 +5394,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5380,8 +5419,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -5408,6 +5450,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5432,6 +5477,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5458,6 +5506,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5482,6 +5533,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5508,6 +5562,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5532,6 +5589,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5558,6 +5618,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5582,6 +5645,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5608,6 +5674,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5632,6 +5701,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5658,6 +5730,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5682,6 +5757,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5708,6 +5786,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5732,6 +5813,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5758,6 +5842,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5782,6 +5869,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5808,6 +5898,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5832,6 +5925,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5858,6 +5954,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5882,6 +5981,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5906,6 +6008,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5930,6 +6035,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5954,6 +6062,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -5976,8 +6087,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6002,6 +6116,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6026,6 +6143,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6050,6 +6170,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6074,6 +6197,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6098,6 +6224,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6122,6 +6251,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6146,6 +6278,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6168,8 +6303,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6194,6 +6332,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6216,8 +6357,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6242,6 +6386,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6264,8 +6411,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6290,6 +6440,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6317,6 +6470,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6341,6 +6497,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6363,8 +6522,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6389,6 +6551,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6416,6 +6581,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6440,6 +6608,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6464,6 +6635,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6488,6 +6662,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6512,6 +6689,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6536,6 +6716,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6558,8 +6741,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6584,6 +6770,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6606,8 +6795,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6632,6 +6824,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6659,6 +6854,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6683,6 +6881,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6705,8 +6906,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -6731,6 +6935,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6758,6 +6965,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6782,6 +6992,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6806,6 +7019,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6830,6 +7046,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6854,6 +7073,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6878,6 +7100,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6905,6 +7130,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6929,6 +7157,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6956,6 +7187,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -6980,6 +7214,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7002,8 +7239,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -7028,6 +7268,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7050,8 +7293,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -7076,6 +7322,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7098,8 +7347,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -7124,6 +7376,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7146,8 +7401,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -7170,8 +7428,17 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "inclusive_expiry_cutoff",
+        "month_precision",
+        "source_footnote"
       ],
+      "value_kind": "cutoff",
+      "cutoff": {
+        "upper": "2029-05",
+        "inclusive": true,
+        "precision": "month"
+      },
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7196,6 +7463,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7222,6 +7492,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7246,6 +7519,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7273,6 +7549,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7300,6 +7579,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7327,6 +7609,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7354,6 +7639,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7381,6 +7669,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7408,6 +7699,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7435,6 +7729,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7462,6 +7759,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7489,6 +7789,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7513,6 +7816,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7540,6 +7846,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7567,6 +7876,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7594,6 +7906,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7621,6 +7936,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7645,6 +7963,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7669,6 +7990,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7693,6 +8017,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7717,6 +8044,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7741,6 +8071,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7765,6 +8098,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7789,6 +8125,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7813,6 +8152,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7839,6 +8181,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7866,6 +8211,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7890,6 +8238,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7914,6 +8265,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7938,6 +8292,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7962,6 +8319,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -7986,6 +8346,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8013,6 +8376,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8035,8 +8401,17 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "inclusive_expiry_cutoff",
+        "month_precision",
+        "source_footnote"
       ],
+      "value_kind": "cutoff",
+      "cutoff": {
+        "upper": "2028-02",
+        "inclusive": true,
+        "precision": "month"
+      },
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8064,6 +8439,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8086,8 +8464,17 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "inclusive_expiry_cutoff",
+        "month_precision",
+        "source_footnote"
       ],
+      "value_kind": "cutoff",
+      "cutoff": {
+        "upper": "2028-01",
+        "inclusive": true,
+        "precision": "month"
+      },
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8115,6 +8502,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8141,6 +8531,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8165,6 +8558,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8191,6 +8587,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8218,6 +8617,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8244,6 +8646,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8271,6 +8676,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8297,6 +8705,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8321,6 +8732,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8347,6 +8761,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8371,6 +8788,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8397,6 +8817,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8424,6 +8847,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8450,6 +8876,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8474,6 +8903,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8498,6 +8930,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8522,6 +8957,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8546,6 +8984,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8570,6 +9011,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8596,6 +9040,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8620,6 +9067,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8644,6 +9094,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8668,6 +9121,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8692,6 +9148,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8719,6 +9178,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8743,6 +9205,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8767,6 +9232,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8793,6 +9261,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8817,6 +9288,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8843,6 +9317,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8867,6 +9344,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8893,6 +9373,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8920,6 +9403,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8946,6 +9432,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8973,6 +9462,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -8999,6 +9491,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9023,6 +9518,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9049,6 +9547,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9073,6 +9574,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9099,6 +9603,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9125,6 +9632,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9149,6 +9659,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9173,6 +9686,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9197,6 +9713,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9221,6 +9740,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9245,6 +9767,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9269,6 +9794,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9293,6 +9821,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9317,6 +9848,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9341,6 +9875,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9365,6 +9902,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9389,6 +9929,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9411,8 +9954,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9437,6 +9983,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9459,8 +10008,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9485,6 +10037,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9507,8 +10062,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9533,6 +10091,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9557,6 +10118,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9581,6 +10145,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9605,6 +10172,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9629,6 +10199,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9653,6 +10226,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9677,6 +10253,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9699,8 +10278,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9725,6 +10307,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9747,8 +10332,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9773,6 +10361,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9795,8 +10386,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9821,6 +10415,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9843,8 +10440,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9869,6 +10469,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9891,8 +10494,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -9917,6 +10523,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9941,6 +10550,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9965,6 +10577,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -9989,6 +10604,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10013,6 +10631,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10037,6 +10658,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10061,6 +10685,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10088,6 +10715,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10112,6 +10742,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10139,6 +10772,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10163,6 +10799,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10190,6 +10829,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10214,6 +10856,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10241,6 +10886,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10265,6 +10913,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10292,6 +10943,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10316,6 +10970,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10343,6 +11000,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10367,6 +11027,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10391,6 +11054,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10415,6 +11081,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10439,6 +11108,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10463,6 +11135,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10487,6 +11162,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10511,6 +11189,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10535,6 +11216,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10559,6 +11243,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10583,6 +11270,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10607,6 +11297,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10631,6 +11324,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10655,6 +11351,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10679,6 +11378,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10703,6 +11405,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10727,6 +11432,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10751,6 +11459,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10775,6 +11486,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10799,6 +11513,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10823,6 +11540,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10847,6 +11567,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10871,6 +11594,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10895,6 +11621,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10922,6 +11651,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10946,6 +11678,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10973,6 +11708,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -10997,6 +11735,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11024,6 +11765,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11050,6 +11794,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11077,6 +11824,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11103,6 +11853,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11127,6 +11880,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11153,6 +11909,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11177,6 +11936,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11203,6 +11965,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11230,6 +11995,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11256,6 +12024,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11280,6 +12051,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11306,6 +12080,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11333,6 +12110,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11359,6 +12139,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11383,6 +12166,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11409,6 +12195,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11433,6 +12222,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11459,6 +12251,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11483,6 +12278,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11509,6 +12307,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11536,6 +12337,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11562,6 +12366,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11586,6 +12393,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11612,6 +12422,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11636,6 +12449,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11662,6 +12478,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11689,6 +12508,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11715,6 +12537,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11739,6 +12564,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11765,6 +12593,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11789,6 +12620,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11815,6 +12649,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11839,6 +12676,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11865,6 +12705,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11892,6 +12735,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11918,6 +12764,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11945,6 +12794,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11971,6 +12823,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -11998,6 +12853,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12024,6 +12882,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12051,6 +12912,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12077,6 +12941,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12101,6 +12968,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12127,6 +12997,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12154,6 +13027,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12180,6 +13056,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12204,6 +13083,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12230,6 +13112,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12257,6 +13142,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12283,6 +13171,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12307,6 +13198,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12333,6 +13227,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12357,6 +13254,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12383,6 +13283,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12410,6 +13313,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12436,6 +13342,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12460,6 +13369,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12486,6 +13398,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12513,6 +13428,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12539,6 +13457,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12563,6 +13484,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12589,6 +13513,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12613,6 +13540,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12639,6 +13569,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12666,6 +13599,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12692,6 +13628,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12716,6 +13655,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12742,6 +13684,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12769,6 +13714,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12795,6 +13743,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12822,6 +13773,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12848,6 +13802,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12872,6 +13829,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12898,6 +13858,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12925,6 +13888,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12951,6 +13917,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -12978,6 +13947,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13004,6 +13976,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13028,6 +14003,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13054,6 +14032,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13078,6 +14059,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13104,6 +14088,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13128,6 +14115,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13154,6 +14144,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13178,6 +14171,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13204,6 +14200,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13228,6 +14227,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13254,6 +14256,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13278,6 +14283,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13304,6 +14312,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13328,6 +14339,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13354,6 +14368,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13378,6 +14395,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13404,6 +14424,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13428,6 +14451,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13454,6 +14480,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13478,6 +14507,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13504,6 +14536,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13528,6 +14563,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13554,6 +14592,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13578,6 +14619,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13604,6 +14648,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13628,6 +14675,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13654,6 +14704,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13678,6 +14731,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13704,6 +14760,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13728,6 +14787,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13752,6 +14814,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13776,6 +14841,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13800,6 +14868,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13824,6 +14895,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13848,6 +14922,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13872,6 +14949,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13896,6 +14976,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13920,6 +15003,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13944,6 +15030,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13968,6 +15057,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -13992,6 +15084,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14016,6 +15111,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14040,6 +15138,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14062,8 +15163,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -14088,6 +15192,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14112,6 +15219,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14136,6 +15246,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14158,8 +15271,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -14184,6 +15300,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14208,6 +15327,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14232,6 +15354,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14254,8 +15379,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -14280,6 +15408,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14302,8 +15433,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -14328,6 +15462,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14350,8 +15487,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -14376,6 +15516,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14398,8 +15541,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -14424,6 +15570,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14446,8 +15595,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_yet_distributed",
       "status": "needs_review"
     },
     {
@@ -14474,6 +15626,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14501,6 +15656,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14527,6 +15685,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14554,6 +15715,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14580,6 +15744,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14607,6 +15774,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14633,6 +15803,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14657,6 +15830,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14683,6 +15859,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14707,6 +15886,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14733,6 +15915,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14757,6 +15942,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14783,6 +15971,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14810,6 +16001,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14836,6 +16030,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14863,6 +16060,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14889,6 +16089,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14913,6 +16116,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14939,6 +16145,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14966,6 +16175,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -14990,6 +16202,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15014,6 +16229,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15038,6 +16256,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15062,6 +16283,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15086,6 +16310,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15113,6 +16340,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15137,6 +16367,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15161,6 +16394,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15185,6 +16421,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15209,6 +16448,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15233,6 +16475,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15257,6 +16502,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15281,6 +16529,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15305,6 +16556,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15329,6 +16583,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15353,6 +16610,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15377,6 +16637,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15404,6 +16667,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15428,6 +16694,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15455,6 +16724,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15479,6 +16751,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15503,6 +16778,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15527,6 +16805,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15551,6 +16832,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15575,6 +16859,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15599,6 +16886,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15623,6 +16913,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15650,6 +16943,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15674,6 +16970,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15698,6 +16997,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15722,6 +17024,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15749,6 +17054,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15773,6 +17081,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15797,6 +17108,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15821,6 +17135,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15848,6 +17165,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15872,6 +17192,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15899,6 +17222,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15923,6 +17249,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15947,6 +17276,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15971,6 +17303,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -15995,6 +17330,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16019,6 +17357,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16043,6 +17384,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16067,6 +17411,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16091,6 +17438,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16115,6 +17465,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16142,6 +17495,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16166,6 +17522,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16188,8 +17547,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "quarantined_at_wholesaler",
       "status": "needs_review"
     },
     {
@@ -16214,6 +17576,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16241,6 +17606,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16265,6 +17633,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16287,8 +17658,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "quarantined_at_wholesaler",
       "status": "needs_review"
     },
     {
@@ -16313,6 +17687,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16340,6 +17717,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16364,6 +17744,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16391,6 +17774,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16415,6 +17801,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16439,6 +17828,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16463,6 +17855,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16487,6 +17882,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16511,6 +17909,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16535,6 +17936,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16559,6 +17963,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16586,6 +17993,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16610,6 +18020,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16634,6 +18047,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16658,6 +18074,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16682,6 +18101,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16706,6 +18128,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16730,6 +18155,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16754,6 +18182,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16778,6 +18209,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16802,6 +18236,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16826,6 +18263,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16850,6 +18290,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16872,8 +18315,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "quarantined_at_wholesaler",
       "status": "needs_review"
     },
     {
@@ -16898,6 +18344,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16920,8 +18369,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "quarantined_at_wholesaler",
       "status": "needs_review"
     },
     {
@@ -16946,6 +18398,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16970,6 +18425,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -16994,6 +18452,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17018,6 +18479,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17042,6 +18506,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17069,6 +18536,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17093,6 +18563,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17120,6 +18593,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17144,6 +18620,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17171,6 +18650,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17195,6 +18677,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17222,6 +18707,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17246,6 +18734,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17273,6 +18764,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17297,6 +18791,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17324,6 +18821,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17348,6 +18848,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17372,6 +18875,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17396,6 +18902,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17420,6 +18929,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17444,6 +18956,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17468,6 +18983,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17492,6 +19010,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17519,6 +19040,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17543,6 +19067,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17567,6 +19094,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17591,6 +19121,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17618,6 +19151,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17642,6 +19178,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17669,6 +19208,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17693,6 +19235,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17720,6 +19265,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17744,6 +19292,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17771,6 +19322,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17795,6 +19349,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17822,6 +19379,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17846,6 +19406,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17873,6 +19436,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17897,6 +19463,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17924,6 +19493,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17948,6 +19520,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17975,6 +19550,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -17999,6 +19577,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18026,6 +19607,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18050,6 +19634,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18077,6 +19664,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18101,6 +19691,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18125,6 +19718,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18149,6 +19745,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18173,6 +19772,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18197,6 +19799,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18224,6 +19829,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18248,6 +19856,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18272,6 +19883,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18296,6 +19910,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18320,6 +19937,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18344,6 +19964,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18371,6 +19994,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18395,6 +20021,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18419,6 +20048,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18443,6 +20075,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18470,6 +20105,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18494,6 +20132,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18518,6 +20159,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18542,6 +20186,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18569,6 +20216,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18593,6 +20243,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18620,6 +20273,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18644,6 +20300,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18671,6 +20330,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18695,6 +20357,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18719,6 +20384,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18743,6 +20411,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18767,6 +20438,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18791,6 +20465,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18815,6 +20492,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18839,6 +20519,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18863,6 +20546,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18887,6 +20573,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18911,6 +20600,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18935,6 +20627,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18959,6 +20654,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -18983,6 +20681,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19007,6 +20708,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19031,6 +20735,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19058,6 +20765,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19082,6 +20792,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19109,6 +20822,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19133,6 +20849,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19157,6 +20876,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19181,6 +20903,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19205,6 +20930,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19229,6 +20957,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19253,6 +20984,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19277,6 +21011,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19304,6 +21041,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19328,6 +21068,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19352,6 +21095,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19376,6 +21122,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19400,6 +21149,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19424,6 +21176,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19451,6 +21206,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19475,6 +21233,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19499,6 +21260,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19523,6 +21287,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19547,6 +21314,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19571,6 +21341,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19595,6 +21368,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19619,6 +21395,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19643,6 +21422,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19667,6 +21449,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19691,6 +21476,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19715,6 +21503,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19739,6 +21530,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19763,6 +21557,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19787,6 +21584,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19811,6 +21611,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19835,6 +21638,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19859,6 +21665,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19883,6 +21692,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19907,6 +21719,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19931,6 +21746,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19955,6 +21773,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -19979,6 +21800,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20003,6 +21827,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20030,6 +21857,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20054,6 +21884,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20078,6 +21911,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20102,6 +21938,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20126,6 +21965,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20150,6 +21992,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20174,6 +22019,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20198,6 +22046,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20222,6 +22073,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20246,6 +22100,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20273,6 +22130,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20297,6 +22157,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20324,6 +22187,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20348,6 +22214,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20372,6 +22241,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20396,6 +22268,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20420,6 +22295,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20444,6 +22322,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20468,6 +22349,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20492,6 +22376,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20519,6 +22406,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20543,6 +22433,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20567,6 +22460,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20591,6 +22487,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20618,6 +22517,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20642,6 +22544,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20666,6 +22571,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20690,6 +22598,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20714,6 +22625,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20738,6 +22652,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20762,6 +22679,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20788,6 +22708,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20812,6 +22735,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20836,6 +22762,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20860,6 +22789,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20884,6 +22816,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20911,6 +22846,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20935,6 +22873,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20962,6 +22903,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -20986,6 +22930,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21013,6 +22960,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21037,6 +22987,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21061,6 +23014,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21085,6 +23041,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21109,6 +23068,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21133,6 +23095,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21157,6 +23122,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21181,6 +23149,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21205,6 +23176,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21229,6 +23203,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21253,6 +23230,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21280,6 +23260,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21304,6 +23287,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21328,6 +23314,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21352,6 +23341,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21376,6 +23368,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21400,6 +23395,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21424,6 +23422,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21448,6 +23449,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21472,6 +23476,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21496,6 +23503,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21520,6 +23530,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21544,6 +23557,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21568,6 +23584,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21592,6 +23611,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21616,6 +23638,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21640,6 +23665,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21664,6 +23692,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21691,6 +23722,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21715,6 +23749,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21739,6 +23776,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21763,6 +23803,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21787,6 +23830,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21811,6 +23857,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21835,6 +23884,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21859,6 +23911,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21883,6 +23938,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21907,6 +23965,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21934,6 +23995,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21958,6 +24022,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -21982,6 +24049,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22006,6 +24076,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22033,6 +24106,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22057,6 +24133,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22084,6 +24163,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22108,6 +24190,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22135,6 +24220,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22159,6 +24247,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22186,6 +24277,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22210,6 +24304,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22237,6 +24334,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22261,6 +24361,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22288,6 +24391,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22312,6 +24418,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22336,6 +24445,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22360,6 +24472,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22384,6 +24499,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22408,6 +24526,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22432,6 +24553,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22456,6 +24580,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22480,6 +24607,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22504,6 +24634,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22531,6 +24664,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22555,6 +24691,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22579,6 +24718,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22603,6 +24745,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22625,8 +24770,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_distributed",
       "status": "needs_review"
     },
     {
@@ -22651,6 +24799,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22673,8 +24824,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_distributed",
       "status": "needs_review"
     },
     {
@@ -22699,6 +24853,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22723,6 +24880,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22747,6 +24907,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22769,8 +24932,11 @@
       "candidates": [],
       "precision": "unknown",
       "review_reasons": [
-        "unparsed_date_cell"
+        "source_distribution_statement"
       ],
+      "value_kind": "non_date",
+      "cutoff": null,
+      "statement": "not_distributed",
       "status": "needs_review"
     },
     {
@@ -22795,6 +24961,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22819,6 +24988,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22843,6 +25015,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22867,6 +25042,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22891,6 +25069,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22915,6 +25096,9 @@
       "review_reasons": [
         "unparsed_date_cell"
       ],
+      "value_kind": "unparsed",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22939,6 +25123,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22963,6 +25150,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -22989,6 +25179,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23016,6 +25209,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23042,6 +25238,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23066,6 +25265,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23092,6 +25294,9 @@
       "review_reasons": [
         "month_precision"
       ],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23119,6 +25324,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23143,6 +25351,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23170,6 +25381,9 @@
       "review_reasons": [
         "ambiguous_numeric_date"
       ],
+      "value_kind": "ambiguous_date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23194,6 +25408,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23218,6 +25435,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23242,6 +25462,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23266,6 +25489,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23290,6 +25516,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23314,6 +25543,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23338,6 +25570,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23362,6 +25597,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23386,6 +25624,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     },
     {
@@ -23410,6 +25651,9 @@
       ],
       "precision": "day",
       "review_reasons": [],
+      "value_kind": "date",
+      "cutoff": null,
+      "statement": null,
       "status": "needs_review"
     }
   ],
@@ -23513,9 +25757,9 @@
     "data/public_mhra/documents.json": "54282b79c3a90fe852113612fd1ab32f6a6a015c7c94981d70fba99cce8c8899",
     "data/public_mhra/header_labels.json": "6a82be44b62250a3884b104e5fca25a7e55cb840915c9231c6380c1ea8c394f1",
     "data/public_mhra/protocol.json": "82234e6362996a343e8d94cf681e44e7a5d302d91b82dd19421a2a8ba6cb3950",
-    "scripts/train_mhra.py": "44f3c506919b4bbc38e48b070dc88708fb8e3ed44874aaa696dde3a23b4c55c3",
+    "scripts/train_mhra.py": "9f0915e76064be5ff170275282d35d86c925f41dcd26e9f19e7f9ddbe193bee6",
     "src/pharma_ocr_date_rag/public_data.py": "6964040b24ee6e3ab6c42852229c39ec0f071782931eca9f4677f25db21fc4a7",
-    "src/pharma_ocr_date_rag/recalls.py": "3acb3bfb21e4148e7ab255f9c59efde4a14f0f0c143ecb628773df13f55a8129",
+    "src/pharma_ocr_date_rag/recalls.py": "2a7c2cf69d9a951a353a6b0c5311d1aa808bd44106be2fb18af7dc34122959c4",
     "src/pharma_ocr_date_rag/dates.py": "b52962874f966f7012b6605967003e2029df4c092f58b38f8eb42495351aaf47",
     "src/pharma_ocr_date_rag/languages.py": "6dc0105a524dd5de57a06092a48eb61fc5aa3a9d5b12e06afa2eb29ae5c082ec"
   }

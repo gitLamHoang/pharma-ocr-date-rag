@@ -59,13 +59,25 @@ Release follow-up: the Linux retraining check exposed unstable ordering in the t
 
 Hosted-site verification also exposed a browser-test race: source highlights render before an image finishes loading over the network. The test now waits for image decoding before checking dimensions, without treating a broken image as success. The complete browser flow then passed against GitHub Pages; the hosted public snapshot also matched all committed source hashes and 742 records.
 
+## Delivered: September 27
+
+- Inspected the frozen real-data failures rather than expanding the crawl or changing the classifier. Of 80 cells with no date candidates, 39 are source distribution statements and three are inclusive expiry cutoffs. Added explicit value kinds for these meanings; 38 cells remain unsupported. The no-single-date count stays 203.
+- Recognize only complete, role-appropriate statements and an explicit inclusive expiry cutoff with an unambiguous valid endpoint. Preserve month precision, null single-date values and empty candidate lists. Do not infer a lower bound, century, date convention or footnote meaning. Unsupported exceptions, ranges and invalid dates remain unresolved.
+- Show a source footnote warning when either the date cell or batch cell contains the cutoff qualifier marker. Added value-kind filters and explicit interpretations in the public UI. Schema-v2 JSON and separate CSV columns retain cutoff, statement and review information without converting it into a normalized expiry date.
+- Added six explicitly authored, source-coordinate-checked development cases covering the six distinct phrases, with a reproducible 6/6 report. These cases were selected after inspecting all splits; they are not independent gold or held-out parsing accuracy. Added 24 Python tests and three frontend tests for semantic boundaries and invalid combinations.
+- Confirmed all 742 original IDs, source cells/hashes, batch identifiers, normalized values, candidates and review statuses are unchanged. Frozen corpus bytes, training split, model settings, classifier predictions and scores are unchanged. No new source collection, OCR fine-tuning or model improvement is claimed.
+- Verification: 258 Python tests pass with locked Python 3.12 research/demo dependencies; Python 3.9 passes 253 with five optional research tests skipped. Fifteen frontend tests, production build and desktop/mobile browser workflows pass, including kind filters, source qualifiers and JSON/CSV bounds. Re-ran actual recognition on the same three original PDFs; both OCR and native date coverage remain 11/11. Existing English (18/18), multilingual (42/42 in both modes) and retrieval (3/3 at all budgets) regressions remain unchanged. Regenerated source-hashed reports and added the cell benchmark check to CI.
+- Updated the dataset/model card, README, demo walkthrough and portfolio explanation; captured actual desktop/mobile screenshots. Broader date formats, independent labels and template-diverse sources remain future work.
+
+Explanation point: a date-looking token can be a boundary, not an event date. The program should preserve that distinction instead of turning every recognized month into an exact expiry value. Likewise, a source statement is not missing data or a claim about current stock status.
+
 ## Planned Work Sessions
 
 | Date | Priority | Completion evidence |
 | --- | --- | --- |
 | September 25 | Completed: per-document conventions and adversarial fixtures | See the delivered milestone above |
 | September 26 | Completed: synthetic image OCR plus real public-data training/UI | See both delivered milestones and their separate reports |
-| September 27 | Improve public-date handling and evaluation diversity | Range/non-date cases from frozen public tables; independent labels or template-diverse sources where available; retain multilingual regressions |
+| September 27 | Completed: conditional dates and non-date statements | Six source-anchored cases, typed exports, source qualifiers and negative tests; independent labels remain future work |
 | September 28 | Extend review-cycle semantics | Explicit re-review and source retirement behavior; preserve existing browser and SQL decision history |
 | September 29 | Compare retrieval/model alternatives if prerequisites exist | Reproducible measured comparison; never invent unavailable model results or spend on APIs without authorization |
 | September 30 | Refine demo flow and visual documentation | Browser checks on desktop/mobile, reproducible screenshots, concise walkthrough |

@@ -113,8 +113,7 @@ def predict_roles(model, headers: list[str]) -> list[dict]:
     return output
 
 
-def date_cell(value: str) -> dict:
-    """Do not infer missing days, century, range endpoints or numeric date convention."""
+def _single_date(value: str) -> dict:
     value = value.strip()
     hits = extract_dates(value, language="en", date_order="auto", repair_ocr=False)
     if len(hits) == 1 and hits[0].start == 0 and hits[0].end == len(value):
@@ -146,6 +145,50 @@ def date_cell(value: str) -> dict:
     }
 
 
+def date_cell(value: str, *, role: str | None = None) -> dict:
+    """Keep conditional dates and source statements separate from single dates."""
+    parsed = _single_date(value)
+    result = {
+        **parsed,
+        "value_kind": "date"
+        if parsed["normalized"]
+        else "ambiguous_date"
+        if parsed["candidates"]
+        else "unparsed",
+        "cutoff": None,
+        "statement": None,
+    }
+    text = " ".join(value.split())
+    statements = {
+        "not yet distributed": "not_yet_distributed",
+        "not distributed": "not_distributed",
+        "quarantined at wholesaler": "quarantined_at_wholesaler",
+    }
+    if role == "distribution" and text.casefold() in statements:
+        result.update(
+            value_kind="non_date",
+            statement=statements[text.casefold()],
+            review_reasons=["source_distribution_statement"],
+        )
+    if role == "expiry":
+        match = re.fullmatch(
+            r"all lots with an expiry date up to and including (.+?)(\s*\*)?", text, re.IGNORECASE
+        )
+        if match:
+            upper = _single_date(match[1])
+            # A cutoff must be explicit and unambiguous, never one guessed endpoint.
+            if upper["normalized"] is not None:
+                reasons = ["inclusive_expiry_cutoff", *upper["review_reasons"]]
+                if match[2]:
+                    reasons.append("source_footnote")
+                result.update(
+                    value_kind="cutoff",
+                    cutoff={"upper": upper["normalized"], "inclusive": True, "precision": upper["precision"]},
+                    review_reasons=reasons,
+                )
+    return result
+
+
 def recall_register(documents: list[dict], model, splits: dict[str, str]) -> tuple[list[dict], list[dict]]:
     records, excluded = [], []
     for doc in documents:
@@ -167,6 +210,10 @@ def recall_register(documents: list[dict], model, splits: dict[str, str]) -> tup
                     if prediction["role"] not in {"expiry", "distribution"}:
                         continue
                     raw = cells[column]
+                    parsed = date_cell(raw, role=prediction["role"])
+                    if parsed["value_kind"] == "cutoff" and "*" in cells[batch_columns[0]]:
+                        if "source_footnote" not in parsed["review_reasons"]:
+                            parsed["review_reasons"].append("source_footnote")
                     records.append(
                         {
                             "id": f"{doc['id']}:{table['table_index']}:{row_index}:{column}",
@@ -184,7 +231,7 @@ def recall_register(documents: list[dict], model, splits: dict[str, str]) -> tup
                             "raw_text": raw,
                             "role": prediction["role"],
                             "model_score": prediction["score"],
-                            **date_cell(raw),
+                            **parsed,
                             "status": "needs_review",
                         }
                     )

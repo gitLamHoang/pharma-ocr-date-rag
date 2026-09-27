@@ -20,6 +20,8 @@ The [image-OCR experiment](image-ocr.md) measures a different boundary: actual T
 
 ## Product questions still open
 
+A useful source-data example: three cells say "up to and including" a month, and 39 describe distribution status instead of a date. The interface now separates these meanings and exposes source footnotes. This makes the register more informative without claiming 42 newly resolved dates. All original normalized values remain unchanged.
+
 - Do supplier-quality reviewers spend enough time on date review to justify a separate tool?
 - Which error types matter most, and when is a human review mandatory?
 - What source formats, retention rules and approval systems would a pilot need to fit?
