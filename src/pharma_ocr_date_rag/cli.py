@@ -11,7 +11,18 @@ from .pipeline import all_chunks, format_date_report, process_folder
 from .policies import load_date_order_map
 from .rag import answer_question
 from .reporting import date_rows, export_csv, export_json
-from .review import DECISIONS, history, index_folder, queue, review
+from .review import (
+    DECISIONS,
+    DOCUMENT_ACTIONS,
+    DOCUMENT_STATES,
+    document_action,
+    document_history,
+    document_versions,
+    history,
+    index_folder,
+    queue,
+    review,
+)
 
 
 def main() -> None:
@@ -42,7 +53,29 @@ def main() -> None:
     review_parser.add_argument("--reason", required=True)
     history_parser = subparsers.add_parser("history", help="Show review events for a hit")
     history_parser.add_argument("hit_id", type=int)
-    for command in [index_parser, queue_parser, review_parser, history_parser]:
+    documents_parser = subparsers.add_parser(
+        "documents", help="List local document versions and source state"
+    )
+    documents_parser.add_argument("--collection")
+    documents_parser.add_argument("--state", choices=sorted(DOCUMENT_STATES), default="active")
+    documents_parser.add_argument("--limit", type=int, default=100)
+    documents_parser.add_argument("--offset", type=int, default=0)
+    document_parser = subparsers.add_parser("document", help="Reopen, retire or restore one document version")
+    document_parser.add_argument("action", choices=sorted(DOCUMENT_ACTIONS))
+    document_parser.add_argument("document_id", type=int)
+    document_parser.add_argument("--reviewer", required=True)
+    document_parser.add_argument("--reason", required=True)
+    document_history_parser = subparsers.add_parser("document-history", help="Show document lifecycle events")
+    document_history_parser.add_argument("document_id", type=int)
+    for command in [
+        index_parser,
+        queue_parser,
+        review_parser,
+        history_parser,
+        documents_parser,
+        document_parser,
+        document_history_parser,
+    ]:
         command.add_argument("--db", type=Path, default=Path("outputs/review.sqlite"))
     for subparser in (extract_parser, ask_parser, index_parser):
         subparser.add_argument("--language", choices=LANGUAGES, default="auto")
@@ -78,6 +111,14 @@ def main() -> None:
             result = review(args.db, args.hit_id, args.decision, args.reviewer, args.reason)
         elif args.command == "history":
             result = history(args.db, args.hit_id)
+        elif args.command == "documents":
+            result = document_versions(
+                args.db, collection=args.collection, state=args.state, limit=args.limit, offset=args.offset
+            )
+        elif args.command == "document":
+            result = document_action(args.db, args.document_id, args.action, args.reviewer, args.reason)
+        elif args.command == "document-history":
+            result = document_history(args.db, args.document_id)
         else:
             result = None
         if result is not None:

@@ -7,6 +7,7 @@ import {
   fold,
   latestEvent,
   makeEvent,
+  makeReopenEvents,
   parseWorkspace,
   sourceSlice,
   validateEvent,
@@ -126,4 +127,58 @@ test('CSV exports quote multiline evidence and neutralize formula prefixes', () 
     '"source","note"\r\n"line, ""quoted""\nnext","\' =1+1"',
   );
   assert.ok(csvText([]).includes('document,date'));
+});
+
+test('document reopen preserves history and clears previous ambiguity choices', () => {
+  const data = fixture();
+  const doc = data.documents.find((d) => d.id === 'fr_certificat')!;
+  const field = doc.fields.find((f) => f.normalized === null)!;
+  const accepted = makeEvent(data, doc, field, 'accepted', field.candidates[0], 'A', 'First check');
+  const prior = [accepted];
+  const reopened = makeReopenEvents(data, doc, ' B ', ' A fresh source check ');
+  const events = [...prior, ...reopened];
+  assert.deepEqual(prior, [accepted]);
+  assert.equal(reopened.length, doc.fields.length);
+  assert.equal(new Set(reopened.map((event) => event.reopenId)).size, 1);
+  assert.equal(new Set(reopened.map((event) => event.id)).size, doc.fields.length);
+  assert.ok(reopened.every((event) => validateEvent(event, data)));
+  assert.ok(
+    reopened.every((event) => event.reviewer === 'B' && event.reason === 'A fresh source check'),
+  );
+  assert.equal(latestEvent(events, doc, field, data.extractorVersion)?.resolved, null);
+  assert.equal(
+    filteredFields(data, events, { ...filters, status: 'needs_review' }).length,
+    doc.fields.length,
+  );
+  assert.equal(
+    filteredFields(data, events, { ...filters, status: 'pending' }).length,
+    42 - doc.fields.length,
+  );
+  const again = makeReopenEvents(data, doc, 'C', 'Another explicit cycle');
+  assert.notEqual(again[0].reopenId, reopened[0].reopenId);
+});
+
+test('reopen rejects stale evidence and malformed grouped decisions but accepts older single events', () => {
+  const data = fixture(),
+    doc = data.documents[0];
+  assert.throws(() => makeReopenEvents(data, { ...doc, sha256: '0'.repeat(64) }, 'A', 'Reason'));
+  assert.throws(() => makeReopenEvents(data, doc, ' ', 'Reason'));
+  assert.throws(() => makeReopenEvents(data, doc, 'A', ' '));
+  assert.throws(() => makeReopenEvents(data, doc, 'A', 'x'.repeat(601)));
+  const [event] = makeReopenEvents(data, doc, 'A', 'Reason');
+  assert.equal(validateEvent({ ...event, reopenId: 'not-a-group' }, data), false);
+  assert.equal(validateEvent({ ...event, decision: 'accepted' }, data), false);
+  const ambiguousDoc = data.documents.find((d) => d.fields.some((f) => f.normalized === null))!;
+  const ambiguous = makeReopenEvents(data, ambiguousDoc, 'A', 'Reason').find(
+    (e) => e.resolved === null,
+  )!;
+  const field = ambiguousDoc.fields.find((f) => f.id === ambiguous.fieldId)!;
+  assert.equal(validateEvent({ ...ambiguous, resolved: field.candidates[0] }, data), false);
+  const { reopenId, ...legacy } = event;
+  assert.ok(reopenId);
+  assert.equal(validateEvent(legacy, data), true);
+  assert.deepEqual(
+    makeReopenEvents(data, { ...doc, fields: [doc.fields[0]] }, 'A', 'Reason').length,
+    doc.fields.length,
+  );
 });

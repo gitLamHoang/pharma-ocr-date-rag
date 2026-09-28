@@ -29,6 +29,23 @@ def test_review_cli_round_trip(tmp_path, capsys, monkeypatch):
     assert command("queue") == []
     assert command("history", str(hit["id"])) == [event]
     assert command("index", str(folder), "--collection", "demo")["unchanged"] == 1
+    doc = command("documents", "--collection", "demo")[0]
+    for action in ["reopen", "retire", "restore"]:
+        result = command(
+            "document", action, str(doc["id"]), "--reviewer", "demo", "--reason", "Check lifecycle"
+        )
+        assert result["event"]["action"] == action
+        if action == "retire":
+            assert command("queue", "--decision", "all") == []
+            assert command("documents", "--state", "retired")[0]["id"] == doc["id"]
+            assert command("index", str(folder), "--collection", "demo")["retired_skipped"] == 1
+    assert command("queue", "--decision", "needs_review")[0]["id"] == hit["id"]
+    assert len(command("history", str(hit["id"]))) == 3
+    assert [event["action"] for event in command("document-history", str(doc["id"]))] == [
+        "reopen",
+        "retire",
+        "restore",
+    ]
 
 
 def test_cli_database_failure_has_actionable_error(tmp_path, capsys, monkeypatch):

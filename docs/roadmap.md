@@ -71,6 +71,19 @@ Hosted-site verification also exposed a browser-test race: source highlights ren
 
 Explanation point: a date-looking token can be a boundary, not an event date. The program should preserve that distinction instead of turning every recognized month into an exact expiry value. Likewise, a source statement is not missing data or a claim about current stock status.
 
+## Delivered: September 28
+
+- Added explicit local document re-review, retirement, restoration and lifecycle history. Version listings include source state and field counts, including zero-field and missing-file sources. Actions require an exact document version ID, reviewer and reason.
+- Retirement blocks routine indexing for every version of the same collection/filename, including changed content and settings. Restoration accepts only the last retired version, reactivates stored evidence and marks all its fields `needs_review`. Ordinary source changes and missing files keep their earlier semantics.
+- Preserved previous field decisions and added append-only document events. Reopen/restore field reasons link to the document event ID. Active-state changes and new events share one transaction; simulated partial-write failures roll back everything. Schema v3 upgrades v1/v2 databases without renumbering evidence or inventing historical lifecycle events.
+- Added a browser confirmation for whole-document re-review. It covers all fields, including hidden filter results, groups events in JSON and clears previous manual date choices. Earlier events remain compatible and visible in history. Failed storage leaves the session unchanged. Public MHRA records remain a separate, review-only snapshot; source retirement is a local SQLite operation.
+- Verification: 267 Python tests pass with locked Python 3.12 research/demo dependencies; Python 3.9 passes 262 with five optional research tests skipped. Added nine Python cases and two frontend tests; all 17 frontend tests, production build, formatting and desktop/mobile browser workflows pass. Checked dialog layouts at 320, 768, 1024 and 1920 pixels, including confirmation, storage failure, reload and exports.
+- Built a wheel and installed it into a fresh dependency-free Python 3.12 environment. The installed CLI indexed four synthetic documents / 24 fields, reopened six fields, skipped one retired source, restored those six to review, and preserved both field and document history.
+- Reproduced frozen MHRA training results (80/80 roles, still tied by keyword rules), six source-anchored cell cases, English 18/18, multilingual 42/42 in both modes and retrieval 3/3 at each budget. Verified saved OCR reports without rerunning OCR locally. Frozen public data, extraction semantics, model protocol and scores are unchanged. Regenerated only the source-hashed synthetic reports.
+- Added the [lifecycle contract and walkthrough](review-lifecycle.md), an actual confirmation screenshot, README controls and portfolio explanation. Authenticated reviewers, cross-tab synchronization, independent date labels and clinical validation remain outside this prototype.
+
+Explanation point: preserving evidence does not mean treating an old decision as permanent approval. Re-review adds a new decision without erasing history; retirement is an explicit source action, not an assumption based on a missing file.
+
 ## Planned Work Sessions
 
 | Date | Priority | Completion evidence |
@@ -78,7 +91,7 @@ Explanation point: a date-looking token can be a boundary, not an event date. Th
 | September 25 | Completed: per-document conventions and adversarial fixtures | See the delivered milestone above |
 | September 26 | Completed: synthetic image OCR plus real public-data training/UI | See both delivered milestones and their separate reports |
 | September 27 | Completed: conditional dates and non-date statements | Six source-anchored cases, typed exports, source qualifiers and negative tests; independent labels remain future work |
-| September 28 | Extend review-cycle semantics | Explicit re-review and source retirement behavior; preserve existing browser and SQL decision history |
+| September 28 | Completed: explicit re-review and source retirement | Append-only history, v1/v2 upgrade and failed-write tests, browser confirmation, and installed-wheel lifecycle walkthrough |
 | September 29 | Compare retrieval/model alternatives if prerequisites exist | Reproducible measured comparison; never invent unavailable model results or spend on APIs without authorization |
 | September 30 | Refine demo flow and visual documentation | Browser checks on desktop/mobile, reproducible screenshots, concise walkthrough |
 | October 1 | Installation and release rehearsal | Clean-environment installation, CI, dependency notes and full demo run |

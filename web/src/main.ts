@@ -30,6 +30,7 @@ import {
   CheckCheck,
   Braces,
   Copy,
+  RotateCcw,
 } from 'lucide';
 import {
   parseWorkspace,
@@ -38,6 +39,7 @@ import {
   latestEvent,
   filteredFields,
   makeEvent,
+  makeReopenEvents,
   validateEvent,
   csvText,
   sourceSlice,
@@ -72,6 +74,7 @@ const icons = {
   CheckCheck,
   Braces,
   Copy,
+  RotateCcw,
 };
 const root = document.querySelector<HTMLDivElement>('#app')!;
 const repository = 'https://github.com/gitLamHoang/pharma-ocr-date-rag';
@@ -347,7 +350,9 @@ function workspace() {
     (state.evidence === 'text' ? 'active' : '') +
     '">' +
     icon('braces') +
-    ' Text</button></div></div>' +
+    ' Text</button></div>' +
+    button('reopen-document', 'rotate-ccw', 'Reopen document for review') +
+    '</div>' +
     '<div class="page-controls"><span class="source-tag">Synthetic source</span><span>Page 1 of 1</span><div class="zoom">' +
     button('zoom-out', 'zoom-out', 'Zoom out', state.zoom <= 70 ? 'disabled' : '') +
     '<span>' +
@@ -454,7 +459,23 @@ function workspace() {
     matching.length +
     ' matching fields · ' +
     docFields.length +
-    ' in selected document</span><span>Review decisions are saved in this browser.</span></div>'
+    ' in selected document</span><span>Review decisions are saved in this browser.</span></div>' +
+    '<dialog id="reopen-dialog" aria-labelledby="reopen-title"><form id="reopen-form">' +
+    '<h2 id="reopen-title">Reopen document</h2><p class="reopen-source">' +
+    escape(doc.filename) +
+    '</p><p>All ' +
+    doc.fields.length +
+    ' fields will need review. Previous decisions remain in history.</p>' +
+    '<label>Reviewer<input name="reviewer" maxlength="80" value="' +
+    escape(state.reviewer) +
+    '" required></label><label>Re-review reason<textarea name="reason" rows="3" maxlength="600" required></textarea></label>' +
+    '<p class="form-error" role="alert" hidden></p><div class="dialog-actions">' +
+    '<button type="button" data-action="cancel-reopen">Cancel</button>' +
+    '<button type="submit" class="primary">' +
+    icon('rotate-ccw') +
+    ' Reopen all ' +
+    doc.fields.length +
+    ' fields</button></div></form></dialog>'
   );
 }
 function historyFor(doc: Document, field: Field): string {
@@ -473,6 +494,7 @@ function historyFor(doc: Document, field: Field): string {
       (event) =>
         '<div class="mini-event">' +
         badge(event.decision) +
+        (event.reopenId ? '<small>Document reopened</small>' : '') +
         '<p>' +
         escape(event.reason) +
         '</p><small>' +
@@ -626,6 +648,7 @@ function historyView() {
               icon(event.decision === 'accepted' ? 'check' : 'flag') +
               '</span><div><div class="event-heading">' +
               badge(event.decision) +
+              (event.reopenId ? '<small>Document reopened</small>' : '') +
               '<button class="table-link" data-doc="' +
               doc.id +
               '" data-field="' +
@@ -958,6 +981,14 @@ root.addEventListener('click', async (event) => {
   else if (target.dataset.mode) state.benchmarkMode = target.dataset.mode;
   else if (target.dataset.action) {
     const action = target.dataset.action;
+    if (action === 'reopen-document') {
+      root.querySelector<HTMLDialogElement>('#reopen-dialog')?.showModal();
+      return;
+    }
+    if (action === 'cancel-reopen') {
+      root.querySelector<HTMLDialogElement>('#reopen-dialog')?.close();
+      return;
+    }
     if (action === 'recall-prev') state.recallPage = Math.max(0, state.recallPage - 1);
     if (action === 'recall-next') state.recallPage++;
     if (action === 'export-public-json' && publicData) {
@@ -1132,6 +1163,33 @@ root.addEventListener('input', (event) => {
 });
 root.addEventListener('submit', (event) => {
   event.preventDefault();
+  if ((event.target as HTMLFormElement).id === 'reopen-form') {
+    const form = event.target as HTMLFormElement;
+    const values = new FormData(form);
+    try {
+      const additions = makeReopenEvents(
+        data,
+        selectedDoc(),
+        String(values.get('reviewer') ?? ''),
+        String(values.get('reason') ?? ''),
+      );
+      const updated = [...events, ...additions];
+      localStorage.setItem(storeKey, JSON.stringify(updated));
+      events = updated;
+      state.reviewer = additions[0].reviewer;
+      selectField(selectedDoc(), selectedField());
+      state.message =
+        additions.length + ' fields reopened for review. Previous decisions preserved.';
+      render();
+      root.querySelector<HTMLButtonElement>('[data-action=reopen-document]')?.focus();
+    } catch (error) {
+      const alert = form.querySelector<HTMLElement>('[role=alert]')!;
+      alert.hidden = false;
+      alert.textContent =
+        error instanceof Error ? error.message : 'Could not reopen this document.';
+    }
+    return;
+  }
   const decision = (event as SubmitEvent).submitter?.getAttribute('data-decision') as Decision;
   if (!decision) return;
   try {

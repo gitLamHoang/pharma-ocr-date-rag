@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-28 - Explicit document re-review and source retirement
+
+- Added SQLite document listing, reopen, retire, restore and lifecycle-history commands. Retirement blocks all content/settings versions of a collection/filename until explicit restoration. Inactive and stale version requests are rejected; zero-field and missing-file sources remain manageable.
+- Reopen and restore append `needs_review` for every stored field. Active-state changes and append-only lifecycle/field events share one transaction, with rollback tests. Schema v3 preserves v1/v2 evidence and review IDs; no historical actions are fabricated.
+- Added a browser confirmation for whole-document re-review, grouped session events and reset of earlier manual interpretations. Existing decisions remain compatible. Browser tests cover hidden fields, required reasons, failed storage, reload, history, exports and desktop/mobile dialogs. Public MHRA records remain separate and review-only.
+- Extraction logic, frozen public data, training protocol and model results are unchanged. Added the lifecycle contract, walkthrough and an actual UI screenshot.
+
 ## 2026-09-27 - Conditional dates and source statements
 
 - Separated single dates, ambiguous dates, expiry cutoffs, distribution statements and unsupported cells. Three inclusive cutoffs preserve month precision and null single-date values; 39 distribution statements remain source statements, not current status assertions. Unsupported cells now number 38 rather than mixing all 80 no-candidate cells together.

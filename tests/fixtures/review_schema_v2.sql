@@ -1,4 +1,4 @@
--- Schema v3: explicit source lifecycle events preserve earlier review decisions.
+-- Schema v2: ambiguous dates retain candidates and original source evidence.
 PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS documents (
     id INTEGER PRIMARY KEY,
@@ -46,27 +46,4 @@ SELECT h.*, d.collection, d.path, d.content_sha256, d.extractor_version,
 FROM date_hits h JOIN documents d ON d.id = h.document_id
 LEFT JOIN review_events r ON r.id = (SELECT MAX(id) FROM review_events WHERE hit_id = h.id)
 WHERE d.active = 1;
-CREATE TABLE IF NOT EXISTS document_events (
-    id INTEGER PRIMARY KEY,
-    document_id INTEGER NOT NULL REFERENCES documents(id),
-    action TEXT NOT NULL CHECK (action IN ('reopen', 'retire', 'restore')),
-    reviewer TEXT NOT NULL CHECK (length(trim(reviewer)) > 0),
-    reason TEXT NOT NULL CHECK (length(trim(reason)) > 0),
-    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
-);
-CREATE INDEX IF NOT EXISTS document_events_document ON document_events(document_id, id DESC);
-CREATE TRIGGER IF NOT EXISTS document_events_no_update BEFORE UPDATE ON document_events
-BEGIN SELECT RAISE(ABORT, 'Document events are append-only'); END;
-CREATE TRIGGER IF NOT EXISTS document_events_no_delete BEFORE DELETE ON document_events
-BEGIN SELECT RAISE(ABORT, 'Document events are append-only'); END;
-CREATE VIEW IF NOT EXISTS document_versions AS
-SELECT d.*, (SELECT COUNT(*) FROM date_hits WHERE document_id=d.id) AS hit_count,
-       CASE WHEN d.active=1 THEN 'active'
-            WHEN (SELECT e.action FROM document_events e
-                  JOIN documents source ON source.id=e.document_id
-                  WHERE source.collection=d.collection AND source.path=d.path
-                        AND e.action IN ('retire', 'restore')
-                  ORDER BY e.id DESC LIMIT 1) = 'retire' THEN 'retired'
-            ELSE 'superseded' END AS state
-FROM documents d;
-PRAGMA user_version = 3;
+PRAGMA user_version = 2;

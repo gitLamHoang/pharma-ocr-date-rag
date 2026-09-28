@@ -25,6 +25,8 @@ Open the [public browser workspace](https://gitlamhoang.github.io/pharma-ocr-dat
 6. Open Benchmark lab. Select Vietnamese and inspect six individual cases. Both vocabulary modes pass the authored fixtures, but this is not a claim about unseen documents or image OCR.
 7. Export the session JSON. Point to original text, source spans, hashes, candidates and review events.
 
+Optional review follow-up: select **Reopen document for review**, then confirm a reviewer and reason. All six French fields return to `Needs review`; the audit date becomes unresolved again. Earlier decisions remain in history. Explain that another inspection must not silently inherit an earlier manual interpretation. [Local source retirement and full lifecycle walkthrough](review-lifecycle.md).
+
 For a local extraction demo, run Streamlit using the README commands. Paste synthetic text or select a sample collection, change language/date-order settings, and inspect the recomputed results. Unlike the static browser workspace, this invokes Python on new text.
 
 ## Explain the Engineering

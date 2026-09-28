@@ -83,7 +83,7 @@ try {
     .locator('#reason')
     .fill('Synthetic test: date convention still requires confirmation.');
   await page.getByRole('button', { name: 'Accept', exact: true }).click();
-  assert.match(await page.locator('.form-error').innerText(), /valid date/);
+  assert.match(await page.locator('.inspector .form-error').innerText(), /valid date/);
   await page.locator('input[name=candidate]').last().check();
   await page
     .locator('#reason')
@@ -163,7 +163,80 @@ try {
     await page.goto(new URL('?viewport=' + width + '#workspace', base).href);
     await page.locator('.source-highlight.selected').waitFor();
     await checkLayout();
+    await page.getByRole('button', { name: 'Reopen document for review', exact: true }).click();
+    const dialog = page.getByRole('dialog');
+    assert.equal(await dialog.isVisible(), true);
+    assert.equal(
+      await dialog.evaluate((element) => element.scrollWidth > element.clientWidth),
+      false,
+    );
+    await dialog.screenshot({ path: resolve(screenshots, `reopen-dialog-${width}.png`) });
+    await dialog.getByRole('button', { name: 'Cancel', exact: true }).click();
   }
+  const storedEvents = () =>
+    page.evaluate(() => JSON.parse(localStorage.getItem('pharma-date-review.events.v1')));
+  const beforeReopen = await storedEvents();
+  await page.selectOption('#label', 'audit');
+  assert.equal(await page.locator('#field option').count(), 1);
+  await page.getByRole('button', { name: 'Reopen document for review', exact: true }).click();
+  const reopenDialog = page.getByRole('dialog');
+  await reopenDialog.getByRole('button', { name: /Reopen all/ }).click();
+  assert.deepEqual(await storedEvents(), beforeReopen, 'A required reason cannot be skipped');
+  await reopenDialog
+    .getByLabel('Re-review reason')
+    .fill('Synthetic test: repeat the complete document review.');
+  await page.evaluate(() => {
+    window.originalStorageSet = Storage.prototype.setItem;
+    Storage.prototype.setItem = () => {
+      throw new Error('Simulated storage write failure');
+    };
+  });
+  await reopenDialog.getByRole('button', { name: /Reopen all/ }).click();
+  assert.match(await reopenDialog.getByRole('alert').innerText(), /Simulated storage/);
+  assert.deepEqual(
+    await storedEvents(),
+    beforeReopen,
+    'Failed storage must preserve all prior decisions',
+  );
+  await page.evaluate(() => {
+    Storage.prototype.setItem = window.originalStorageSet;
+  });
+  await reopenDialog.getByRole('button', { name: /Reopen all/ }).click();
+  const afterReopen = await storedEvents();
+  assert.deepEqual(afterReopen.slice(0, beforeReopen.length), beforeReopen);
+  const additions = afterReopen.slice(beforeReopen.length);
+  assert.ok(additions.length > 1, 'Reopen must include document fields hidden by filters');
+  assert.equal(new Set(additions.map((event) => event.reopenId)).size, 1);
+  assert.ok(
+    additions.every(
+      (event) => event.documentId === 'fr_certificat' && event.decision === 'needs_review',
+    ),
+  );
+  assert.equal(await page.locator('.field-value h3').innerText(), 'Unresolved date');
+  assert.equal(await page.locator('input[name=candidate]:checked').count(), 0);
+  await page.reload();
+  await page.locator('.inspector .status-needs_review').first().waitFor();
+  assert.equal(await page.locator('.field-value h3').innerText(), 'Unresolved date');
+  assert.deepEqual(await storedEvents(), afterReopen);
+  await page
+    .locator('#reason')
+    .fill('Synthetic test: prior interpretation must not carry forward.');
+  await page.getByRole('button', { name: 'Accept', exact: true }).click();
+  assert.match(await page.locator('.inspector .form-error').innerText(), /valid date/);
+  assert.deepEqual(await storedEvents(), afterReopen);
+  const reopenedExportPromise = page.waitForEvent('download');
+  await page.locator('.topbar [data-action=export-json]').click();
+  const reopenedExport = await reopenedExportPromise;
+  assert.deepEqual(
+    JSON.parse(await readFile(await reopenedExport.path(), 'utf8')).reviews,
+    afterReopen,
+  );
+  await page.locator('nav [data-view=history]').click();
+  assert.equal(await page.locator('.history-event').count(), afterReopen.length);
+  assert.equal(
+    await page.locator('.history-event').filter({ hasText: 'Document reopened' }).count(),
+    additions.length,
+  );
   await page.locator('nav [data-view=recalls]').click();
   await page.locator('.public-register tbody tr').first().waitFor();
   assert.equal(await page.locator('.public-register tbody tr').count(), 25);

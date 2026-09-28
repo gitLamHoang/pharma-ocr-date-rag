@@ -68,6 +68,7 @@ export interface ReviewEvent {
   reviewer: string;
   reason: string;
   createdAt: string;
+  reopenId?: string;
 }
 
 export const languages: Record<string, string> = {
@@ -188,7 +189,14 @@ export function validateEvent(value: unknown, data: Workspace): value is ReviewE
     typeof event.createdAt === 'string' &&
     Number.isFinite(Date.parse(event.createdAt)) &&
     (event.resolved === null || field.candidates.includes(event.resolved)) &&
-    (event.decision !== 'accepted' || event.resolved !== null)
+    (event.decision !== 'accepted' || event.resolved !== null) &&
+    (event.reopenId === undefined ||
+      (typeof event.reopenId === 'string' &&
+        /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(
+          event.reopenId,
+        ) &&
+        event.decision === 'needs_review' &&
+        event.resolved === field.normalized))
   );
 }
 export function makeEvent(
@@ -215,6 +223,20 @@ export function makeEvent(
   if (!validateEvent(event, data))
     throw new Error('Choose a valid date and enter a reviewer and reason.');
   return event;
+}
+export function makeReopenEvents(
+  data: Workspace,
+  doc: Document,
+  reviewer: string,
+  reason: string,
+): ReviewEvent[] {
+  const source = data.documents.find((d) => d.id === doc.id && d.sha256 === doc.sha256);
+  if (!source || !source.fields.length) throw new Error('No current document fields to reopen.');
+  const reopenId = crypto.randomUUID();
+  return source.fields.map((field) => ({
+    ...makeEvent(data, source, field, 'needs_review', field.normalized, reviewer, reason),
+    reopenId,
+  }));
 }
 export function matches(data: Workspace, doc: Document, field: Field, query: string): boolean {
   const terms = fold(query).trim().split(/\s+/).filter(Boolean);

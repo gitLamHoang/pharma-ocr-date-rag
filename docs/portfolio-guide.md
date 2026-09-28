@@ -9,7 +9,7 @@ The live demo starts with real notices: search a batch, inspect its date and sou
 ## Three engineering decisions to explain
 
 1. **Language is not a date convention.** Recognizing French words does not prove `09/10/2026` is day-first. Vocabulary and numeric order are separate settings, tested separately.
-2. **Evidence must survive change.** SQL versions include content hashes and parser settings. Reindexing identical evidence preserves decisions; changed evidence creates a separate version. The migration preserves historical IDs and events and rolls back on failure.
+2. **Evidence must survive change.** SQL versions include content hashes and parser settings. Reindexing identical evidence preserves decisions; changed evidence creates a separate version. Explicit re-review appends decisions instead of deleting history. Retirement blocks routine re-indexing, while restoration requires another review. The migration and bulk actions roll back on failure.
 3. **A metric needs a denominator and a scope.** The multilingual report is 42 authored development cases, not 42 vendor documents. Both language modes pass, but the fixtures were used during implementation and do not establish generalization or image-OCR accuracy.
 
 ## An experiment to discuss

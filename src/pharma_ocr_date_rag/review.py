@@ -16,6 +16,8 @@ from .policies import resolve_date_orders
 
 EXTRACTOR_VERSION = "dates-v2-multilingual"
 DECISIONS = {"accepted", "rejected", "needs_review"}
+DOCUMENT_ACTIONS = {"reopen", "retire", "restore"}
+DOCUMENT_STATES = {"active", "retired", "superseded", "all"}
 
 
 def _execute_script(connection: sqlite3.Connection, script: str) -> None:
@@ -40,7 +42,7 @@ def database(path: str | Path) -> Iterator[sqlite3.Connection]:
         with connection:
             connection.execute("BEGIN IMMEDIATE")
             version = connection.execute("PRAGMA user_version").fetchone()[0]
-            if version not in (0, 1, 2):
+            if version not in (0, 1, 2, 3):
                 raise ValueError(f"Unsupported database schema {version}")
             if version == 1:
                 migration = files("pharma_ocr_date_rag").joinpath("migrate_v1.sql").read_text()
@@ -64,7 +66,8 @@ def index_folder(
 ) -> dict:
     """Atomically add/update files; identical versions retain their review history.
 
-    Missing files are not deleted. Use one logical collection per source folder.
+    Missing files are not deleted; explicitly retired sources are skipped.
+    Use one logical collection per source folder.
     """
     folder = Path(folder)
     validate_language(language)
@@ -73,10 +76,21 @@ def index_folder(
         raise ValueError("Collection must not be empty")
     paths = document_paths(folder)
     orders = resolve_date_orders(paths, date_order, date_order_map)
-    result = {"collection": collection, "indexed": 0, "unchanged": 0, "reactivated": 0, "new_hits": 0}
+    result = {
+        "collection": collection,
+        "indexed": 0,
+        "unchanged": 0,
+        "reactivated": 0,
+        "new_hits": 0,
+        "retired_skipped": 0,
+    }
     with database(db) as connection, connection:
         connection.execute("BEGIN IMMEDIATE")
         for path in paths:
+            lifecycle = _source_event(connection, collection, path.name)
+            if lifecycle and lifecycle["action"] == "retire":
+                result["retired_skipped"] += 1
+                continue
             order = orders[path.name]
             extractor_version = f"{EXTRACTOR_VERSION};language={language};date_order={order}"
             digest = sha256(path.read_bytes()).hexdigest()
@@ -133,6 +147,99 @@ def index_folder(
             result["indexed"] += 1
             result["new_hits"] += len(document.dates)
     return result
+
+
+def _source_event(connection: sqlite3.Connection, collection: str, path: str) -> sqlite3.Row | None:
+    return connection.execute(
+        "SELECT e.* FROM document_events e JOIN documents d ON d.id=e.document_id "
+        "WHERE d.collection=? AND d.path=? AND e.action IN ('retire','restore') "
+        "ORDER BY e.id DESC LIMIT 1",
+        (collection, path),
+    ).fetchone()
+
+
+def document_versions(
+    db: str | Path,
+    *,
+    collection: str | None = None,
+    state: str = "active",
+    limit: int = 100,
+    offset: int = 0,
+) -> list[dict]:
+    """List version IDs, including documents with no date hits or no current source file."""
+    if state not in DOCUMENT_STATES or not 1 <= limit <= 1000 or offset < 0:
+        raise ValueError("Invalid document filter or pagination")
+    clauses, parameters = [], []
+    if collection is not None:
+        clauses.append("collection=?")
+        parameters.append(collection)
+    if state != "all":
+        clauses.append("state=?")
+        parameters.append(state)
+    where = " WHERE " + " AND ".join(clauses) if clauses else ""
+    with database(db) as connection:
+        return [
+            dict(row)
+            for row in connection.execute(
+                "SELECT * FROM document_versions" + where + " ORDER BY id LIMIT ? OFFSET ?",
+                [*parameters, limit, offset],
+            )
+        ]
+
+
+def document_action(db: str | Path, document_id: int, action: str, reviewer: str, reason: str) -> dict:
+    """Atomically record a version-specific action and its required field decisions.
+
+    Retirement blocks every version of the same collection/path. Restore targets
+    only the last retired version, and never carries its old approvals forward.
+    """
+    if action not in DOCUMENT_ACTIONS or not reviewer.strip() or not reason.strip():
+        raise ValueError("A valid document action, reviewer and reason are required")
+    reviewer, reason = reviewer.strip(), reason.strip()
+    with database(db) as connection, connection:
+        connection.execute("BEGIN IMMEDIATE")
+        document = connection.execute("SELECT * FROM documents WHERE id=?", (document_id,)).fetchone()
+        if not document:
+            raise ValueError("Document version does not exist")
+        if action == "restore":
+            lifecycle = _source_event(connection, document["collection"], document["path"])
+            if (
+                not lifecycle
+                or lifecycle["action"] != "retire"
+                or lifecycle["document_id"] != document_id
+                or document["active"]
+            ):
+                raise ValueError("Restore requires the last explicitly retired document version")
+        elif not document["active"]:
+            raise ValueError("Document version is inactive; use the current version ID")
+        cursor = connection.execute(
+            "INSERT INTO document_events(document_id,action,reviewer,reason) VALUES(?,?,?,?)",
+            (document_id, action, reviewer, reason),
+        )
+        event = dict(
+            connection.execute("SELECT * FROM document_events WHERE id=?", (cursor.lastrowid,)).fetchone()
+        )
+        if action in {"retire", "restore"}:
+            connection.execute("UPDATE documents SET active=? WHERE id=?", (action == "restore", document_id))
+        hits_reopened = 0
+        if action in {"reopen", "restore"}:
+            result = connection.execute(
+                "INSERT INTO review_events(hit_id,decision,reviewer,reason) "
+                "SELECT id,'needs_review',?,? FROM date_hits WHERE document_id=? ORDER BY id",
+                (reviewer, f"Document {action} #{event['id']}: {reason}", document_id),
+            )
+            hits_reopened = result.rowcount
+        return {"event": event, "hits_reopened": hits_reopened}
+
+
+def document_history(db: str | Path, document_id: int) -> list[dict]:
+    with database(db) as connection:
+        return [
+            dict(row)
+            for row in connection.execute(
+                "SELECT * FROM document_events WHERE document_id=? ORDER BY id", (document_id,)
+            )
+        ]
 
 
 def queue(
