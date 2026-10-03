@@ -13,6 +13,8 @@ A pharmaceutical date-review prototype with **60 real public MHRA notices**, a t
 
 No installation or API key. Search 742 candidate date-column cells from public medicine notices, inspect original batch rows, and compare model evidence. A separate workspace contains eight synthetic multilingual documents and 42 candidate dates.
 
+[October 2 release checklist](docs/release-checklist.md): installation checks, measured results, demo sequence and known limits.
+
 ![Public MHRA notices workspace with batch search, date candidates and source evidence](docs/images/public-notices.png)
 
 ## The Problem
@@ -178,7 +180,7 @@ Measured on the current **authored synthetic development fixtures**, not held-ou
 | Multilingual breakdown | EN 18/18; FR, DE, ES, VI each 6/6 | English includes 12 edge cases; coverage is intentionally uneven |
 | Retrieval chunk experiment | 3/3 questions hit at 35, 60 and 90 words | A small smoke benchmark, not evidence that chunk size never matters |
 
-[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, fifteen unit tests, a production build and Playwright desktop/mobile checks before deploying. A separate CI job retrains the public-data classifier from the frozen corpus.
+[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, seventeen unit tests, a production build and Playwright desktop/mobile checks before deploying. Separate CI jobs retrain the public-data classifier and verify a clean wheel installation.
 
 ```bash
 cd web
@@ -189,6 +191,15 @@ npm run test:browser
 ```
 
 The browser test starts and stops its own production preview, checks all eight page assets, exercises review persistence and exports, and captures screenshots. See [contributing](CONTRIBUTING.md) for snapshot regeneration and dependency details.
+
+### Verify the installable package
+
+```bash
+uv build --wheel --out-dir outputs/wheel
+uv run --no-project --python 3.12 python scripts/verify_wheel.py outputs/wheel/*.whl
+```
+
+On macOS or Linux, this creates a temporary environment outside the checkout and installs only the local wheel, without an index or runtime dependencies. It checks the installed CLI, mixed date conventions, source spans, review lifecycle and v1/v2 database upgrades. Failure returns a nonzero exit code and a failed report. CI saves the wheel and its SHA-256 verification report as artifacts. Test only trusted wheels; this is installation verification, not a sandbox for untrusted code.
 
 ### Separate image-OCR experiment
 

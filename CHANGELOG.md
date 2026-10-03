@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-02 - Final installation and demo verification
+
+- Added an isolated installed-wheel verifier and CI job. Six checks exercise the packaged CLI, mixed date conventions/source spans, repeat indexing, lifecycle history and v1/v2 database upgrades. Verification uses a temporary environment outside the checkout, disables source-path imports, and installs without index access or dependencies.
+- Record artifact/input hashes and real verification time; return failure for installation, import, command, timeout, validation or cleanup errors. Added eight tests for failed checks, source-import leakage, subprocess bounds and stale success reports. CI uploads the wheel and its report together. A deliberately incomplete wheel without `schema.sql` correctly fails the installed check.
+- A fresh locked Python 3.12 environment passes 275 tests; Python 3.9 passes 270 with five optional research tests skipped. Fresh frontend installation passes 17 tests, production build and desktop/mobile browser workflows. Actual OCR reruns reproduce 16/16 clean and 8/16 degraded synthetic fields, plus 11/11 limited original-PDF date coverage for OCR and native text.
+- Added the final release checklist, corrected the frontend test count, and marked unshipped retrieval/model ideas as deferred. Frozen data, parsing behavior and model scores are unchanged. This completes the scheduled application sprint, not a clinical or production release.
+
 ## 2026-09-28 - Explicit document re-review and source retirement
 
 - Added SQLite document listing, reopen, retire, restore and lifecycle-history commands. Retirement blocks all content/settings versions of a collection/filename until explicit restoration. Inactive and stale version requests are rejected; zero-field and missing-file sources remain manageable.

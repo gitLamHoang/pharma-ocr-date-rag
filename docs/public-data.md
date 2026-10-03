@@ -126,4 +126,6 @@ Top-feature explanations sort coefficients rounded to six decimals, then break t
 
 ## Remaining Gaps
 
+The [October 2 release check](release-checklist.md) reproduced the frozen classifier results and reran both OCR experiments. Counts are unchanged; no new source collection, independent annotation or real-corpus retrieval comparison is claimed.
+
 Public MHRA English is not a substitute for multilingual supplier documents. Five-language parsing and English/French/Vietnamese degraded-image checks remain **synthetic** experiments. There is no PaddleOCR verification, LlamaIndex deployment, Mistral/Phi-2 benchmark, trained OCR recognizer, independently measured user benefit, or production medical validation. Next steps are template-diverse public sources, independent annotations, broader date/range formats, and occurrence-level PDF batch/date association tests.

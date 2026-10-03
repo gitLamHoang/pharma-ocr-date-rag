@@ -37,6 +37,24 @@ jobs:
       - run: uv sync --frozen --python 3.12 --extra dev --extra research
       - run: uv run pytest tests/test_public_data.py tests/test_recalls.py -q
       - run: uv run python scripts/train_mhra.py --check
+  installed-wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.21"
+      - run: uv python install 3.12
+      - run: uv build --wheel --out-dir outputs/wheel
+      - run: uv run --no-project --python 3.12 python scripts/verify_wheel.py outputs/wheel/*.whl
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: installed-wheel-verification
+          path: |
+            outputs/wheel-verification.json
+            outputs/wheel/*.whl
+          if-no-files-found: warn
   image-ocr:
     runs-on: ubuntu-latest
     steps:

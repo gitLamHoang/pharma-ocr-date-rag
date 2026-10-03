@@ -2,7 +2,7 @@
 
 Sprint: September 24 through October 2, 2026. Application deadline: October 3.
 
-Each date is a planned work session, not a promise that an untested feature already exists. Priorities may change when a regression or installation problem is found. Each session should ship a useful tested change and record the actual result here.
+Sprint work concludes with the October 2 release verification below. Planned sessions without shipped work are marked explicitly. No missing activity is backdated or fabricated.
 
 ## Delivered: September 24
 
@@ -84,7 +84,18 @@ Explanation point: a date-looking token can be a boundary, not an event date. Th
 
 Explanation point: preserving evidence does not mean treating an old decision as permanent approval. Re-review adds a new decision without erasing history; retirement is an explicit source action, not an assumption based on a missing file.
 
-## Planned Work Sessions
+## Delivered: October 2
+
+- Completed the final installation rehearsal with a fresh locked Python 3.12 environment and a fresh frontend dependency installation. Added a repeatable installed-wheel verifier so CI checks the distributed CLI and SQL resources outside the source checkout, without optional runtime dependencies or index access during installation.
+- Six installed-package checks pass: isolated import/entry point, mixed conventions/source spans, repeat indexing, document lifecycle history, and v1/v2 upgrades. All preserve unresolved evidence and earlier review IDs. Added eight verifier regression tests for errors, timeout configuration, source import leakage, cleanup failure and stale reports. A deliberately incomplete wheel without `schema.sql` correctly fails. CI uploads the valid wheel with its hash-bearing verification report.
+- Verification: 275 Python tests pass with research/demo/Tesseract extras. Python 3.9 passes 270 with five optional research tests skipped. All 17 frontend tests, production build, formatting, local desktop/mobile browser flows and saved-evidence checks pass. The full browser smoke test also covers the public hosted demo.
+- Reproduced English 18/18, multilingual 42/42 in each mode, retrieval 3/3 at every existing word budget, six source-anchored cell cases and frozen model roles 80/80, still tied by rules. Reran actual synthetic image OCR (16/16 clean; 8/16 degraded with four extras) and original public-PDF OCR/native extraction (both 11/11 supported unique date interpretations). Fresh OCR output stays separate from frozen checked-in evidence.
+- Added the [final release checklist](release-checklist.md), clean-install commands, scope boundaries and a concise demo sequence. Corrected stale documentation and explicitly deferred the proposed real-data retrieval comparison. No separate September 29, September 30 or October 1 milestone shipped; this session does not claim otherwise.
+- This is the final scheduled session. The automation is to be deleted after publishing and checking this commit. Remaining research is documented, not automatically scheduled beyond the application deadline.
+
+Explanation point: tests inside a checkout can accidentally rely on unpackaged files. The new verification installs only the wheel, invokes its real CLI and proves that database upgrades and source evidence work for someone installing the project.
+
+## Session Outcomes
 
 | Date | Priority | Completion evidence |
 | --- | --- | --- |
@@ -92,10 +103,10 @@ Explanation point: preserving evidence does not mean treating an old decision as
 | September 26 | Completed: synthetic image OCR plus real public-data training/UI | See both delivered milestones and their separate reports |
 | September 27 | Completed: conditional dates and non-date statements | Six source-anchored cases, typed exports, source qualifiers and negative tests; independent labels remain future work |
 | September 28 | Completed: explicit re-review and source retirement | Append-only history, v1/v2 upgrade and failed-write tests, browser confirmation, and installed-wheel lifecycle walkthrough |
-| September 29 | Compare retrieval/model alternatives if prerequisites exist | Reproducible measured comparison; never invent unavailable model results or spend on APIs without authorization |
-| September 30 | Refine demo flow and visual documentation | Browser checks on desktop/mobile, reproducible screenshots, concise walkthrough |
-| October 1 | Installation and release rehearsal | Clean-environment installation, CI, dependency notes and full demo run |
-| October 2 | Final fixes and application-ready release | Verified main branch, exact results, concise limitations and final shareable commit/release |
+| September 29 | Deferred: retrieval/model alternatives | Scoping only; no new experiment or comparison shipped |
+| September 30 | No separate milestone shipped | Existing demo flow verified in the final session |
+| October 1 | Rehearsal moved to October 2 | No separate milestone shipped |
+| October 2 | Completed: final installation and demo verification | Fresh environments, installed-wheel CI, reproducible measurements and final release checklist |
 
 ## Session Checklist
 
@@ -103,4 +114,4 @@ Inspect the current worktree and instructions, preserve user changes, pull safel
 
 Keep the README synchronized with what runs. The five-language demo consumes synthetic text; separate experiments measure synthetic multilingual images and three original English MHRA PDFs. A real-data column classifier is trained, but no OCR recognizer is fine-tuned. There is no LlamaIndex index, Mistral/Phi-2 benchmark, clinical validation or measured customer impact. New real sources require documented reuse terms, attribution, bounded collection and reviewable provenance. Preserve frozen test data and disclose template overlap rather than treating repeated headings as proof of generalization.
 
-The daily Codex schedule runs at 9:00 a.m. America/Los_Angeles through October 2. It depends on the local machine and app being available. Stop the automation after the final session; do not create backdated or empty activity commits.
+The daily Codex schedule was limited to October 2 and depended on local machine/app availability. The sprint ends after the final session; no backdated, empty or post-deadline activity commits are planned.
