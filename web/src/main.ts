@@ -1,4 +1,5 @@
 import './style.css';
+import './design.css';
 import {
   parseRecalls,
   filterRecalls,
@@ -689,11 +690,7 @@ function publicRows() {
 }
 function publicView() {
   if (!publicData)
-    return (
-      '<div class="large-empty"><h2>Public notices unavailable</h2><p>' +
-      escape(publicError) +
-      '</p></div>'
-    );
+    return `<div class="large-empty">${icon('circle-alert')}<h2>Public notices unavailable</h2><p>${escape(publicError)}</p></div>`;
   const matches = publicRows();
   const pageCount = Math.max(1, Math.ceil(matches.length / 25));
   state.recallPage = Math.min(state.recallPage, pageCount - 1);
@@ -702,169 +699,82 @@ function publicView() {
   const doc = publicData.documents.find((doc) => doc.id === selected?.document_id);
   const table = doc?.tables.find((table) => table.table_index === selected?.table_index);
   const evaluation = publicData.evaluation.test;
-  return (
-    '<div class="metrics"><div><span>Official notices</span><strong>' +
-    publicData.corpus.documents +
-    '<small>MHRA / GOV.UK</small></strong></div><div><span>Batch/date cells</span><strong>' +
-    publicData.records.length +
-    '<small>source-linked candidates</small></strong></div><div><span>Training documents</span><strong>' +
-    publicData.corpus.document_splits.train +
-    '<small>' +
-    publicData.corpus.document_splits.validation +
-    ' validation / ' +
-    publicData.corpus.document_splits.test +
-    ' test</small></strong></div><div><span>No single date</span><strong>' +
-    publicData.records.filter((row) => row.normalized === null).length +
-    '<small>ambiguous, conditional or non-date</small></strong></div></div>' +
-    '<div class="public-scope"><span>' +
-    icon('circle-alert') +
-    'Static research snapshot · ' +
-    escape(publicData.snapshotRetrievedAt.slice(0, 10)) +
-    ' · Not current recall advice. All values require source review.</span><a href="' +
-    repository +
-    '/blob/main/docs/public-data.md" target="_blank" rel="noreferrer">Dataset & model card ' +
-    icon('arrow-up-right') +
-    '</a></div>' +
-    '<div class="filter-bar public-filters"><label class="search">' +
-    icon('search') +
-    '<input id="recall-query" type="search" placeholder="Medicine, batch or source date" aria-label="Search public notices" value="' +
-    escape(state.recallQuery) +
-    '"></label>' +
-    '<select id="recall-role" aria-label="Public date type">' +
-    options(
-      { expiry: 'Expiry', distribution: 'Distribution' },
-      state.recallRole,
-      'All date types',
-    ) +
-    '</select>' +
-    '<select id="recall-split" aria-label="Dataset split">' +
-    options(
-      { train: 'Training', validation: 'Validation', test: 'Held-out test' },
-      state.recallSplit,
-      'All splits',
-    ) +
-    '</select>' +
-    '<select id="recall-kind" aria-label="Value kind">' +
-    options(valueKinds, state.recallKind, 'All value kinds') +
-    '</select>' +
-    '<label class="public-checkbox"><input type="checkbox" id="recall-unresolved" ' +
-    (state.recallUnresolved ? 'checked' : '') +
-    '> No single date</label></div>' +
-    '<div class="table-toolbar"><h2>Public batch register <span>' +
-    matches.length +
-    '</span></h2><button data-action="export-public-csv">' +
-    icon('download') +
-    ' Export CSV</button></div>' +
-    (pageRows.length
-      ? '<div class="table-scroll public-register"><table><thead><tr><th>Notice / Batch</th><th>Field</th><th>Source value</th><th>Interpretation</th><th>Review flags</th><th>Split</th></tr></thead><tbody>' +
-        pageRows
-          .map(
-            (row) =>
-              '<tr class="' +
-              (selected?.id === row.id ? 'public-selected' : '') +
-              '"><td><button class="table-link" data-public-field="' +
-              escape(row.id) +
-              '">' +
-              escape(row.batch || 'No batch text') +
-              '</button><small>' +
-              escape(row.title) +
-              '</small></td><td>' +
-              escape(row.role) +
-              '</td><td>' +
-              escape(row.raw_text) +
-              '</td><td class="date-cell">' +
-              escape(cellInterpretation(row)) +
-              '</td><td>' +
-              escape(
-                row.review_reasons.join(', ').replaceAll('_', ' ') || 'Source review required',
-              ) +
-              '</td><td>' +
-              escape(row.split) +
-              '</td></tr>',
-          )
-          .join('') +
-        '</tbody></table></div>'
-      : '<div class="large-empty"><h3>No matching public records</h3></div>') +
-    '<div class="public-pagination">' +
-    button(
-      'recall-prev',
-      'chevron-left',
-      'Previous public records',
-      state.recallPage === 0 ? 'disabled' : '',
-    ) +
-    '<span>Page ' +
-    (state.recallPage + 1) +
-    ' / ' +
-    pageCount +
-    '</span>' +
-    button(
-      'recall-next',
-      'chevron-right',
-      'Next public records',
-      state.recallPage + 1 >= pageCount ? 'disabled' : '',
-    ) +
-    '</div>' +
-    (doc && table && selected
-      ? '<section class="public-source"><div class="table-toolbar"><h2>Source table</h2><a href="' +
-        escape(doc.url) +
-        '" target="_blank" rel="noreferrer">Original GOV.UK notice ' +
-        icon('arrow-up-right') +
-        '</a></div><h3>' +
-        escape(doc.title) +
-        '</h3><p>Table ' +
-        (table.table_index + 1) +
-        ', row ' +
-        (selected.row_index + 1) +
-        ' · Classifier score ' +
-        selected.model_score.toFixed(3) +
-        ' (uncalibrated) · Source SHA-256 <code>' +
-        escape(doc.source.sha256) +
-        '</code></p>' +
-        '<div class="table-scroll"><table><thead><tr>' +
-        table.headers.map((header) => '<th>' + escape(header) + '</th>').join('') +
-        '</tr></thead><tbody><tr>' +
-        table.rows[selected.row_index]
-          .map(
-            (value, index) =>
-              '<td' +
-              (index === selected.column_index ? ' class="source-cell-selected"' : '') +
-              '>' +
-              escape(value) +
-              '</td>',
-          )
-          .join('') +
-        '</tr></tbody></table></div>' +
-        '<p class="public-interpretation">' +
-        escape(valueKinds[selected.value_kind]) +
-        ': ' +
-        escape(cellInterpretation(selected)) +
-        '</p>' +
-        (selected.review_reasons.includes('source_footnote')
-          ? '<p class="public-qualifier">Source footnote marker present. Consult the complete notice for qualifications.</p>'
-          : '') +
-        (selected.candidates.length > 1
-          ? '<p>Possible dates: ' + selected.candidates.map(escape).join(' / ') + '</p>'
-          : '') +
-        '</section>'
-      : '') +
-    '<section class="public-method"><h2>Measured model comparison</h2><p>Held-out column roles: model ' +
-    Math.round(evaluation.model.accuracy * 100) +
-    '%; keyword baseline ' +
-    Math.round(evaluation.keywords.accuracy * 100) +
-    '% on ' +
-    evaluation.model.count +
-    ' columns. ' +
-    evaluation.seen_heading_count +
-    ' headings already occur in training. At the review threshold, ' +
-    evaluation.abstention.classified +
-    '/' +
-    evaluation.abstention.total +
-    ' receive a role; the rest are unclassified.</p><p>English templates only. This is not date-value accuracy, independently annotated clinical validation, or evidence that the learned model improves on rules.</p><small>' +
-    escape(publicData.attribution) +
-    '</small></section>'
-  );
+  const unresolved = publicData.records.filter((row) => row.normalized === null).length;
+  const cards = [
+    ['globe', 'Official notices', publicData.corpus.documents, 'Public MHRA source documents'],
+    ['rows-3', 'Date candidates', publicData.records.length, 'Every cell linked to its source'],
+    ['circle-alert', 'Needs interpretation', unresolved, 'Ambiguous, conditional or non-date'],
+    [
+      'chart-no-axes-combined',
+      'Training documents',
+      publicData.corpus.document_splits.train,
+      `${publicData.corpus.document_splits.validation} validation · ${publicData.corpus.document_splits.test} held-out test`,
+    ],
+  ];
+  return `
+    <div class="metrics public-metrics">${cards
+      .map(
+        ([glyph, label, value, detail]) => `
+      <div><span class="metric-label">${icon(String(glyph))}${label}</span><strong>${value}</strong><small>${detail}</small></div>`,
+      )
+      .join('')}</div>
+    <div class="explore-heading"><div><span class="section-kicker">THE EVIDENCE</span><h2>Public notice explorer</h2></div>
+      <div class="quick-actions" aria-label="Example workflows">
+        <button data-action="demo-batch">${icon('search')}Follow a real batch</button>
+        <button data-action="demo-unresolved">${icon('circle-alert')}Explore uncertainty</button>
+      </div>
+    </div>
+    <div class="public-workbench">
+      <section class="register-panel" aria-label="Public batch register">
+        <div class="filter-bar public-filters">
+          <label class="search">${icon('search')}<input id="recall-query" type="search" placeholder="Search medicine, batch number, or date…" aria-label="Search public notices" value="${escape(state.recallQuery)}"></label>
+          <select id="recall-role" aria-label="Public date type">${options({ expiry: 'Expiry', distribution: 'Distribution' }, state.recallRole, 'All date types')}</select>
+          <select id="recall-kind" aria-label="Value kind">${options(valueKinds, state.recallKind, 'All value kinds')}</select>
+          <select id="recall-split" aria-label="Dataset split">${options({ train: 'Training', validation: 'Validation', test: 'Held-out test' }, state.recallSplit, 'All splits')}</select>
+          <label class="public-checkbox"><input type="checkbox" id="recall-unresolved" ${state.recallUnresolved ? 'checked' : ''}>No single date</label>
+        </div>
+        <div class="table-toolbar"><h2>Batch register <span>${matches.length} candidates</span></h2><div class="register-actions"><button class="quiet-button" data-action="demo-all">All records</button><button data-action="export-public-csv">${icon('download')}<span>CSV</span></button></div></div>
+        ${
+          pageRows.length
+            ? `<div class="table-scroll public-register"><table><thead><tr><th>Notice / batch</th><th>Type</th><th>Source value</th><th>Interpretation</th></tr></thead><tbody>${pageRows
+                .map(
+                  (row) => `
+          <tr class="${selected?.id === row.id ? 'public-selected' : ''}" data-public-field="${escape(row.id)}">
+            <td><button class="table-link" data-public-field="${escape(row.id)}">${escape(row.batch || 'No batch text')}${icon('arrow-up-right')}</button><small title="${escape(row.title)}">${escape(row.title)}</small></td>
+            <td><span class="role-pill">${escape(row.role)}</span></td><td class="raw-date">${escape(row.raw_text)}</td>
+            <td class="date-cell ${row.normalized === null ? 'needs-attention' : 'has-date'}">${escape(cellInterpretation(row))}</td>
+          </tr>`,
+                )
+                .join('')}</tbody></table></div>`
+            : `<div class="large-empty">${icon('search')}<h3>No matching public records</h3><p>Try a different medicine or reset your filters.</p><button data-action="demo-all">Show all records</button></div>`
+        }
+        <div class="public-pagination"><span class="page-range">${matches.length ? state.recallPage * 25 + 1 : 0}–${Math.min((state.recallPage + 1) * 25, matches.length)} of ${matches.length}</span>${button('recall-prev', 'chevron-left', 'Previous public records', state.recallPage === 0 ? 'disabled' : '')}<span>Page ${state.recallPage + 1} / ${pageCount}</span>${button('recall-next', 'chevron-right', 'Next public records', state.recallPage + 1 >= pageCount ? 'disabled' : '')}</div>
+      </section>
+      ${
+        doc && table && selected
+          ? `<section class="public-source" aria-label="Selected source evidence">
+        <div class="evidence-heading"><span class="section-kicker">SOURCE EVIDENCE</span><span class="evidence-marker">${icon('file-text')}Linked</span></div>
+        <div class="evidence-value"><span>${escape(selected.role)} · Batch ${escape(selected.batch || 'unavailable')}</span><h2>${escape(cellInterpretation(selected))}</h2><small>Source value: <code>${escape(selected.raw_text)}</code></small></div>
+        <div class="evidence-state ${selected.normalized === null ? 'is-uncertain' : ''}">${icon(selected.normalized === null ? 'circle-alert' : 'scan-line')}<span>${escape(selected.review_reasons.join(', ').replaceAll('_', ' ') || 'Verify against the original notice')}</span></div>
+        ${selected.candidates.length > 1 ? `<div class="possible-dates"><span>Possible interpretations</span>${selected.candidates.map((value) => `<code>${escape(value)}</code>`).join('')}</div>` : ''}
+        <div class="source-document"><span class="source-document-icon">${icon('file-text')}</span><div><span>ORIGINAL DOCUMENT</span><h3>${escape(doc.title)}</h3></div></div>
+        <div class="source-table-heading"><h3>Source table</h3><span>Table ${table.table_index + 1} · Row ${selected.row_index + 1}</span></div>
+        <dl class="source-record">${table.headers.map((header, index) => `<div class="${index === selected.column_index ? 'selected-source-pair' : ''}"><dt>${escape(header)}</dt><dd${index === selected.column_index ? ' class="source-cell-selected"' : ''}>${escape(table.rows[selected.row_index][index])}</dd></div>`).join('')}</dl>
+        <p class="public-interpretation">${escape(valueKinds[selected.value_kind])}: ${escape(cellInterpretation(selected))}</p>
+        ${selected.review_reasons.includes('source_footnote') ? '<p class="public-qualifier">Source footnote marker present. Consult the complete notice for qualifications.</p>' : ''}
+        <a class="source-link" href="${escape(doc.url)}" target="_blank" rel="noreferrer">Original GOV.UK notice ${icon('arrow-up-right')}</a>
+        <details class="source-provenance"><summary>Provenance & model details</summary><p>Dataset split: ${escape(selected.split)} · Classifier score ${selected.model_score.toFixed(3)} (uncalibrated).</p><p>Source SHA-256<br><code>${escape(doc.source.sha256)}</code></p></details>
+      </section>`
+          : `<aside class="source-empty">${icon('file-text')}<h3>Evidence will appear here</h3><p>Select a matching batch to inspect its original source.</p></aside>`
+      }
+    </div>
+    <div class="public-scope"><span>${icon('circle-alert')}Research snapshot · ${escape(publicData.snapshotRetrievedAt.slice(0, 10))} · Not current recall advice. All values require source review.</span><a href="${repository}/blob/main/docs/public-data.md" target="_blank" rel="noreferrer">Dataset & model card ${icon('arrow-up-right')}</a></div>
+    <details class="public-method"><summary><span>${icon('chart-no-axes-combined')}Inside the benchmark</span><span>Results, limitations & attribution ${icon('chevron-right')}</span></summary><div><h2>Measured model comparison</h2><p>Held-out column roles: model ${Math.round(evaluation.model.accuracy * 100)}%; keyword baseline ${Math.round(evaluation.keywords.accuracy * 100)}% on ${evaluation.model.count} columns. ${evaluation.seen_heading_count} headings already occur in training. At the review threshold, ${evaluation.abstention.classified}/${evaluation.abstention.total} receive a role; the rest are unclassified.</p><p>English templates only. This is not date-value accuracy, independently annotated clinical validation, or evidence that the learned model improves on rules.</p><small>${escape(publicData.attribution)}</small></div></details>`;
 }
-function render() {
+function render(preserveRegisterScroll = false) {
+  const registerScroll = preserveRegisterScroll
+    ? (root.querySelector('.public-register')?.scrollTop ?? 0)
+    : 0;
   if (location.hash !== '#' + state.view) history.replaceState(null, '', '#' + state.view);
   const titles: Record<View, string> = {
     recalls: 'Public medicine notices',
@@ -873,91 +783,43 @@ function render() {
     benchmarks: 'Benchmark lab',
     history: 'Review history',
   };
-  root.innerHTML =
-    '<div class="app-shell ' +
-    (state.sidebar ? 'sidebar-open' : '') +
-    '">' +
-    '<aside class="sidebar"><a class="brand" href="#workspace" data-view="workspace"><span class="brand-mark">' +
-    icon('scan-line') +
-    '</span><span>Pharma<span>Date Review</span></span></a>' +
-    '<span class="nav-label">Workspace</span><nav aria-label="Main navigation">' +
-    (
-      [
-        ['recalls', 'globe', 'Public notices'],
-        ['workspace', 'files', 'Document review'],
-        ['register', 'rows-3', 'Date register'],
-        ['benchmarks', 'chart-no-axes-combined', 'Benchmark lab'],
-        ['history', 'history', 'Review history'],
-      ] as const
-    )
-      .map(
-        ([view, glyph, label]) =>
-          '<button data-view="' +
-          view +
-          '" class="' +
-          (state.view === view ? 'active' : '') +
-          '" ' +
-          (state.view === view ? 'aria-current="page"' : '') +
-          '>' +
-          icon(glyph) +
-          label +
-          (view === 'history' && events.length
-            ? '<span class="nav-count">' + events.length + '</span>'
-            : '') +
-          '</button>',
-      )
-      .join('') +
-    '</nav><div class="sidebar-bottom"><div class="dataset-label"><span class="live-dot"></span>Research workspace</div><p>Public MHRA notices<br>8 synthetic multilingual samples</p>' +
-    '<a href="' +
-    repository +
-    '" target="_blank" rel="noreferrer">Source & methodology ' +
-    icon('arrow-up-right') +
-    '</a><div class="creator"><span>LP</span><div>Lam Phan<small>Independent portfolio project</small></div></div></div></aside>' +
-    '<div class="main-shell"><header class="topbar">' +
-    button('sidebar', 'panel-left-open', 'Toggle navigation') +
-    '<div class="breadcrumb">Workspace <span>/</span> ' +
-    titles[state.view] +
-    '</div>' +
-    '<div class="top-actions"><span class="environment">' +
-    (state.view === 'recalls' ? 'Public source data' : 'Synthetic data') +
-    '</span><button data-action="' +
-    (state.view === 'recalls' ? 'export-public-json' : 'export-json') +
-    '">' +
-    icon('download') +
-    '<span>Export session</span></button></div></header>' +
-    '<main><div class="page-heading"><div><p class="eyebrow">Vendor document intelligence</p><h1>' +
-    titles[state.view] +
-    '</h1></div><span class="workspace-version">Source-backed candidates <span>v0.3</span></span></div>' +
-    (state.view === 'recalls' ? '' : summary()) +
-    (state.message
-      ? '<div class="notice" role="status">' +
-        icon('check-check') +
-        escape(state.message) +
-        '</div>'
-      : '') +
-    (state.view === 'recalls'
-      ? publicView()
-      : state.view === 'workspace'
-        ? workspace()
-        : state.view === 'register'
-          ? register()
-          : state.view === 'benchmarks'
-            ? benchmarks()
-            : historyView()) +
-    '</main><footer><span>Research prototype · Source review required</span><a href="' +
-    repository +
-    '/blob/main/docs/design.md" target="_blank" rel="noreferrer">Methodology ' +
-    icon('arrow-up-right') +
-    '</a></footer></div></div>';
+  const descriptions: Record<View, string> = {
+    recalls: 'Trace pharmaceutical dates to the evidence behind them.',
+    workspace: 'Inspect the source. Resolve ambiguity. Record your decision.',
+    register: 'Every extracted field, organized for a closer look.',
+    benchmarks: 'Inspect the experiments behind the extraction.',
+    history: 'A clear record of every review decision in this browser.',
+  };
+  const nav = [
+    ['recalls', 'globe', 'Public notices'],
+    ['workspace', 'files', 'Document review'],
+    ['register', 'rows-3', 'Date register'],
+    ['benchmarks', 'chart-no-axes-combined', 'Benchmark lab'],
+    ['history', 'history', 'Review history'],
+  ] as const;
+  root.innerHTML = `<div class="app-shell ${state.sidebar ? 'sidebar-open' : ''}">
+    <aside class="sidebar"><a class="brand" href="#recalls" data-view="recalls"><span class="brand-mark">${icon('scan-line')}</span><span>Pharma<span>DATE INTELLIGENCE</span></span></a>
+      <div class="sidebar-workspace"><span class="workspace-avatar">P</span><div>Research workspace<small>Personal workspace</small></div><span class="workspace-badge">01</span></div>
+      <span class="nav-label">WORKSPACE</span><nav aria-label="Main navigation">${nav.map(([view, glyph, label]) => `<button data-view="${view}" class="${state.view === view ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(glyph)}<span>${label}</span>${view === 'history' && events.length ? `<span class="nav-count">${events.length}</span>` : ''}</button>`).join('')}</nav>
+      <div class="sidebar-note"><span class="sidebar-note-icon">${icon('scan-line')}</span><strong>Evidence comes first.</strong><p>Every candidate stays connected to its original source.</p><a href="${repository}" target="_blank" rel="noreferrer">Explore the code ${icon('arrow-up-right')}</a></div>
+      <div class="sidebar-bottom"><div class="dataset-label"><span class="live-dot"></span>Research preview</div><p>Public MHRA data + synthetic samples</p><div class="creator"><span>HP</span><div>Harvey Phan<small>Building document intelligence</small></div></div></div>
+    </aside><div class="main-shell"><header class="topbar">${button('sidebar', 'panel-left-open', 'Toggle navigation', `aria-expanded="${state.sidebar}"`)}<div class="breadcrumb">Workspace <span>/</span><strong>${titles[state.view]}</strong></div><div class="top-actions"><span class="environment"><span class="live-dot"></span>${state.view === 'recalls' ? 'Public source data' : 'Synthetic samples'}</span><button data-action="${state.view === 'recalls' ? 'export-public-json' : 'export-json'}">${icon('download')}<span>Export session</span></button></div></header>
+    <main><div class="page-heading ${state.view === 'recalls' ? 'hero-heading' : ''}"><div><p class="eyebrow"><span></span>PHARMACEUTICAL DOCUMENT INTELLIGENCE</p><h1>${state.view === 'recalls' ? 'Every date.<br><span>Backed by evidence.</span>' : titles[state.view]}</h1><p class="page-description">${descriptions[state.view]}</p></div>
+      ${state.view === 'recalls' ? `<div class="workflow-card"><div class="workflow-card-top"><span>FROM SOURCE TO REVIEW</span>${icon('arrow-up-right')}</div><div class="workflow-track"><span>${icon('file-text')}Document</span><i></i><span>${icon('scan-line')}Extract</span><i></i><span>${icon('check-check')}Review</span></div><button class="primary" data-action="demo-review">Review a sample ${icon('arrow-up-right')}</button><small>Explore the interactive multilingual workflow</small></div>` : `<span class="workspace-version">${icon('scan-line')}Source-linked review <span>v0.4</span></span>`}</div>
+    ${state.view === 'recalls' ? '' : summary()}
+    ${state.message ? `<div class="notice" role="status">${icon('check-check')}${escape(state.message)}</div>` : ''}
+    ${state.view === 'recalls' ? publicView() : state.view === 'workspace' ? workspace() : state.view === 'register' ? register() : state.view === 'benchmarks' ? benchmarks() : historyView()}
+    </main><footer><span>Pharma Date Review<span class="footer-dot">·</span>Research prototype · Source review required</span><a href="${repository}/blob/main/docs/design.md" target="_blank" rel="noreferrer">Methodology ${icon('arrow-up-right')}</a></footer></div></div>`;
+  const registerElement = root.querySelector('.public-register');
+  if (registerElement) registerElement.scrollTop = registerScroll;
   createIcons({ icons });
   const pane = root.querySelector<HTMLElement>('.documents-pane');
   const item = pane?.querySelector<HTMLElement>('.document-item.selected');
-  if (pane && item && window.innerWidth <= 760) {
+  if (pane && item && window.innerWidth <= 760)
     pane.scrollLeft += item.getBoundingClientRect().left - pane.getBoundingClientRect().left;
-  }
 }
 root.addEventListener('click', async (event) => {
-  const target = (event.target as Element).closest<HTMLElement>('button,a');
+  const target = (event.target as Element).closest<HTMLElement>('button,a,[data-public-field]');
   if (!target) return;
   if (target.dataset.decision) return;
   if (target.dataset.view) {
@@ -981,6 +843,35 @@ root.addEventListener('click', async (event) => {
   else if (target.dataset.mode) state.benchmarkMode = target.dataset.mode;
   else if (target.dataset.action) {
     const action = target.dataset.action;
+    if (['demo-batch', 'demo-unresolved', 'demo-all'].includes(action)) {
+      Object.assign(state, {
+        view: 'recalls',
+        recallQuery: '',
+        recallRole: '',
+        recallKind: '',
+        recallSplit: '',
+        recallUnresolved: false,
+        recallPage: 0,
+        recallSelected: '',
+      });
+      if (action === 'demo-batch')
+        Object.assign(state, { recallQuery: '0162858', recallRole: 'expiry' });
+      if (action === 'demo-unresolved')
+        Object.assign(state, { recallKind: 'ambiguous_date', recallUnresolved: true });
+    }
+    if (action === 'demo-review') {
+      Object.assign(state, {
+        view: 'workspace',
+        query: '',
+        language: '',
+        label: '',
+        status: '',
+        evidence: 'page',
+        sidebar: false,
+      });
+      const doc = data.documents.find((doc) => doc.id === 'fr_certificat') ?? data.documents[0];
+      selectField(doc, doc.fields.find((field) => field.candidates.length > 1) ?? doc.fields[0]);
+    }
     if (action === 'reopen-document') {
       root.querySelector<HTMLDialogElement>('#reopen-dialog')?.showModal();
       return;
@@ -1110,7 +1001,7 @@ root.addEventListener('click', async (event) => {
       return;
     }
   } else return;
-  render();
+  render(!!target.dataset.publicField);
 });
 root.addEventListener('change', (event) => {
   const target = event.target as HTMLInputElement;
