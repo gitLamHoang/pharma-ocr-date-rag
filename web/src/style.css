@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
-
 :root {
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   color: #263736;
   background: #fafbfb;
   font-size: 14px;
@@ -131,7 +129,7 @@ small,
   font-size: 12px;
 }
 code {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'DM Mono', monospace;
   font-size: 11px;
   overflow-wrap: anywhere;
 }
@@ -339,7 +337,7 @@ main {
   padding-bottom: 3px;
 }
 .workspace-version > span {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'DM Mono', monospace;
   margin-left: 8px;
   color: #4a6559;
 }
@@ -526,7 +524,7 @@ main {
   overflow-wrap: anywhere;
 }
 .source-toolbar small {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'DM Mono', monospace;
   font-size: 9px;
 }
 .segmented {
@@ -634,7 +632,7 @@ main {
   color: #557544;
   border: 1px solid #b8c9ad;
   font:
-    8px 'IBM Plex Mono',
+    8px 'DM Mono',
     monospace;
   padding: 1px 2px;
   min-width: 12px;
@@ -649,7 +647,7 @@ main {
   margin: 0;
   min-height: 100%;
   background: white;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'DM Mono', monospace;
   font-size: 11px;
   line-height: 2;
   white-space: pre-wrap;
@@ -798,7 +796,7 @@ mark {
   align-items: center;
   gap: 5px;
   font:
-    10px 'IBM Plex Mono',
+    10px 'DM Mono',
     monospace;
 }
 .candidates input {
@@ -1007,7 +1005,7 @@ td:first-child {
   text-decoration: underline;
 }
 .date-cell {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'DM Mono', monospace;
   font-size: 10px;
   white-space: nowrap;
 }
@@ -1202,7 +1200,7 @@ td:first-child {
 }
 .bar-row strong {
   font:
-    11px 'IBM Plex Mono',
+    11px 'DM Mono',
     monospace;
   color: #748374;
 }

@@ -239,6 +239,42 @@ try {
   );
   await page.locator('nav [data-view=recalls]').click();
   await page.locator('.public-register tbody tr').first().waitFor();
+  // Guided paths keep real evidence linked and preserve the local review session.
+  await page.locator('[data-action=demo-batch]').focus();
+  await page.keyboard.press('Enter');
+  assert.equal(await page.locator('.public-register tbody tr').count(), 1);
+  assert.equal(await page.locator('#recall-query').inputValue(), '0162858');
+  assert.equal(await page.locator('#recall-role').inputValue(), 'expiry');
+  assert.equal(await page.locator('.source-cell-selected').innerText(), '05/2028');
+  await page.locator('[data-action=demo-unresolved]').click();
+  assert.equal(await page.locator('#recall-query').inputValue(), '');
+  assert.equal(await page.locator('#recall-role').inputValue(), '');
+  assert.equal(await page.locator('#recall-kind').inputValue(), 'ambiguous_date');
+  assert.equal(await page.locator('#recall-unresolved').isChecked(), true);
+  const guidedRow = page.locator('.public-register tbody tr').last();
+  const guidedSource = await guidedRow.locator('td').nth(2).innerText();
+  await guidedRow.scrollIntoViewIfNeeded();
+  const registerScroll = await page.locator('.public-register').evaluate((el) => el.scrollTop);
+  await guidedRow.locator('.table-link').click();
+  assert.equal(
+    await page.locator('.public-register').evaluate((el) => el.scrollTop),
+    registerScroll,
+  );
+  assert.equal(await page.locator('.source-cell-selected').innerText(), guidedSource);
+  await page.locator('[data-action=demo-review]').click();
+  assert.equal(
+    await page.locator('.document-item.selected').getAttribute('data-doc'),
+    'fr_certificat',
+  );
+  assert.equal(await page.locator('.field-value h3').innerText(), 'Unresolved date');
+  assert.ok((await page.locator('input[name=candidate]').count()) > 1);
+  assert.deepEqual(await storedEvents(), afterReopen);
+  await page.locator('nav [data-view=recalls]').click();
+  await page.locator('[data-action=demo-all]').click();
+  for (const id of ['recall-query', 'recall-role', 'recall-split', 'recall-kind']) {
+    assert.equal(await page.locator('#' + id).inputValue(), '');
+  }
+  assert.equal(await page.locator('#recall-unresolved').isChecked(), false);
   assert.equal(await page.locator('.public-register tbody tr').count(), 25);
   await page.getByRole('button', { name: 'Next public records', exact: true }).click();
   assert.match(await page.locator('.public-pagination').innerText(), /Page 2/);
