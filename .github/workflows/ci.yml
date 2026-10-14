@@ -20,6 +20,7 @@ jobs:
       - run: uv run pytest -q
       - run: uv run python scripts/evaluate.py
       - run: uv run python scripts/benchmark_retrieval.py
+      - run: uv run python scripts/benchmark_retrieval_quality.py --check
       - run: uv run python scripts/export_evidence.py --check
       - run: uv run python scripts/benchmark_multilingual.py --check
       - run: uv run python scripts/export_web.py --check

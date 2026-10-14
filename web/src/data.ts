@@ -1,5 +1,5 @@
 export type Decision = 'accepted' | 'rejected' | 'needs_review';
-export type View = 'recalls' | 'workspace' | 'register' | 'benchmarks' | 'history';
+export type View = 'search' | 'recalls' | 'workspace' | 'register' | 'benchmarks' | 'history';
 export interface Field {
   id: string;
   raw_text: string;

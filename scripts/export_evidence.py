@@ -48,7 +48,7 @@ def evidence() -> dict:
             "extra": sorted(summary.extra),
         },
         "retrieval": {
-            "method": "term-frequency cosine with shared multilingual field vocabulary; top_k=3; no-match abstention",
+            "method": "BM25 with shared multilingual field vocabulary; top_k=3; no-match abstention",
             "cases": [asdict(case) for case in CASES],
             "rows": [asdict(row) for row in evaluate_chunk_sizes(docs, CASES, [35, 60, 90], top_k=3)],
         },

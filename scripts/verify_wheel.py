@@ -52,6 +52,24 @@ def exercise(python: Path, entrypoint: Path, cwd: Path) -> list[str]:
         require(text[row["start"] : row["end"]] == row["raw_text"], "Source offsets changed")
     checks.append("mixed_conventions_and_source_spans")
 
+    evidence = cli("ask", str(source), "--question", "expiry", "--format", "json", "--date-order-map", policy)
+    require(evidence["status"] == "matched", "Installed evidence search did not match")
+    require(evidence["retrieval_method"] == "bm25", "Installed retrieval method changed")
+    require(len(evidence["results"]) == 3, "Expected one retrieved chunk per source")
+    for result in evidence["results"]:
+        text = (source / result["doc_id"]).read_text(encoding="utf-8")
+        span = result["source_span"]
+        require(text[span["start"] : span["end"]] == result["text"], "Retrieved source span changed")
+        require(
+            hashlib.sha256(result["text"].encode()).hexdigest() == result["chunk_sha256"],
+            "Retrieved chunk hash changed",
+        )
+    missing = cli("ask", str(source), "--question", "astronomy", "--format", "json")
+    require(
+        missing["status"] == "abstained" and missing["results"] == [], "No-match search invented evidence"
+    )
+    checks.append("structured_retrieval_and_abstention")
+
     db = str(cwd / "reviews.sqlite")
 
     def review_cli(*args: str) -> object:

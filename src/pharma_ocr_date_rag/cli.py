@@ -9,7 +9,7 @@ from .dates import DATE_ORDERS
 from .languages import LANGUAGES
 from .pipeline import all_chunks, format_date_report, process_folder
 from .policies import load_date_order_map
-from .rag import answer_question
+from .rag import answer_question, answer_question_json
 from .reporting import date_rows, export_csv, export_json
 from .review import (
     DECISIONS,
@@ -33,9 +33,11 @@ def main() -> None:
     extract_parser.add_argument("folder", type=Path)
     extract_parser.add_argument("--format", choices=["text", "json", "csv"], default="text")
 
-    ask_parser = subparsers.add_parser("ask", help="Ask a retrieval question")
+    ask_parser = subparsers.add_parser("ask", help="Retrieve source evidence with BM25 ranking")
     ask_parser.add_argument("folder", type=Path)
     ask_parser.add_argument("--question", required=True)
+    ask_parser.add_argument("--format", choices=["text", "json"], default="text")
+    ask_parser.add_argument("--top-k", type=int, choices=range(1, 101), default=3, metavar="1..100")
 
     index_parser = subparsers.add_parser("index", help="Index a versioned local review queue")
     index_parser.add_argument("folder", type=Path)
@@ -144,4 +146,15 @@ def main() -> None:
         return
 
     if args.command == "ask":
-        print(answer_question(all_chunks(documents), args.question))
+        try:
+            chunks = all_chunks(documents)
+            if args.format == "json":
+                print(
+                    json.dumps(
+                        answer_question_json(chunks, args.question, args.top_k), indent=2, ensure_ascii=False
+                    )
+                )
+            else:
+                print(answer_question(chunks, args.question, args.top_k))
+        except ValueError as error:
+            parser.error(str(error))

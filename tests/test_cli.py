@@ -1,3 +1,4 @@
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -89,6 +90,85 @@ def test_cli_invalid_policy_is_an_actionable_usage_error(content, tmp_path, caps
     path.write_text(content)
     monkeypatch.setattr(
         sys, "argv", ["pharma-date-rag", "extract", str(FIXTURES), "--date-order-map", str(path)]
+    )
+    with pytest.raises(SystemExit) as error:
+        main()
+    assert error.value.code == 2
+    captured = capsys.readouterr()
+    assert "error:" in captured.err
+    assert "Traceback" not in captured.err
+    assert not captured.out
+
+
+def test_ask_json_preserves_source_and_unresolved_dates(tmp_path, capsys, monkeypatch):
+    text = "\nRésumé du fournisseur. Expiry: 09/10/2026."
+    (tmp_path / "source.txt").write_text(text, encoding="utf-8")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "pharma-date-rag",
+            "ask",
+            str(tmp_path),
+            "--question",
+            "expiry",
+            "--format",
+            "json",
+            "--top-k",
+            "1",
+        ],
+    )
+    main()
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["status"] == "matched"
+    assert payload["retrieval_method"] == "bm25"
+    assert len(payload["results"]) == 1
+    result = payload["results"][0]
+    span = result["source_span"]
+    assert text[span["start"] : span["end"]] == result["text"]
+    assert hashlib.sha256(result["text"].encode()).hexdigest() == result["chunk_sha256"]
+    date = result["dates"][0]
+    assert date["normalized"] is None
+    assert len(date["candidates"]) == 2
+    span = date["source_span"]
+    assert text[span["start"] : span["end"]] == date["raw_text"]
+
+
+def test_ask_json_no_match_has_no_stale_evidence(tmp_path, capsys, monkeypatch):
+    (tmp_path / "source.txt").write_text("Expiry: 2028-01-01", encoding="utf-8")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "pharma-date-rag",
+            "ask",
+            str(tmp_path),
+            "--question",
+            "astronomy",
+            "--format",
+            "json",
+        ],
+    )
+    main()
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["status"] == "abstained"
+    assert payload["results"] == []
+
+
+@pytest.mark.parametrize("extra", [["--top-k", "0"], ["--top-k", "101"], ["--question", "x" * 4097]])
+def test_ask_invalid_search_settings_are_usage_errors(tmp_path, capsys, monkeypatch, extra):
+    (tmp_path / "source.txt").write_text("Expiry: 2028-01-01", encoding="utf-8")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "pharma-date-rag",
+            "ask",
+            str(tmp_path),
+            "--question",
+            "expiry",
+            *extra,
+        ],
     )
     with pytest.raises(SystemExit) as error:
         main()

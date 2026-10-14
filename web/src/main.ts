@@ -1,5 +1,13 @@
 import './style.css';
 import './design.css';
+import './search.css';
+import {
+  buildEvidenceIndex,
+  searchEvidence,
+  evidenceExport,
+  type EvidenceIndex,
+} from './search.ts';
+import { searchView } from './search-view.ts';
 import {
   parseRecalls,
   filterRecalls,
@@ -83,13 +91,20 @@ const storeKey = 'pharma-date-review.events.v1';
 let data: Workspace;
 let publicData: RecallData | null = null;
 let publicError = '';
+let evidenceIndex: EvidenceIndex | null = null;
 let events: ReviewEvent[] = [];
 const state = {
-  view: (['recalls', 'workspace', 'register', 'benchmarks', 'history'].includes(
+  view: (['search', 'recalls', 'workspace', 'register', 'benchmarks', 'history'].includes(
     location.hash.slice(1),
   )
     ? location.hash.slice(1)
-    : 'recalls') as View,
+    : 'search') as View,
+  searchDraft: '',
+  searchQuery: '',
+  searchSplit: '',
+  searchKind: '',
+  searchSelected: '',
+  searchLimit: 12,
   recallQuery: '',
   recallRole: '',
   recallKind: '',
@@ -777,6 +792,7 @@ function render(preserveRegisterScroll = false) {
     : 0;
   if (location.hash !== '#' + state.view) history.replaceState(null, '', '#' + state.view);
   const titles: Record<View, string> = {
+    search: 'Evidence search',
     recalls: 'Public medicine notices',
     workspace: 'Document review',
     register: 'Date register',
@@ -784,6 +800,7 @@ function render(preserveRegisterScroll = false) {
     history: 'Review history',
   };
   const descriptions: Record<View, string> = {
+    search: 'Retrieve source-backed evidence from the public MHRA corpus.',
     recalls: 'Trace pharmaceutical dates to the evidence behind them.',
     workspace: 'Inspect the source. Resolve ambiguity. Record your decision.',
     register: 'Every extracted field, organized for a closer look.',
@@ -791,6 +808,7 @@ function render(preserveRegisterScroll = false) {
     history: 'A clear record of every review decision in this browser.',
   };
   const nav = [
+    ['search', 'search', 'Evidence search'],
     ['recalls', 'globe', 'Public notices'],
     ['workspace', 'files', 'Document review'],
     ['register', 'rows-3', 'Date register'],
@@ -798,17 +816,17 @@ function render(preserveRegisterScroll = false) {
     ['history', 'history', 'Review history'],
   ] as const;
   root.innerHTML = `<div class="app-shell ${state.sidebar ? 'sidebar-open' : ''}">
-    <aside class="sidebar"><a class="brand" href="#recalls" data-view="recalls"><span class="brand-mark">${icon('scan-line')}</span><span>Pharma<span>DATE INTELLIGENCE</span></span></a>
+    <aside class="sidebar"><a class="brand" href="#search" data-view="search"><span class="brand-mark">${icon('scan-line')}</span><span>Pharma<span>DATE INTELLIGENCE</span></span></a>
       <div class="sidebar-workspace"><span class="workspace-avatar">P</span><div>Research workspace<small>Personal workspace</small></div><span class="workspace-badge">01</span></div>
       <span class="nav-label">WORKSPACE</span><nav aria-label="Main navigation">${nav.map(([view, glyph, label]) => `<button data-view="${view}" class="${state.view === view ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(glyph)}<span>${label}</span>${view === 'history' && events.length ? `<span class="nav-count">${events.length}</span>` : ''}</button>`).join('')}</nav>
       <div class="sidebar-note"><span class="sidebar-note-icon">${icon('scan-line')}</span><strong>Evidence comes first.</strong><p>Every candidate stays connected to its original source.</p><a href="${repository}" target="_blank" rel="noreferrer">Explore the code ${icon('arrow-up-right')}</a></div>
       <div class="sidebar-bottom"><div class="dataset-label"><span class="live-dot"></span>Research preview</div><p>Public MHRA data + synthetic samples</p><div class="creator"><span>HP</span><div>Harvey Phan<small>Building document intelligence</small></div></div></div>
-    </aside><div class="main-shell"><header class="topbar">${button('sidebar', 'panel-left-open', 'Toggle navigation', `aria-expanded="${state.sidebar}"`)}<div class="breadcrumb">Workspace <span>/</span><strong>${titles[state.view]}</strong></div><div class="top-actions"><span class="environment"><span class="live-dot"></span>${state.view === 'recalls' ? 'Public source data' : 'Synthetic samples'}</span><button data-action="${state.view === 'recalls' ? 'export-public-json' : 'export-json'}">${icon('download')}<span>Export session</span></button></div></header>
-    <main><div class="page-heading ${state.view === 'recalls' ? 'hero-heading' : ''}"><div><p class="eyebrow"><span></span>PHARMACEUTICAL DOCUMENT INTELLIGENCE</p><h1>${state.view === 'recalls' ? 'Every date.<br><span>Backed by evidence.</span>' : titles[state.view]}</h1><p class="page-description">${descriptions[state.view]}</p></div>
+    </aside><div class="main-shell"><header class="topbar">${button('sidebar', 'panel-left-open', 'Toggle navigation', `aria-expanded="${state.sidebar}"`)}<div class="breadcrumb">Workspace <span>/</span><strong>${titles[state.view]}</strong></div><div class="top-actions"><span class="environment"><span class="live-dot"></span>${['recalls', 'search'].includes(state.view) ? 'Public source data' : 'Synthetic samples'}</span><button ${state.view === 'search' && (!state.searchQuery || !evidenceIndex || !searchEvidence(evidenceIndex, state.searchQuery, { split: state.searchSplit, kind: state.searchKind }).hits.length) ? 'disabled' : ''} data-action="${state.view === 'search' ? 'export-search' : state.view === 'recalls' ? 'export-public-json' : 'export-json'}">${icon('download')}<span>${state.view === 'search' ? 'Export evidence' : 'Export session'}</span></button></div></header>
+    <main class="${state.view === 'search' ? 'search-page' : ''}"><div class="page-heading ${state.view === 'recalls' ? 'hero-heading' : ''}"><div><p class="eyebrow"><span></span>PHARMACEUTICAL DOCUMENT INTELLIGENCE</p><h1>${state.view === 'recalls' ? 'Every date.<br><span>Backed by evidence.</span>' : titles[state.view]}</h1><p class="page-description">${descriptions[state.view]}</p></div>
       ${state.view === 'recalls' ? `<div class="workflow-card"><div class="workflow-card-top"><span>FROM SOURCE TO REVIEW</span>${icon('arrow-up-right')}</div><div class="workflow-track"><span>${icon('file-text')}Document</span><i></i><span>${icon('scan-line')}Extract</span><i></i><span>${icon('check-check')}Review</span></div><button class="primary" data-action="demo-review">Review a sample ${icon('arrow-up-right')}</button><small>Explore the interactive multilingual workflow</small></div>` : `<span class="workspace-version">${icon('scan-line')}Source-linked review <span>v0.4</span></span>`}</div>
-    ${state.view === 'recalls' ? '' : summary()}
+    ${['recalls', 'search'].includes(state.view) ? '' : summary()}
     ${state.message ? `<div class="notice" role="status">${icon('check-check')}${escape(state.message)}</div>` : ''}
-    ${state.view === 'recalls' ? publicView() : state.view === 'workspace' ? workspace() : state.view === 'register' ? register() : state.view === 'benchmarks' ? benchmarks() : historyView()}
+    ${state.view === 'search' ? searchView(publicData, evidenceIndex, state, publicError) : state.view === 'recalls' ? publicView() : state.view === 'workspace' ? workspace() : state.view === 'register' ? register() : state.view === 'benchmarks' ? benchmarks() : historyView()}
     </main><footer><span>Pharma Date Review<span class="footer-dot">·</span>Research prototype · Source review required</span><a href="${repository}/blob/main/docs/design.md" target="_blank" rel="noreferrer">Methodology ${icon('arrow-up-right')}</a></footer></div></div>`;
   const registerElement = root.querySelector('.public-register');
   if (registerElement) registerElement.scrollTop = registerScroll;
@@ -826,6 +844,17 @@ root.addEventListener('click', async (event) => {
     state.view = target.dataset.view as View;
     state.sidebar = false;
     state.message = '';
+  } else if (target.dataset.searchExample) {
+    Object.assign(state, {
+      searchDraft: target.dataset.searchExample,
+      searchQuery: target.dataset.searchExample,
+      searchSelected: '',
+      searchLimit: 12,
+      searchSplit: '',
+      searchKind: '',
+    });
+  } else if (target.dataset.searchResult) {
+    state.searchSelected = target.dataset.searchResult;
   } else if (target.dataset.publicField) {
     state.recallSelected = target.dataset.publicField;
   } else if (target.dataset.doc) {
@@ -843,6 +872,38 @@ root.addEventListener('click', async (event) => {
   else if (target.dataset.mode) state.benchmarkMode = target.dataset.mode;
   else if (target.dataset.action) {
     const action = target.dataset.action;
+    if (action === 'reload-search') {
+      location.reload();
+      return;
+    }
+    if (action === 'reset-search')
+      Object.assign(state, {
+        searchDraft: '',
+        searchQuery: '',
+        searchSelected: '',
+        searchSplit: '',
+        searchKind: '',
+        searchLimit: 12,
+      });
+    if (action === 'search-more') state.searchLimit += 12;
+    if (action === 'export-search') {
+      if (!publicData || !evidenceIndex || !state.searchQuery) return;
+      const filters = { split: state.searchSplit, kind: state.searchKind };
+      download(
+        'mhra-search-evidence.json',
+        JSON.stringify(
+          evidenceExport(
+            publicData,
+            searchEvidence(evidenceIndex, state.searchQuery, filters),
+            filters,
+          ),
+          null,
+          2,
+        ),
+        'application/json',
+      );
+      return;
+    }
     if (['demo-batch', 'demo-unresolved', 'demo-all'].includes(action)) {
       Object.assign(state, {
         view: 'recalls',
@@ -1002,10 +1063,25 @@ root.addEventListener('click', async (event) => {
     }
   } else return;
   render(!!target.dataset.publicField);
+  if (target.dataset.searchResult)
+    document.querySelector<HTMLElement>('#evidence-detail-heading')?.focus();
+  if (target.dataset.searchExample)
+    document
+      .querySelector<HTMLElement>('.search-results-header h2')
+      ?.scrollIntoView({ block: 'start' });
+  if (target.dataset.action === 'reset-search')
+    document.querySelector<HTMLInputElement>('#evidence-query')?.focus();
 });
 root.addEventListener('change', (event) => {
   const target = event.target as HTMLInputElement;
-  if (['recall-role', 'recall-split', 'recall-unresolved', 'recall-kind'].includes(target.id)) {
+  if (target.id === 'search-split' || target.id === 'search-kind') {
+    if (target.id === 'search-split') state.searchSplit = target.value;
+    else state.searchKind = target.value;
+    state.searchSelected = '';
+    state.searchLimit = 12;
+  } else if (
+    ['recall-role', 'recall-split', 'recall-unresolved', 'recall-kind'].includes(target.id)
+  ) {
     if (target.id === 'recall-role') state.recallRole = target.value;
     if (target.id === 'recall-kind') state.recallKind = target.value;
     if (target.id === 'recall-split') state.recallSplit = target.value;
@@ -1026,9 +1102,12 @@ root.addEventListener('change', (event) => {
     state.error = '';
   } else return;
   render();
+  if (target.id === 'search-split' || target.id === 'search-kind')
+    document.getElementById(target.id)?.focus();
 });
 root.addEventListener('input', (event) => {
   const target = event.target as HTMLInputElement;
+  if (target.id === 'evidence-query') state.searchDraft = target.value;
   if (target.id === 'reviewer') state.reviewer = target.value;
   if (target.id === 'reason') state.reason = target.value;
   if (target.id === 'recall-query') {
@@ -1054,6 +1133,16 @@ root.addEventListener('input', (event) => {
 });
 root.addEventListener('submit', (event) => {
   event.preventDefault();
+  if ((event.target as HTMLFormElement).id === 'evidence-search-form') {
+    Object.assign(state, {
+      searchQuery: state.searchDraft.trim(),
+      searchSelected: '',
+      searchLimit: 12,
+    });
+    render();
+    document.querySelector<HTMLInputElement>('#evidence-query')?.focus();
+    return;
+  }
   if ((event.target as HTMLFormElement).id === 'reopen-form') {
     const form = event.target as HTMLFormElement;
     const values = new FormData(form);
@@ -1113,6 +1202,7 @@ async function start() {
       const publicResponse = await fetch('data/recalls.json');
       if (!publicResponse.ok) throw new Error('Public-source evidence could not be loaded.');
       publicData = parseRecalls(await publicResponse.json());
+      evidenceIndex = buildEvidenceIndex(publicData);
     } catch (error) {
       publicError = error instanceof Error ? error.message : 'Public notices could not be loaded.';
     }

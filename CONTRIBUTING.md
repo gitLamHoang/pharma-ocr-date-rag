@@ -7,6 +7,7 @@ uv sync --frozen --python 3.12 --extra dev --extra demo --extra research
 uv run pytest -q
 uv run ruff check .
 uv run ruff format --check .
+uv run python scripts/benchmark_retrieval_quality.py --check
 uv run python scripts/export_evidence.py --check
 uv run python scripts/benchmark_multilingual.py --check
 uv run python scripts/export_web.py --check
@@ -55,3 +56,5 @@ For public cell semantics, keep source text, cutoff bounds and single dates sepa
 For package or SQL resource changes, run `uv build --wheel --out-dir outputs/wheel`, then `uv run --no-project --python 3.12 python scripts/verify_wheel.py outputs/wheel/*.whl`. Keep one wheel in the output directory. The verifier supports macOS/Linux, uses an isolated temporary installation and does not import application code from the checkout. It exercises the installed entry point, mixed conventions, review lifecycle and both legacy database upgrades. The CI artifact contains the wheel and its verification report. Build tools may need network access; the wheel installation uses `--no-index --no-deps`. The verifier requires the repository's synthetic fixtures, but those are data inputs, not imported source code.
 
 Small contributions with a concrete failing example are easiest to review. Useful next steps include authenticated review cycles, broader image-OCR coverage and a bounded independently labeled test set.
+
+For retrieval changes, inspect each query in `reports/retrieval_quality.json` and regenerate it with `python scripts/benchmark_retrieval_quality.py`. Keep the cosine baseline and no-answer cases. Do not select cases only because they favor the new method. Update the [retrieval contract](docs/retrieval.md) when ranking, query bounds or evidence fields change.
