@@ -1,0 +1,424 @@
+{
+  "schema_version": 1,
+  "scope": "Explicitly authored development queries against synthetic fixtures. Cases and relevance judgments were written while implementing the retriever. Not independent, held-out, clinical, or real-world performance evidence.",
+  "relevance_unit": "Document; any retrieved chunk from an explicitly relevant document counts. Repeated document IDs are deduplicated before applying k.",
+  "protocol": {
+    "documents": 4,
+    "chunks": 8,
+    "chunk_words": 35,
+    "overlap": 5,
+    "top_k": 3,
+    "date_order": "mdy",
+    "bm25": {
+      "k1": 1.2,
+      "b": 0.75
+    },
+    "aggregation": "Maximum chunk score per document, deterministic source-ID ties.",
+    "metric_denominators": "Ranking means use answerable queries only. Abstention uses no-match queries only. Precision divides by k even when fewer results are returned. Binary nDCG uses log2 discount.",
+    "limitations": "No semantic embeddings, entailment check, generation, or unknown-entity detector. A shared date-field keyword can retrieve evidence for the wrong vendor. Parameters were not tuned on an independent validation set."
+  },
+  "comparisons": {
+    "cosine_baseline": {
+      "metrics": {
+        "answerable_queries": 12,
+        "no_match_queries": 4,
+        "hit_at_1": 1.0,
+        "precision_at_k": 0.3888888888888889,
+        "recall_at_k": 0.9791666666666666,
+        "mrr_at_k": 1.0,
+        "ndcg_at_k": 1.0,
+        "correct_abstentions": 3,
+        "false_positive_queries": 1,
+        "no_match_abstention_rate": 0.75
+      },
+      "queries": [
+        {
+          "id": "alpha-expiry",
+          "question": "Alpha packaging expiry",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "The Alpha certificate contains the packaging expiry date."
+        },
+        {
+          "id": "alpha-manufacture",
+          "question": "Alpha manufacture",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "The Alpha certificate gives its manufacture date."
+        },
+        {
+          "id": "alpha-material",
+          "question": "HDPE Bottle 60 mL",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "judgment": "Only the Alpha fixture identifies this material."
+        },
+        {
+          "id": "beta-audit",
+          "question": "supplier audit",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Only Beta contains an extracted audit date."
+        },
+        {
+          "id": "beta-material",
+          "question": "Microcrystalline Cellulose",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Only the Beta fixture identifies this material."
+        },
+        {
+          "id": "beta-expiry",
+          "question": "Beta excipient expiry",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt",
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt"
+          ],
+          "judgment": "The Beta report gives the excipient expiry month."
+        },
+        {
+          "id": "delta-expiry",
+          "question": "Delta cold chain expiry",
+          "relevant_documents": [
+            "delta_noisy_scan.txt"
+          ],
+          "retrieved_documents": [
+            "delta_noisy_scan.txt",
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt"
+          ],
+          "judgment": "The Delta fixture contains an OCR-noisy expiry month."
+        },
+        {
+          "id": "delta-material",
+          "question": "refrigerated label adhesive",
+          "relevant_documents": [
+            "delta_noisy_scan.txt"
+          ],
+          "retrieved_documents": [
+            "delta_noisy_scan.txt",
+            "alpha_packaging_coa.txt"
+          ],
+          "judgment": "Only Delta identifies this material."
+        },
+        {
+          "id": "gamma-expiry",
+          "question": "Gamma stability expiry",
+          "relevant_documents": [
+            "gamma_stability_notice.txt"
+          ],
+          "retrieved_documents": [
+            "gamma_stability_notice.txt",
+            "alpha_packaging_coa.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Gamma gives the stability sample expiry."
+        },
+        {
+          "id": "gamma-window",
+          "question": "pull window",
+          "relevant_documents": [
+            "gamma_stability_notice.txt"
+          ],
+          "retrieved_documents": [
+            "gamma_stability_notice.txt"
+          ],
+          "judgment": "Only Gamma gives a pull window."
+        },
+        {
+          "id": "all-expiry",
+          "question": "expiry",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt",
+            "beta_excipient_report.txt",
+            "delta_noisy_scan.txt",
+            "gamma_stability_notice.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "All four fixtures contain expiry evidence; k=3 cannot recover all four."
+        },
+        {
+          "id": "receipt",
+          "question": "received warehouse",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Beta gives a warehouse receipt date."
+        },
+        {
+          "id": "unknown-topic",
+          "question": "quantum astronomy",
+          "relevant_documents": [],
+          "retrieved_documents": [],
+          "judgment": "No fixture discusses this topic."
+        },
+        {
+          "id": "empty-query",
+          "question": "",
+          "relevant_documents": [],
+          "retrieved_documents": [],
+          "judgment": "An empty query requests no evidence."
+        },
+        {
+          "id": "missing-field",
+          "question": "invoice payment deadline",
+          "relevant_documents": [],
+          "retrieved_documents": [],
+          "judgment": "None of the fixtures contains an invoice payment deadline."
+        },
+        {
+          "id": "unknown-vendor-expiry",
+          "question": "expiry for nonexistentvendor",
+          "relevant_documents": [],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "No document names this vendor. Shared expiry vocabulary can cause a false positive; this deliberately records the lexical retriever's entity-grounding limit."
+        }
+      ]
+    },
+    "bm25": {
+      "metrics": {
+        "answerable_queries": 12,
+        "no_match_queries": 4,
+        "hit_at_1": 1.0,
+        "precision_at_k": 0.3888888888888889,
+        "recall_at_k": 0.9791666666666666,
+        "mrr_at_k": 1.0,
+        "ndcg_at_k": 1.0,
+        "correct_abstentions": 3,
+        "false_positive_queries": 1,
+        "no_match_abstention_rate": 0.75
+      },
+      "queries": [
+        {
+          "id": "alpha-expiry",
+          "question": "Alpha packaging expiry",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "The Alpha certificate contains the packaging expiry date."
+        },
+        {
+          "id": "alpha-manufacture",
+          "question": "Alpha manufacture",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "The Alpha certificate gives its manufacture date."
+        },
+        {
+          "id": "alpha-material",
+          "question": "HDPE Bottle 60 mL",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt"
+          ],
+          "judgment": "Only the Alpha fixture identifies this material."
+        },
+        {
+          "id": "beta-audit",
+          "question": "supplier audit",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Only Beta contains an extracted audit date."
+        },
+        {
+          "id": "beta-material",
+          "question": "Microcrystalline Cellulose",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Only the Beta fixture identifies this material."
+        },
+        {
+          "id": "beta-expiry",
+          "question": "Beta excipient expiry",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt",
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt"
+          ],
+          "judgment": "The Beta report gives the excipient expiry month."
+        },
+        {
+          "id": "delta-expiry",
+          "question": "Delta cold chain expiry",
+          "relevant_documents": [
+            "delta_noisy_scan.txt"
+          ],
+          "retrieved_documents": [
+            "delta_noisy_scan.txt",
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt"
+          ],
+          "judgment": "The Delta fixture contains an OCR-noisy expiry month."
+        },
+        {
+          "id": "delta-material",
+          "question": "refrigerated label adhesive",
+          "relevant_documents": [
+            "delta_noisy_scan.txt"
+          ],
+          "retrieved_documents": [
+            "delta_noisy_scan.txt",
+            "alpha_packaging_coa.txt"
+          ],
+          "judgment": "Only Delta identifies this material."
+        },
+        {
+          "id": "gamma-expiry",
+          "question": "Gamma stability expiry",
+          "relevant_documents": [
+            "gamma_stability_notice.txt"
+          ],
+          "retrieved_documents": [
+            "gamma_stability_notice.txt",
+            "alpha_packaging_coa.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Gamma gives the stability sample expiry."
+        },
+        {
+          "id": "gamma-window",
+          "question": "pull window",
+          "relevant_documents": [
+            "gamma_stability_notice.txt"
+          ],
+          "retrieved_documents": [
+            "gamma_stability_notice.txt"
+          ],
+          "judgment": "Only Gamma gives a pull window."
+        },
+        {
+          "id": "all-expiry",
+          "question": "expiry",
+          "relevant_documents": [
+            "alpha_packaging_coa.txt",
+            "beta_excipient_report.txt",
+            "delta_noisy_scan.txt",
+            "gamma_stability_notice.txt"
+          ],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "All four fixtures contain expiry evidence; k=3 cannot recover all four."
+        },
+        {
+          "id": "receipt",
+          "question": "received warehouse",
+          "relevant_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "retrieved_documents": [
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "Beta gives a warehouse receipt date."
+        },
+        {
+          "id": "unknown-topic",
+          "question": "quantum astronomy",
+          "relevant_documents": [],
+          "retrieved_documents": [],
+          "judgment": "No fixture discusses this topic."
+        },
+        {
+          "id": "empty-query",
+          "question": "",
+          "relevant_documents": [],
+          "retrieved_documents": [],
+          "judgment": "An empty query requests no evidence."
+        },
+        {
+          "id": "missing-field",
+          "question": "invoice payment deadline",
+          "relevant_documents": [],
+          "retrieved_documents": [],
+          "judgment": "None of the fixtures contains an invoice payment deadline."
+        },
+        {
+          "id": "unknown-vendor-expiry",
+          "question": "expiry for nonexistentvendor",
+          "relevant_documents": [],
+          "retrieved_documents": [
+            "alpha_packaging_coa.txt",
+            "gamma_stability_notice.txt",
+            "beta_excipient_report.txt"
+          ],
+          "judgment": "No document names this vendor. Shared expiry vocabulary can cause a false positive; this deliberately records the lexical retriever's entity-grounding limit."
+        }
+      ]
+    }
+  },
+  "source_sha256": {
+    "data/retrieval_cases.json": "dc37a2b4a2712ae844cccc0fbb87919fc2acf2eaf7a35d0d385c14ee444717a8",
+    "data/synthetic_docs/alpha_packaging_coa.txt": "c01dc6af8731cd8f95868c5352dbe0e11313b298b95f9eeabba8a15064b95867",
+    "data/synthetic_docs/beta_excipient_report.txt": "72221cd0af68579548a4054bee84f5946ccf863ea75a5cda39f176f50906337d",
+    "data/synthetic_docs/delta_noisy_scan.txt": "cc7b9d7453ea0e5b009344d168352683d2766b8062fc0e7d4fa81c8fe83f44e2",
+    "data/synthetic_docs/gamma_stability_notice.txt": "2b48b085fee311e174b8b9d1a6766468e0ef84af542e2fcc7dc4b895d0d94110",
+    "scripts/benchmark_retrieval_quality.py": "2febca4c81ba513ceb89ae92a1cd8dd8c5c522dc30c089ff0390618e9a07c3b9",
+    "src/pharma_ocr_date_rag/rag.py": "0ea3a38726ea280c0655510a481246c51313d194ee8897489e3bf1bbd0263fd1",
+    "src/pharma_ocr_date_rag/experiments.py": "87ccaa8d19a1cbe10db59b6b18272f9ff42564ee755d207401e6f3e0c4a43f40",
+    "src/pharma_ocr_date_rag/dates.py": "b52962874f966f7012b6605967003e2029df4c092f58b38f8eb42495351aaf47",
+    "src/pharma_ocr_date_rag/languages.py": "6dc0105a524dd5de57a06092a48eb61fc5aa3a9d5b12e06afa2eb29ae5c082ec"
+  }
+}

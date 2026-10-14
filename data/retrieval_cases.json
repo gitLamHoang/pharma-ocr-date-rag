@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope": "Explicitly authored development queries against synthetic fixtures. Cases and relevance judgments were written while implementing the retriever. Not independent, held-out, clinical, or real-world performance evidence.",
+  "relevance_unit": "Document; any retrieved chunk from an explicitly relevant document counts. Repeated document IDs are deduplicated before applying k.",
+  "chunk_words": 35,
+  "overlap": 5,
+  "top_k": 3,
+  "documents": [
+    "data/synthetic_docs/alpha_packaging_coa.txt",
+    "data/synthetic_docs/beta_excipient_report.txt",
+    "data/synthetic_docs/delta_noisy_scan.txt",
+    "data/synthetic_docs/gamma_stability_notice.txt"
+  ],
+  "queries": [
+    {"id": "alpha-expiry", "question": "Alpha packaging expiry", "relevant_documents": ["alpha_packaging_coa.txt"], "judgment": "The Alpha certificate contains the packaging expiry date."},
+    {"id": "alpha-manufacture", "question": "Alpha manufacture", "relevant_documents": ["alpha_packaging_coa.txt"], "judgment": "The Alpha certificate gives its manufacture date."},
+    {"id": "alpha-material", "question": "HDPE Bottle 60 mL", "relevant_documents": ["alpha_packaging_coa.txt"], "judgment": "Only the Alpha fixture identifies this material."},
+    {"id": "beta-audit", "question": "supplier audit", "relevant_documents": ["beta_excipient_report.txt"], "judgment": "Only Beta contains an extracted audit date."},
+    {"id": "beta-material", "question": "Microcrystalline Cellulose", "relevant_documents": ["beta_excipient_report.txt"], "judgment": "Only the Beta fixture identifies this material."},
+    {"id": "beta-expiry", "question": "Beta excipient expiry", "relevant_documents": ["beta_excipient_report.txt"], "judgment": "The Beta report gives the excipient expiry month."},
+    {"id": "delta-expiry", "question": "Delta cold chain expiry", "relevant_documents": ["delta_noisy_scan.txt"], "judgment": "The Delta fixture contains an OCR-noisy expiry month."},
+    {"id": "delta-material", "question": "refrigerated label adhesive", "relevant_documents": ["delta_noisy_scan.txt"], "judgment": "Only Delta identifies this material."},
+    {"id": "gamma-expiry", "question": "Gamma stability expiry", "relevant_documents": ["gamma_stability_notice.txt"], "judgment": "Gamma gives the stability sample expiry."},
+    {"id": "gamma-window", "question": "pull window", "relevant_documents": ["gamma_stability_notice.txt"], "judgment": "Only Gamma gives a pull window."},
+    {"id": "all-expiry", "question": "expiry", "relevant_documents": ["alpha_packaging_coa.txt", "beta_excipient_report.txt", "delta_noisy_scan.txt", "gamma_stability_notice.txt"], "judgment": "All four fixtures contain expiry evidence; k=3 cannot recover all four."},
+    {"id": "receipt", "question": "received warehouse", "relevant_documents": ["beta_excipient_report.txt"], "judgment": "Beta gives a warehouse receipt date."},
+    {"id": "unknown-topic", "question": "quantum astronomy", "relevant_documents": [], "judgment": "No fixture discusses this topic."},
+    {"id": "empty-query", "question": "", "relevant_documents": [], "judgment": "An empty query requests no evidence."},
+    {"id": "missing-field", "question": "invoice payment deadline", "relevant_documents": [], "judgment": "None of the fixtures contains an invoice payment deadline."},
+    {"id": "unknown-vendor-expiry", "question": "expiry for nonexistentvendor", "relevant_documents": [], "judgment": "No document names this vendor. Shared expiry vocabulary can cause a false positive; this deliberately records the lexical retriever's entity-grounding limit."}
+  ]
+}

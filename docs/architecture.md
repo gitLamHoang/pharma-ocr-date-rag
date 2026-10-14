@@ -2,7 +2,7 @@
 
 ## One reviewable evidence trail
 
-`pipeline.py` reads text or calls an optional OCR adapter, extracts dates with original nearby context, and constructs chunks. `rag.py` ranks chunks with term-frequency cosine similarity plus shared date-field vocabulary matches across languages. Zero-overlap chunks are excluded. It returns source text rather than generating a free-form answer.
+`pipeline.py` reads text or calls an optional OCR adapter, extracts dates with original nearby context, and constructs chunks. `rag.py` builds a reusable BM25 index with cached term statistics and date extraction. Shared date-field vocabulary supports multilingual matches. Zero-overlap chunks are excluded. Text and JSON responses retain source evidence without a generated answer. See the [retrieval contract and evaluation](retrieval.md).
 
 `review.py` uses parameterized queries against the packaged [`schema.sql`](../src/pharma_ocr_date_rag/schema.sql). The database contains:
 
@@ -42,7 +42,7 @@ New extraction records preserve original text, character offsets and context eve
 
 ## Browser and local UI boundary
 
-The TypeScript/Vite app has five views: public notices, document review, date register, benchmark lab and review history. `scripts/export_web.py` runs the Python extractor against the eight synthetic fixtures and exports exact source text, field spans, alternatives, input hashes and parser-source hashes. Its `--check` mode fails if the committed browser evidence is stale.
+The TypeScript/Vite app has six views: evidence search, public notices, document review, date register, benchmark lab and review history. Evidence search indexes public table rows locally and retains source citations in its export. `scripts/export_web.py` runs the Python extractor against the eight synthetic fixtures and exports exact source text, field spans, alternatives, input hashes and parser-source hashes. Its `--check` mode fails if the committed browser evidence is stale.
 
 The separate public-data path uses `public_data.py` to collect attributed MHRA API tables with bounded requests and verified cache bytes. `recalls.py` groups documents chronologically, fits TF-IDF and logistic regression only on training headings, applies an abstention threshold, and joins predicted date columns to batch columns while retaining exact cell indices. `scripts/train_mhra.py` generates a separate source-hashed `recalls.json`; the browser validates cell/batch identity before rendering it. Public records have search/filter/export controls but no approval action. They are not indexed into SQLite or mixed with synthetic review decisions. See the [dataset/model card](public-data.md) for why repeated headings limit the experiment.
 

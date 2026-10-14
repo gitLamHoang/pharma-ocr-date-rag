@@ -46,6 +46,77 @@ try {
       'Page overflows viewport',
     );
   };
+  // Search is the public entry point; source rows remain inspectable and exportable.
+  await page.goto(base);
+  await page.locator('#evidence-query').waitFor();
+  assert.equal(await page.locator('nav [data-view=search]').getAttribute('aria-current'), 'page');
+  await checkLayout();
+  await page.screenshot({ path: resolve(screenshots, 'evidence-search-home.png'), fullPage: true });
+  await page.locator('#evidence-query').fill('0162858 expiry');
+  await page.locator('#evidence-query').press('Enter');
+  assert.equal(await page.locator('.search-result').count(), 1);
+  assert.match(await page.locator('.search-detail').innerText(), /2028-05/);
+  assert.equal(await page.locator('.search-interpretation').count(), 2);
+  assert.match(
+    await page.locator('.search-detail .source-link').getAttribute('href'),
+    /^https:\/\/www.gov.uk\/drug-device-alerts\//,
+  );
+  await page.locator('.search-result').focus();
+  await page.keyboard.press('Enter');
+  assert.equal(await page.evaluate(() => document.activeElement?.id), 'evidence-detail-heading');
+  const searchDownload = page.waitForEvent('download');
+  await page.locator('.search-result-filters [data-action=export-search]').click();
+  const searchFile = await searchDownload;
+  const searchExport = JSON.parse(await readFile(await searchFile.path(), 'utf8'));
+  assert.equal(searchExport.query, '0162858 expiry');
+  assert.equal(searchExport.resultCount, 1);
+  assert.equal(searchExport.results[0].batch, '0162858');
+  assert.equal(searchExport.results[0].fields.length, 2);
+  assert.equal(searchExport.results[0].citation.sourceSha256.length, 64);
+  assert.deepEqual(searchExport.results[0].matchedTerms, ['0162858', 'expiry']);
+  await page.screenshot({ path: resolve(screenshots, 'evidence-search.png'), fullPage: true });
+  await page.locator('#evidence-query').fill('Flutiform batch 9999999');
+  await page.locator('#evidence-query').press('Enter');
+  assert.equal(await page.locator('.search-result').count(), 0);
+  assert.equal(
+    await page.locator('.search-detail').count(),
+    0,
+    'No-match searches cannot display stale evidence',
+  );
+  assert.match(
+    await page.locator('.search-no-results').innerText(),
+    /Similar batch numbers have not been substituted/,
+  );
+  await page.locator('[data-search-example="expiry cutoff"]').click();
+  assert.equal(await page.locator('.search-result').count(), 3);
+  assert.match(await page.locator('.search-detail').innerText(), /inclusive/);
+  assert.match(await page.locator('.search-footnote').innerText(), /footnote/);
+  await page.selectOption('#search-split', 'test');
+  assert.equal(await page.evaluate(() => document.activeElement?.id), 'search-split');
+  assert.equal(await page.locator('.search-result').count(), 1);
+  for (const width of [390, 320, 768]) {
+    await page.setViewportSize({ width, height: 950 });
+    await page.goto(new URL('?searchViewport=' + width + '#search', base).href);
+    await page.locator('#evidence-query').waitFor();
+    await checkLayout();
+    await page.locator('[data-search-example=Flutiform]').click();
+    await page.locator('.search-result').first().click();
+    await checkLayout();
+    await page.screenshot({
+      path: resolve(screenshots, `evidence-search-${width}.png`),
+      fullPage: true,
+    });
+  }
+  const unavailable = await context.newPage();
+  await unavailable.route('**/data/recalls.json', (route) =>
+    route.fulfill({ status: 503, body: 'unavailable' }),
+  );
+  await unavailable.goto(base);
+  await unavailable.getByRole('heading', { name: 'Evidence could not be loaded' }).waitFor();
+  assert.equal(await unavailable.locator('.search-result').count(), 0);
+  await unavailable.getByRole('button', { name: 'Reload evidence' }).waitFor();
+  await unavailable.close();
+  await page.setViewportSize({ width: 1512, height: 1100 });
   await page.goto(new URL('#workspace', base).href);
   await page.locator('.source-highlight.selected').waitFor();
   await page.evaluate(() => document.fonts.ready);
@@ -367,7 +438,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    'Browser checks passed: synthetic review/persistence; public MHRA search, filters, pagination, original table evidence and export; desktop/mobile layouts.',
+    'Browser checks passed: BM25 evidence retrieval, exact batch abstention, query-linked exports, keyboard and mobile search; synthetic review/persistence; public MHRA search, filters, pagination, original table evidence and export; desktop/mobile layouts.',
   );
 } finally {
   await browser?.close();

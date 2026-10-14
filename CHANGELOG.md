@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-14 - Evidence search and indexed retrieval
+
+- Added a browser evidence-search workspace over grouped public batch rows, with BM25 ranking, strict batch matching, source inspection and query-linked JSON export. Existing review, register and benchmark routes remain available.
+- Replaced repeated cosine retrieval with a reusable Python BM25 index, cached date parsing, deterministic ranking and bounded queries. Added structured CLI evidence with exact source spans, chunk hashes and explicit abstention reasons. The installed-wheel verifier now exercises this contract.
+- Added a reproducible comparison on 12 positive and four negative authored queries. BM25 and cosine tie; both fail the unknown-vendor negative. The report records that limitation without claiming independent accuracy or a ranking gain.
+- Reorganized the README around the working product, technical methods and measured evidence. Added retrieval documentation and CI report verification. Public corpus, extraction semantics and classifier results remain unchanged.
+
 ## 2026-10-02 - Final installation and demo verification
 
 - Added an isolated installed-wheel verifier and CI job. Six checks exercise the packaged CLI, mixed date conventions/source spans, repeat indexing, lifecycle history and v1/v2 database upgrades. Verification uses a temporary environment outside the checkout, disables source-path imports, and installs without index access or dependencies.
