@@ -1848,6 +1848,9 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.01em;
 }
+.hero-heading {
+  border-bottom: 0;
+}
 .hero-heading h1 {
   font-weight: 700;
   letter-spacing: -0.015em;
@@ -1904,4 +1907,225 @@ h1 {
 .workspace-version > span {
   color: var(--ink);
   font-weight: 600;
+}
+
+/* ===== Ledger layer: measured numbers ===== */
+/* Highlighter: only behind numbers that came out of a count or an evaluation. */
+.measured,
+.metrics strong,
+.benchmark-score > strong,
+.bar-row strong {
+  color: var(--ink);
+  background: linear-gradient(176deg, transparent 0 30%, var(--hl-mark) 30% 88%, transparent 88%);
+  padding: 0 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.metrics strong small,
+.benchmark-score > strong small {
+  background: var(--paper-raised);
+  color: var(--graphite);
+  padding-left: 0.3em;
+  font-weight: 500;
+}
+.measured {
+  font-weight: 600;
+}
+.metrics {
+  background: var(--paper-raised);
+  border: 0;
+  border-block: 1.5px solid var(--ink);
+  border-radius: 0;
+  box-shadow: none;
+}
+.metrics > div + div {
+  border-left: 1px solid var(--rule-soft);
+}
+.metrics > div > span,
+.metric-label {
+  color: var(--graphite);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.metric-label svg {
+  color: var(--ink);
+}
+.metrics strong {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  width: fit-content;
+}
+.public-metrics > div > small {
+  color: var(--graphite);
+  font-size: 12px;
+}
+/* The third public count is the unresolved share: the number is measured, the label is a limit. */
+.public-metrics > div:nth-child(3) strong {
+  color: var(--ink);
+}
+.public-metrics > div:nth-child(3) .metric-label,
+.public-metrics > div:nth-child(3) .metric-label svg {
+  color: var(--pen);
+}
+.metric-mark,
+.metric-mark.amber {
+  background: var(--pen);
+  border-radius: 0;
+}
+
+/* ===== Ledger layer: section headings and tables ===== */
+.explore-heading {
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 12px;
+}
+.section-kicker {
+  color: var(--graphite);
+  font-size: 11px;
+}
+.explore-heading h2 {
+  font-size: 24px;
+}
+.quick-actions button {
+  border: 1px solid var(--ink);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-size: 14px;
+}
+.quick-actions button svg {
+  color: var(--ink);
+}
+.register-panel,
+.public-source,
+.source-empty,
+.public-method,
+.benchmark-score,
+.language-chart,
+.history-list,
+.pane,
+.inspector,
+.source-pane,
+.field-navigation {
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+.register-panel,
+.public-source,
+.source-empty {
+  background: var(--paper-raised);
+  border: 1px solid var(--ink);
+}
+.filter-bar,
+.filter-bar.public-filters {
+  border-bottom: 1px solid var(--rule-soft);
+}
+.public-checkbox {
+  color: var(--ink);
+  font-size: 14px;
+}
+.table-toolbar {
+  border-bottom: 0;
+}
+.table-toolbar h2 {
+  font-size: 16px;
+}
+.table-toolbar h2 > span {
+  background: transparent;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius);
+  color: var(--graphite);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.quiet-button {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  border-color: transparent;
+}
+table {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+thead,
+.public-register thead {
+  background: var(--paper-raised);
+}
+th {
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-size: 11px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+}
+td {
+  border-color: var(--rule-soft);
+  color: var(--ink);
+}
+td small,
+.public-register td small {
+  font-family: var(--font-text);
+  color: var(--graphite);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.table-link,
+.public-register .table-link {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgb(28 43 75 / 0.4);
+  text-underline-offset: 0.2em;
+  background: transparent;
+  border: 0;
+}
+.table-link:hover {
+  background: transparent;
+  text-decoration-color: var(--ink);
+}
+.public-register tr:hover,
+tbody tr:hover {
+  background: var(--ink-wash);
+}
+.public-register tr.public-selected,
+.public-register tr.public-selected:hover {
+  background: rgb(28 43 75 / 0.09);
+}
+.public-selected td:first-child {
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+.role-pill,
+.type-label {
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.raw-date {
+  color: var(--graphite);
+}
+.has-date {
+  color: var(--ink);
+}
+/* Unresolved interpretations: red pen; the cell text itself says why. */
+.needs-attention,
+.public-register .date-cell.needs-attention {
+  color: var(--pen);
+}
+.flag-text {
+  color: var(--pen);
+}
+.public-pagination {
+  border-top: 1px solid var(--ink);
+  color: var(--graphite);
+}
+.public-pagination span {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
