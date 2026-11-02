@@ -54,3 +54,36 @@ The browser-hosted portfolio app still uses its fixed eight-document snapshot an
 Changing one document's effective order creates a new version only for that document. Its earlier candidate IDs and decisions remain in history and cannot be newly reviewed while inactive. Unaffected documents keep their IDs and decisions. Returning to an earlier content/settings version reactivates its earlier reviews, following the existing reuse policy; it does not start a new review cycle.
 
 Tests cover mixed orders, explicit unconfirmed settings, sparse defaults, calendar adversaries, retrieval propagation, exports, malformed/duplicate/stale map entries, unchanged versions, policy changes, reactivation, atomic batch rollback, and UI switching/reset behavior.
+
+## Same-Document Order Evidence
+
+Some numeric dates prove their own convention. `31/10/2026` is only valid day-first; `10/31/2026` is only valid month-first; `29/02/2024` is only valid day-first. `conventions.py` counts these order-revealing dates in one document and makes a suggestion only when they all agree:
+
+| Evidence in the document | Result for `09/10/2026` |
+| --- | --- |
+| One or more day-first-only dates, no month-first-only dates | Suggested `2026-10-09`, flagged `order_from_document_evidence` |
+| Day-first-only and month-first-only dates | No suggestion, flagged `conflicting_document_evidence` |
+| No order-revealing date | No suggestion; stays `ambiguous_numeric_date` |
+
+The suggestion never replaces an explicit policy: a file with `dmy` or `mdy` has no ambiguous hits to change. OCR-damaged digits (`O9/10/2026`) are not reinterpreted. Both readings stay in `candidates`, and every suggested date still needs review.
+
+```bash
+pharma-date-rag extract data/mixed_conventions --suggest-order --format json
+```
+
+In the public register, ambiguous cells carry a `document_order` object with the status, suggested reading, up to three cited cells from the same notice and the full day-first and month-first counts. `normalized` stays `null` and the value kind stays `ambiguous_date`; the browser parser rejects a suggestion outside the candidates, evidence from another notice, or a cited cell that does not reveal the order.
+
+### Measured
+
+```bash
+python scripts/benchmark_conventions.py          # writes reports/document_conventions.json
+python scripts/benchmark_conventions.py --check  # CI: saved report must match a fresh run
+```
+
+| Measurement | Result | Boundary |
+| --- | --- | --- |
+| Public ambiguous cells with a suggestion | 118/123 (29 notices); 5 abstain, 0 conflicts | All 118 are day-first; one English publisher |
+| Leave-one-out on public order-revealing cells | 390/399 agree, 0 disagree, 9 abstain | Hides each revealing cell and predicts it from the rest of its notice; tests consistency within a notice, not telling DMY from MDY notices apart |
+| Declared synthetic fixtures | 4/4 suggestions match the declared order; 2/6 ambiguous fields abstain | Seven authored files; small and not held out |
+
+No MDY public notice exists in the corpus, so the public numbers cannot show that month-first documents are recognized. The synthetic US receipt is the only month-first case with an ambiguous date.
