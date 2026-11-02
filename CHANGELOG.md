@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-01 - Same-document date order evidence and ledger redesign
+
+- Added `conventions.py`: numeric dates valid in only one order (`31/10/2026`) vote for their document's convention. A unanimous vote suggests a reading for ambiguous dates; any conflict or missing evidence abstains. Explicit policies are never overridden and OCR-damaged digits are not reinterpreted.
+- The public snapshot (schema v3) attaches `document_order` to every ambiguous cell without filling `normalized`. 118/123 ambiguous public cells receive a day-first suggestion with cited same-notice cells; 5 abstain; 0 conflict. A leave-one-out check over 399 order-revealing public cells agrees 390 times, disagrees 0 times and abstains 9 times. Declared synthetic fixtures: 4/4 suggestions correct, 2 abstentions.
+- Added `extract --suggest-order`, `scripts/benchmark_conventions.py` with a CI `--check`, 24 Python tests (299 total) and 2 frontend tests (19 total). Classifier results, parsing and frozen data are unchanged.
+- Redesigned the browser workspace as an evidence ledger: grid paper, ink rules, Barlow Semi Condensed and Source Serif 4, highlighter only on measured numbers and red pen for limits.
+
 ## 2026-10-02 - Final installation and demo verification
 
 - Added an isolated installed-wheel verifier and CI job. Six checks exercise the packaged CLI, mixed date conventions/source spans, repeat indexing, lifecycle history and v1/v2 database upgrades. Verification uses a temporary environment outside the checkout, disables source-path imports, and installs without index access or dependencies.
@@ -59,7 +66,7 @@
 - Validation: 126 Python tests passed on both the existing Python 3.9 environment and a fresh locked Python 3.12 environment with demo dependencies. Ruff passed; a built wheel indexed four multilingual documents and 24 fields from an isolated environment.
 - Documented the product hypothesis, architecture, public-project boundaries and daily release roadmap. No trained model, live browser OCR, LlamaIndex index or Mistral/Phi-2 comparison is claimed.
 
-## 2026-09-24 — Persistent document review and reproducible evidence
+## 2026-09-24 - Persistent document review and reproducible evidence
 
 - Added a SQLite-backed local review workflow: `index`, `queue`, `review`, and `history` commands with JSON output.
 - Added content-addressed document versions, collection separation, one active source version, idempotent indexing, bounded queue pagination, and append-only decision events.
