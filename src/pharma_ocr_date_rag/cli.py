@@ -3,8 +3,10 @@ from __future__ import annotations
 import argparse
 import json
 import sqlite3
+from dataclasses import replace
 from pathlib import Path
 
+from .conventions import apply_document_order
 from .dates import DATE_ORDERS
 from .languages import LANGUAGES
 from .pipeline import all_chunks, format_date_report, process_folder
@@ -32,6 +34,11 @@ def main() -> None:
     extract_parser = subparsers.add_parser("extract", help="Extract dates from a folder")
     extract_parser.add_argument("folder", type=Path)
     extract_parser.add_argument("--format", choices=["text", "json", "csv"], default="text")
+    extract_parser.add_argument(
+        "--suggest-order",
+        action="store_true",
+        help="Resolve ambiguous numeric dates only from unanimous order-revealing dates in the same file",
+    )
 
     ask_parser = subparsers.add_parser("ask", help="Ask a retrieval question")
     ask_parser.add_argument("folder", type=Path)
@@ -134,6 +141,8 @@ def main() -> None:
         parser.error(str(error))
 
     if args.command == "extract":
+        if args.suggest_order:
+            documents = [replace(doc, dates=apply_document_order(doc.dates)) for doc in documents]
         if args.format != "text":
             rows = date_rows(documents)
             print(export_json(rows) if args.format == "json" else export_csv(rows))

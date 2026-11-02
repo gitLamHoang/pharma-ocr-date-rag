@@ -97,3 +97,22 @@ def test_cli_invalid_policy_is_an_actionable_usage_error(content, tmp_path, caps
     assert "error:" in captured.err
     assert "Traceback" not in captured.err
     assert not captured.out
+
+
+def test_extract_suggest_order_uses_only_same_file_evidence(capsys, monkeypatch):
+    def rows(*flags):
+        monkeypatch.setattr(
+            sys, "argv", ["pharma-date-rag", "extract", str(FIXTURES), "--format", "json", *flags]
+        )
+        main()
+        return json.loads(capsys.readouterr().out)["dates"]
+
+    def expiry(dates, name):
+        return next(row for row in dates if row["document"] == name and row["label"] == "expiry")
+
+    plain, suggested = rows(), rows("--suggest-order")
+    assert expiry(plain, "eu_receipt.txt")["normalized"] is None
+    assert expiry(suggested, "eu_receipt.txt")["normalized"] == "2026-10-09"
+    assert expiry(suggested, "us_receipt.txt")["normalized"] == "2026-09-10"
+    assert "order_from_document_evidence" in expiry(suggested, "us_receipt.txt")["review_reasons"]
+    assert expiry(suggested, "unconfirmed_receipt.txt")["normalized"] is None
