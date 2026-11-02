@@ -1519,3 +1519,389 @@ footer a {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== Ledger layer: grid paper and base type ===== */
+html {
+  background: var(--paper);
+}
+body {
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-faint) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums lining-nums;
+  text-rendering: optimizeLegibility;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-ui);
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+h4 {
+  margin: 0;
+}
+.page-description,
+.sidebar-note p,
+.public-method p,
+.benchmark-score p,
+.benchmark-heading p,
+.large-empty p,
+.source-empty p,
+.evidence-quote blockquote,
+.clear-note,
+.mini-event p,
+.convention-evidence p,
+.convention-sources {
+  font-family: var(--font-text);
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--graphite);
+}
+code,
+.date-cell,
+.raw-date,
+.source-text,
+.source-toolbar small,
+.evidence-value h2 {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+code {
+  font-size: 0.86em;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius);
+  padding: 0.05em 0.3em;
+}
+small,
+.muted {
+  color: var(--graphite-soft);
+}
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: rgb(28 43 75 / 0.45);
+}
+a:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--ink);
+}
+/* Small-caps style labels used across the ledger. */
+.eyebrow,
+.section-kicker,
+.nav-label,
+.evidence-heading .section-kicker,
+.workflow-card-top > span,
+.source-document > div > span,
+th {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+
+/* ===== Ledger layer: shell, header and navigation ===== */
+.sidebar {
+  background: var(--paper-raised);
+  border-right: 1.5px solid var(--ink);
+  color: var(--ink);
+}
+.brand {
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.brand > span:last-child > span {
+  color: var(--graphite);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+.brand-mark {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+.brand-mark svg {
+  color: var(--paper);
+}
+.sidebar-workspace {
+  border: 0;
+  border-block: 1px solid var(--rule-soft);
+  border-radius: 0;
+  padding-inline: 4px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+}
+.workspace-avatar {
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+.sidebar-workspace small,
+.workspace-badge {
+  color: var(--graphite-soft);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.nav-label {
+  color: var(--graphite);
+  font-size: 11px;
+}
+nav {
+  border-top: 1px solid var(--ink);
+}
+nav button {
+  border: 0;
+  border-bottom: 1px solid var(--rule-soft);
+  border-radius: 0;
+  background: transparent;
+  color: var(--graphite);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 500;
+  min-height: 42px;
+  box-shadow: none;
+}
+nav button svg {
+  color: currentColor;
+}
+nav button:hover {
+  background: var(--ink-wash);
+  border-color: var(--rule-soft);
+  color: var(--ink);
+}
+nav button.active,
+nav button.active:hover {
+  background: transparent;
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+nav button.active svg {
+  color: var(--ink);
+}
+.nav-count {
+  background: transparent;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  border-radius: var(--radius);
+  font-variant-numeric: tabular-nums;
+}
+.sidebar-note {
+  background: transparent;
+  border: 0;
+  border-top: 1.5px solid var(--ink);
+  border-radius: 0;
+  padding: 14px 4px 0;
+  color: var(--ink);
+}
+.sidebar-note-icon,
+.sidebar-note svg {
+  color: var(--ink);
+}
+.sidebar-note strong {
+  color: var(--ink);
+  font-size: 15px;
+}
+.sidebar-note p {
+  color: var(--graphite);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.sidebar-note a {
+  color: var(--ink);
+  font-weight: 600;
+}
+.dataset-label,
+.sidebar-bottom > p,
+.creator small {
+  color: var(--graphite);
+}
+.creator {
+  border-top: 1px solid var(--rule-soft);
+  color: var(--ink);
+}
+.creator > span {
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  border-radius: var(--radius);
+}
+.live-dot {
+  background: var(--ink);
+}
+.topbar {
+  background: rgb(238 242 239 / 0.94);
+  border-bottom: 1.5px solid var(--ink);
+  backdrop-filter: none;
+}
+.breadcrumb {
+  color: var(--graphite);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+.breadcrumb strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.breadcrumb span {
+  color: var(--graphite-soft);
+}
+.environment {
+  color: var(--graphite);
+  background: transparent;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius);
+}
+button {
+  border-color: var(--ink);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  box-shadow: none;
+}
+button:hover {
+  background: var(--ink-wash);
+  border-color: var(--ink);
+}
+button.primary,
+button.primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+  box-shadow: none;
+}
+button.primary:hover {
+  background: var(--ink-soft);
+}
+button.reject {
+  color: var(--pen);
+  border-color: var(--pen);
+}
+input,
+select,
+textarea {
+  border: 1px solid var(--graphite-soft);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--ink);
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--graphite-soft);
+}
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--ink);
+}
+main {
+  background: transparent;
+}
+footer {
+  border-top: 1.5px solid var(--ink);
+  color: var(--graphite);
+}
+footer a {
+  color: var(--ink);
+}
+
+/* Hero and page headings read like a notebook title block. */
+.page-heading {
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 22px;
+}
+.eyebrow {
+  color: var(--graphite);
+  font-size: 12px;
+}
+.eyebrow > span {
+  background: var(--ink);
+  border-radius: 0;
+}
+h1 {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.hero-heading h1 {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 0.98;
+}
+.hero-heading h1 > span {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.14em;
+}
+.page-description {
+  color: var(--graphite);
+  font-size: 18px;
+  line-height: 1.5;
+}
+.workflow-card {
+  background: var(--paper-raised);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+.workflow-card-top,
+.workflow-card-top svg,
+.workflow-card > small {
+  color: var(--graphite);
+}
+.workflow-card > small {
+  font-size: 12px;
+}
+.workflow-track > span {
+  color: var(--ink);
+  font-weight: 500;
+}
+.workflow-track svg {
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  color: var(--ink);
+}
+.workflow-track > i {
+  background: var(--ink);
+}
+.workflow-track > i:after {
+  border-color: var(--ink);
+}
+.workspace-version {
+  color: var(--graphite);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+}
+.workspace-version > span {
+  color: var(--ink);
+  font-weight: 600;
+}
