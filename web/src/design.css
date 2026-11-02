@@ -2021,9 +2021,13 @@ h1 {
 .filter-bar.public-filters {
   border-bottom: 1px solid var(--rule-soft);
 }
-.public-checkbox {
+.public-filters .public-checkbox {
   color: var(--ink);
   font-size: 14px;
+}
+.search input,
+.public-filters .search input {
+  background: var(--paper);
 }
 .table-toolbar {
   border-bottom: 0;
@@ -2128,4 +2132,332 @@ tbody tr:hover {
 .public-pagination span {
   color: var(--ink);
   font-variant-numeric: tabular-nums;
+}
+
+/* ===== Ledger layer: source evidence inspector ===== */
+.evidence-heading {
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 10px;
+}
+.evidence-marker {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+.evidence-marker svg {
+  color: var(--ink);
+}
+.evidence-value > span {
+  color: var(--graphite);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.evidence-value h2 {
+  color: var(--ink);
+  font-weight: 500;
+}
+.evidence-value small {
+  font-size: 13px;
+  color: var(--graphite);
+}
+.evidence-state {
+  background: transparent;
+  border: 1px solid var(--rule-soft);
+  border-left: 3px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  font-size: 13px;
+}
+.evidence-state svg {
+  color: var(--ink);
+}
+.evidence-state.is-uncertain {
+  background: var(--pen-wash);
+  border-color: var(--pen);
+  border-left-width: 3px;
+  color: var(--pen);
+  font-weight: 600;
+}
+.evidence-state.is-uncertain svg {
+  color: var(--pen);
+}
+.possible-dates > span {
+  color: var(--graphite);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.possible-dates code {
+  border: 1px dashed var(--pen);
+  background: transparent;
+  color: var(--ink);
+}
+.source-document {
+  border-top: 1px solid var(--rule-soft);
+}
+.source-document-icon {
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  color: var(--ink);
+}
+.source-document > div > span {
+  font-size: 11px;
+}
+.source-document h3 {
+  font-family: var(--font-text);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.source-table-heading h3 {
+  font-size: 14px;
+}
+.source-table-heading span {
+  color: var(--graphite);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.source-record {
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper);
+}
+.source-record > div {
+  border-top: 1px solid var(--rule-soft);
+}
+.source-record dt {
+  color: var(--graphite);
+  font-size: 12px;
+}
+.source-record dd {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.source-record .selected-source-pair {
+  background: rgb(28 43 75 / 0.08);
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+.source-record .source-cell-selected {
+  color: var(--ink);
+  font-weight: 600;
+}
+.public-source .public-interpretation {
+  color: var(--ink);
+  font-size: 13px;
+}
+.source-link {
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+}
+.source-link:hover {
+  background: var(--ink-wash);
+}
+.source-provenance,
+.source-provenance summary,
+summary {
+  color: var(--ink);
+}
+.source-provenance p {
+  font-family: var(--font-text);
+  color: var(--graphite);
+  font-size: 13px;
+}
+.source-empty {
+  border-style: dashed;
+}
+.source-empty h3 {
+  color: var(--ink);
+}
+.public-method {
+  background: var(--paper-raised);
+  border: 1px solid var(--ink);
+}
+.public-method summary > span,
+.public-method summary svg {
+  color: var(--ink);
+}
+.public-method summary > span:last-child {
+  color: var(--graphite);
+}
+.public-method > div {
+  border-top: 1px solid var(--ink);
+}
+.public-method p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+.public-method small {
+  color: var(--graphite);
+}
+
+/* ===== Ledger layer: badges, statuses and limits (red pen) ===== */
+.status,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 1px 6px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.status-accepted {
+  background: var(--ink);
+  color: var(--paper);
+}
+.status-pending {
+  border-style: dashed;
+  color: var(--graphite);
+  border-color: var(--graphite);
+  background: transparent;
+}
+.status-needs_review,
+.status-rejected {
+  border-color: var(--pen);
+  color: var(--pen);
+  background: var(--pen-wash);
+}
+.status-needs_review::before,
+.status-rejected::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+}
+.status-rejected {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+/* Ambiguity badge: suggested order from the same notice, still unconfirmed. */
+.badge.convention {
+  border-color: var(--pen);
+  border-style: dashed;
+  color: var(--pen);
+  background: transparent;
+  vertical-align: middle;
+  margin-top: 3px;
+}
+.attention-dot {
+  background: var(--pen);
+  border-radius: 0;
+}
+.convention-evidence {
+  margin-top: 14px;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--ink);
+}
+.convention-evidence h4 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.convention-suggestion {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.convention-sources {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.convention-sources li {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  overflow-wrap: anywhere;
+}
+.convention-sources code {
+  margin-right: 4px;
+}
+.convention-limit,
+.public-qualifier,
+.public-source .public-qualifier {
+  margin: 0;
+  padding: 6px 0 6px 10px;
+  border-left: 3px solid var(--pen);
+  color: var(--pen);
+  font-family: var(--font-text);
+  font-size: 13px;
+  line-height: 1.5;
+  background: transparent;
+}
+.convention-limit::before,
+.public-qualifier::before {
+  content: 'Limit. ';
+  font-family: var(--font-ui);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.public-scope {
+  border: 0;
+  border-left: 3px solid var(--pen);
+  border-radius: 0;
+  background: transparent;
+  padding: 8px 12px;
+}
+.public-scope > span,
+.public-scope svg {
+  color: var(--pen);
+  font-family: var(--font-text);
+  font-size: 14px;
+}
+.public-scope a {
+  color: var(--ink);
+  font-weight: 600;
+}
+.benchmark-scope,
+.notice {
+  border: 0;
+  border-left: 3px solid var(--pen);
+  border-radius: 0;
+  background: transparent;
+  color: var(--pen);
+  font-family: var(--font-text);
+  font-size: 14px;
+}
+.benchmark-scope svg {
+  color: var(--pen);
+}
+.notice {
+  border-left-color: var(--ink);
+  color: var(--ink);
+}
+.notice svg {
+  color: var(--ink);
+}
+.form-error {
+  color: var(--pen);
+  font-weight: 600;
+}
+.review-flags > div {
+  border-color: var(--pen);
+  background: var(--pen-wash);
+  color: var(--pen);
+  border-radius: 0;
 }
