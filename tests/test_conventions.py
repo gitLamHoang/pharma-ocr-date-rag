@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -100,3 +101,23 @@ def test_leave_one_out_counts_agreement_disagreement_and_abstention():
         ]
     )
     assert result == {"agree": 2, "disagree": 2, "abstain": 1, "total": 5}
+
+
+def test_saved_convention_report_is_reproducible():
+    import subprocess
+    import sys
+
+    root = Path(__file__).resolve().parents[1]
+    result = subprocess.run(
+        [sys.executable, "scripts/benchmark_conventions.py", "--check"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    report = json.loads((root / "reports/document_conventions.json").read_text(encoding="utf-8"))
+    public = report["public_register"]
+    assert public["leave_one_out"]["disagree"] == 0
+    assert public["suggested"] + public["status"].get("no_evidence", 0) == public["ambiguous_cells"]
+    totals = report["declared_fixtures"]["totals"]
+    assert totals["correct"] == totals["suggested"]
