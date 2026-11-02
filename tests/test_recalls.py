@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from pharma_ocr_date_rag.conventions import attach_document_order
 from pharma_ocr_date_rag.recalls import (
     column_examples,
     date_cell,
@@ -167,3 +168,51 @@ def test_original_pdf_report_rejects_changed_evaluation_scope(monkeypatch, mutat
         first["unsupported_html_cells"] = []
     with pytest.raises(ValueError, match="PDF"):
         experiment.check_report(report)
+
+
+def _cell(doc, index, raw):
+    parsed = date_cell(raw, role="expiry")
+    return {"id": f"{doc}:{index}", "document_id": doc, "raw_text": raw, **parsed}
+
+
+def test_same_notice_evidence_suggests_but_never_resolves_a_public_cell():
+    rows = [_cell("a", 0, "09/10/2026"), _cell("a", 1, "31/10/2026"), _cell("b", 0, "09/10/2026")]
+    attach_document_order(rows)
+    ambiguous, revealing, alone = rows
+    assert ambiguous["normalized"] is None and ambiguous["value_kind"] == "ambiguous_date"
+    assert ambiguous["document_order"] == {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-10-09",
+        "evidence_ids": ["a:1"],
+        "dmy_count": 1,
+        "mdy_count": 0,
+    }
+    assert "document_order" not in revealing
+    assert alone["document_order"]["status"] == "no_evidence"
+    assert alone["document_order"]["suggested"] is None
+
+
+def test_conflicting_public_notice_makes_no_suggestion():
+    rows = [_cell("a", 0, "09/10/2026"), _cell("a", 1, "31/10/2026"), _cell("a", 2, "10/31/2026")]
+    attach_document_order(rows)
+    order = rows[0]["document_order"]
+    assert (order["status"], order["suggested"], order["dmy_count"], order["mdy_count"]) == (
+        "conflict",
+        None,
+        1,
+        1,
+    )
+
+
+def test_published_snapshot_suggestions_cite_revealing_cells_from_the_same_notice():
+    data = json.loads((ROOT / "web/public/data/recalls.json").read_text(encoding="utf-8"))
+    records = {row["id"]: row for row in data["records"]}
+    suggested = [row for row in data["records"] if row.get("document_order", {}).get("suggested")]
+    assert suggested
+    for row in suggested:
+        assert row["normalized"] is None and row["document_order"]["suggested"] in row["candidates"]
+        for evidence_id in row["document_order"]["evidence_ids"]:
+            evidence = records[evidence_id]
+            assert evidence["document_id"] == row["document_id"]
+            assert evidence["value_kind"] == "date"

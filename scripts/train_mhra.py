@@ -13,6 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+from pharma_ocr_date_rag.conventions import attach_document_order
 from pharma_ocr_date_rag.recalls import (
     column_examples,
     evaluate_roles,
@@ -43,12 +44,13 @@ def build() -> tuple[dict, dict, object]:
     model = fit_role_model(examples)
     evaluation = evaluate_roles(examples, model)
     records, excluded = recall_register(documents, model, splits)
+    attach_document_order(records)
     paths = [
         *sorted(DATA.glob("*.json")),
         Path(__file__).resolve(),
         *(
             ROOT / "src/pharma_ocr_date_rag" / name
-            for name in ("public_data.py", "recalls.py", "dates.py", "languages.py")
+            for name in ("public_data.py", "recalls.py", "dates.py", "languages.py", "conventions.py")
         ),
     ]
     provenance = {
@@ -87,12 +89,19 @@ def build() -> tuple[dict, dict, object]:
             "without_date_candidates": sum(not row["candidates"] for row in records),
             "value_kinds": dict(sorted(Counter(row["value_kind"] for row in records).items())),
             "ambiguous": sum(len(row["candidates"]) > 1 for row in records),
+            "document_order": dict(
+                sorted(
+                    Counter(
+                        row["document_order"]["status"] for row in records if "document_order" in row
+                    ).items()
+                )
+            ),
             "excluded_tables": excluded,
         },
         "source_sha256": provenance,
     }
     public = {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "attribution": dataset["attribution"],
         "licence": dataset["licence"],
         "snapshotRetrievedAt": dataset["selection"]["retrieved_at"],

@@ -106,6 +106,28 @@ def apply_document_order(hits: Sequence[DateHit], order: DocumentOrder | None = 
     return resolved
 
 
+def attach_document_order(records: list[dict]) -> None:
+    """Add a same-notice order suggestion to ambiguous register cells; never fill `normalized`."""
+    by_document: dict[str, list[dict]] = {}
+    for row in records:
+        by_document.setdefault(row["document_id"], []).append(row)
+    for rows in by_document.values():
+        order = infer_order((row["id"], row["raw_text"]) for row in rows if row["value_kind"] == "date")
+        for row in rows:
+            if row["value_kind"] != "ambiguous_date":
+                continue
+            suggested = interpret(row["raw_text"], order.order) if order.order else None
+            row["document_order"] = {
+                "status": order.status,
+                "order": order.order,
+                "suggested": suggested if suggested in row["candidates"] else None,
+                # The first three revealing cells, in table order; the counts cover all of them.
+                "evidence_ids": list(order.evidence[:3]),
+                "dmy_count": len(order.dmy_evidence),
+                "mdy_count": len(order.mdy_evidence),
+            }
+
+
 def leave_one_out(documents: Iterable[Sequence[tuple[str, str]]]) -> dict:
     """Hide each order-revealing date and predict its order from the rest of its document."""
     agree = disagree = abstain = 0
