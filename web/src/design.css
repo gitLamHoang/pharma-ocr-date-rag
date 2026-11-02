@@ -2125,6 +2125,7 @@ tbody tr:hover {
 }
 .role-pill,
 .type-label {
+  white-space: nowrap;
   background: transparent;
   border: 1px solid var(--ink);
   border-radius: var(--radius);
@@ -2656,4 +2657,105 @@ summary {
   border-radius: var(--radius);
   background: var(--paper-raised);
   color: var(--ink);
+}
+
+/* ===== Ledger layer: focus and motion ===== */
+:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--paper);
+}
+button.primary:focus-visible,
+.segmented button.active:focus-visible {
+  outline-color: var(--ink);
+  outline-offset: 3px;
+}
+.source-highlight:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== Ledger layer: narrow screens ===== */
+@media (max-width: 1000px) {
+  .sidebar {
+    border-right: 1.5px solid var(--ink);
+  }
+}
+@media (max-width: 760px) {
+  body {
+    background-size: 32px 32px;
+  }
+  .topbar {
+    background: var(--paper);
+  }
+  .breadcrumb {
+    font-size: 13px;
+  }
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .hero-heading h1 {
+    font-size: 40px;
+    letter-spacing: -0.01em;
+  }
+  .page-description {
+    font-size: 16px;
+  }
+  .metrics > div > span,
+  .metric-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .public-metrics > div > small,
+  .metrics strong small {
+    font-size: 11px;
+    white-space: normal;
+    width: max-content;
+    max-width: 130px;
+  }
+  .metrics > div + div {
+    border-left: 0;
+  }
+  .metrics > div:nth-child(even) {
+    border-left: 1px solid var(--rule-soft);
+  }
+  .metrics > div:nth-child(n) {
+    padding: 0 15px;
+  }
+  .quick-actions button {
+    font-size: 13px;
+  }
+  .public-filters .public-checkbox {
+    font-size: 13px;
+  }
+  .public-register td small {
+    font-size: 12px;
+  }
+  .badge,
+  .status {
+    font-size: 11px;
+  }
+  .public-scope > span {
+    font-size: 13px;
+  }
+  .convention-sources {
+    font-size: 12.5px;
+  }
 }
