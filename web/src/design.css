@@ -1765,6 +1765,7 @@ nav button.active svg {
   color: var(--graphite-soft);
 }
 .environment {
+  font-size: 12px;
   color: var(--graphite);
   background: transparent;
   border: 1px solid var(--rule-soft);
@@ -1832,8 +1833,7 @@ footer a {
 
 /* Hero and page headings read like a notebook title block. */
 .page-heading {
-  border-bottom: 1.5px solid var(--ink);
-  padding-bottom: 22px;
+  padding-bottom: 6px;
 }
 .eyebrow {
   color: var(--graphite);
@@ -1847,9 +1847,6 @@ h1 {
   color: var(--ink);
   font-weight: 600;
   letter-spacing: -0.01em;
-}
-.hero-heading {
-  border-bottom: 0;
 }
 .hero-heading h1 {
   font-weight: 700;
@@ -1922,11 +1919,37 @@ h1 {
   box-decoration-break: clone;
   font-variant-numeric: tabular-nums lining-nums;
 }
-.metrics strong small,
-.benchmark-score > strong small {
-  background: var(--paper-raised);
+/* Annotations inside a figure sit under it, so the swipe covers only the number. */
+.metrics strong {
+  display: block;
+  position: relative;
+  margin-bottom: 20px;
+}
+.metrics strong small {
+  position: absolute;
+  top: 100%;
+  left: 0.12em;
+  margin-top: 4px;
+  background: none;
   color: var(--graphite);
-  padding-left: 0.3em;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.metrics strong .metric-mark {
+  position: absolute;
+  top: 0.4em;
+  left: calc(100% + 6px);
+  width: 7px;
+  height: 7px;
+}
+.public-metrics strong {
+  margin-bottom: 0;
+}
+.benchmark-score > strong small {
+  color: var(--graphite);
   font-weight: 500;
 }
 .measured {
@@ -2345,12 +2368,11 @@ summary {
   text-decoration: line-through;
   text-decoration-thickness: 1px;
 }
-/* Ambiguity badge: suggested order from the same notice, still unconfirmed. */
+/* Convention badge: supporting same-notice evidence, so ink rather than red pen. */
 .badge.convention {
-  border-color: var(--pen);
-  border-style: dashed;
-  color: var(--pen);
-  background: transparent;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  background: var(--paper);
   vertical-align: middle;
   margin-top: 3px;
 }
@@ -2460,4 +2482,178 @@ summary {
   background: var(--pen-wash);
   color: var(--pen);
   border-radius: 0;
+}
+
+/* ===== Ledger layer: benchmark lab and review workspace ===== */
+.benchmark-heading p {
+  font-size: 15px;
+}
+.benchmark-grid {
+  background: var(--paper-raised);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+}
+.benchmark-score > span,
+.language-chart h3 {
+  color: var(--graphite);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.benchmark-score > strong {
+  width: fit-content;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  color: var(--ink);
+}
+.benchmark-score p {
+  font-size: 15px;
+  max-width: 36ch;
+}
+.benchmark-score a {
+  font-size: 14px;
+  font-weight: 600;
+}
+.bar-row {
+  font-size: 14px;
+  color: var(--ink);
+}
+.bar-track {
+  height: 6px;
+  background: transparent;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.bar-track > div,
+.bar-row:nth-child(n) .bar-track > div {
+  background: var(--ink);
+}
+.bar-row strong {
+  justify-self: start;
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+}
+.segmented {
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: transparent;
+  padding: 0;
+  gap: 0;
+}
+.segmented button {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+}
+.segmented button + button {
+  border-left: 1px solid var(--ink);
+}
+.segmented button.active,
+.segmented button.active:hover {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: none;
+}
+.document-item {
+  border-color: var(--rule-soft);
+  border-radius: 0;
+}
+.document-item.selected {
+  background: rgb(28 43 75 / 0.08);
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+.document-item.selected .document-icon,
+.document-icon {
+  color: var(--ink);
+}
+.document-copy strong {
+  color: var(--ink);
+  font-size: 15px;
+}
+.document-copy small {
+  color: var(--graphite);
+  font-size: 12px;
+}
+.pane-heading {
+  border-bottom: 1px solid var(--ink);
+}
+.pane-heading h2 {
+  font-size: 15px;
+}
+.page-scroll {
+  background: var(--paper);
+}
+.paper {
+  box-shadow: 0 0 0 1px var(--ink);
+}
+/* Selected source box is the evidence under the reader's finger, drawn in ink. */
+.source-highlight {
+  border: 1px dashed var(--graphite-soft);
+  background: transparent;
+}
+.source-highlight:hover {
+  border-style: solid;
+  border-color: var(--ink);
+  background: var(--ink-wash);
+}
+.source-highlight.selected {
+  border: 2px solid var(--ink);
+  background: rgb(28 43 75 / 0.1);
+}
+.source-highlight span {
+  background: var(--paper-raised);
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.source-highlight.selected span {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.source-text mark {
+  background: rgb(28 43 75 / 0.12);
+  color: var(--ink);
+  outline: 1.5px solid var(--ink);
+}
+.field-value h3 {
+  color: var(--ink);
+}
+.type-label {
+  display: inline-block;
+  padding: 1px 6px;
+}
+.evidence-quote blockquote {
+  border-left: 3px solid var(--ink);
+  font-size: 15px;
+  color: var(--ink);
+}
+.candidates label {
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  font-family: var(--font-mono);
+  color: var(--ink);
+}
+.candidates label:has(input:checked) {
+  background: rgb(28 43 75 / 0.1);
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+.history-event {
+  border-color: var(--rule-soft);
+}
+.event-icon {
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  color: var(--ink);
+}
+.large-empty {
+  border: 1px dashed var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  color: var(--ink);
 }
