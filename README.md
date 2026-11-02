@@ -11,7 +11,7 @@ A pharmaceutical date-review prototype with **60 real public MHRA notices**, a t
 
 ### [Open the Interactive Workspace](https://gitlamhoang.github.io/pharma-ocr-date-rag/)
 
-No installation or API key. Search 742 candidate date-column cells from public medicine notices, inspect original batch rows, and compare model evidence. A separate workspace contains eight synthetic multilingual documents and 42 candidate dates.
+No installation or API key. Search 742 candidate date-column cells from public medicine notices, inspect original batch rows, see which ambiguous dates the rest of their notice can settle, and compare model evidence. A separate workspace contains eight synthetic multilingual documents and 42 candidate dates.
 
 [October 2 release checklist](docs/release-checklist.md): installation checks, measured results, demo sequence and known limits.
 
@@ -65,6 +65,7 @@ npm run dev
 | Multilingual fields | Language-specific month names and field vocabularies for English, French, German, Spanish and Vietnamese; all-language or explicit-language mode |
 | Date normalization | ISO, numeric, named-month, Vietnamese `ngày … tháng … năm …`, and month/year dates; calendar validation |
 | Ambiguity handling | Two valid numeric interpretations produce `normalized: null` plus candidates; explicit conventions can differ by document in one batch |
+| Same-document order evidence | Dates valid in only one order (`31/10/2026`) vote for their document's convention; a unanimous vote suggests a reading for ambiguous dates, any conflict abstains, and the cell stays `needs_review` |
 | Evidence | Original date text, unchanged source character offsets, line number, document text hash, parser settings and review reasons |
 | Browser workspace | Source-page highlights and zoom, field inspector, explicit date interpretations, reasoned decisions, local history, register filters and CSV/JSON exports |
 | Local extraction UI | Streamlit sandbox for sample collections, pasted/uploaded UTF-8 text, per-document numeric conventions and source highlighting |
@@ -99,6 +100,9 @@ pharma-date-rag extract data/multilingual_docs
 
 # Export evidence with an explicitly chosen date convention
 pharma-date-rag extract data/multilingual_docs --date-order dmy --format json
+
+# Suggest readings for ambiguous dates from order-revealing dates in the same file
+pharma-date-rag extract data/mixed_conventions --suggest-order --format json
 
 # Search French date fields with an English field term
 pharma-date-rag ask data/multilingual_docs --question "expiry"
@@ -144,6 +148,7 @@ uv sync --frozen --python 3.12 --extra dev --extra research
 uv run python scripts/train_mhra.py --check
 uv run python scripts/benchmark_mhra_pdf.py --check-report
 uv run python scripts/benchmark_cells.py --check
+uv run python scripts/benchmark_conventions.py --check
 ```
 
 The first command below the install **re-trains** from the frozen corpus without network access; the PDF checker verifies saved evidence without rerunning OCR. [Dataset/model card, source licence, crawl and actual OCR commands](docs/public-data.md).
@@ -154,6 +159,7 @@ The first command below the install **re-trains** from the frozen corpus without
 | Test column roles | Model 80/80; keyword rules also 80/80; majority 23/80 | 76/80 heading instances occur in training; no demonstrated advantage over rules |
 | Original-PDF date coverage | OCR 11/11; native text also 11/11 | Supported unique HTML-table date interpretations in 3 PDFs, not whole-document OCR accuracy |
 | Public register | 742 cells: 539 single dates, 123 ambiguous dates, 3 cutoffs, 39 source statements, 38 unsupported | All require review; not independently validated date labels |
+| Same-notice order suggestions | 118/123 ambiguous cells get a cited day-first suggestion; 5 abstain, 0 conflict. Leave-one-out over 399 order-revealing cells: 390 agree, 0 disagree, 9 abstain | One publisher, all day-first; suggestions are not confirmed dates. [Method](docs/date-conventions.md#same-document-order-evidence) |
 
 All public notices are English. Five-language claims below apply to synthetic parser tests, not real multilingual document accuracy. The simpler rule baseline is competitive here; template-diverse, independently annotated data is the next research priority.
 
@@ -180,7 +186,7 @@ Measured on the current **authored synthetic development fixtures**, not held-ou
 | Multilingual breakdown | EN 18/18; FR, DE, ES, VI each 6/6 | English includes 12 edge cases; coverage is intentionally uneven |
 | Retrieval chunk experiment | 3/3 questions hit at 35, 60 and 90 words | A small smoke benchmark, not evidence that chunk size never matters |
 
-[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, seventeen unit tests, a production build and Playwright desktop/mobile checks before deploying. Separate CI jobs retrain the public-data classifier and verify a clean wheel installation.
+[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, nineteen unit tests, a production build and Playwright desktop/mobile checks before deploying. Separate CI jobs retrain the public-data classifier and verify a clean wheel installation.
 
 ```bash
 cd web
@@ -242,6 +248,7 @@ src/pharma_ocr_date_rag/
   public_data.py bounded public collection, robots checks and source tables
   recalls.py     grouped splits, learned column roles and batch/date evidence
   dates.py       date candidates, normalization, source offsets, review flags
+  conventions.py same-document order evidence and abstaining suggestions
   policies.py    explicit per-document numeric conventions and validation
   ocr.py         verified Tesseract adapter; unverified legacy PaddleOCR adapter
   pipeline.py    shared text/document processing
