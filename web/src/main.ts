@@ -6,6 +6,7 @@ import {
   cellInterpretation,
   valueKinds,
   type RecallData,
+  type RecallRecord,
 } from './recalls.ts';
 import {
   createIcons,
@@ -688,6 +689,32 @@ function publicRows() {
       )
     : [];
 }
+const orderName = (order: 'dmy' | 'mdy') => (order === 'dmy' ? 'day-first' : 'month-first');
+function orderBadge(row: RecallRecord): string {
+  const order = row.document_order;
+  return order?.suggested && order.order
+    ? ` <span class="badge convention">${orderName(order.order)} evidence</span>`
+    : '';
+}
+function orderEvidence(row: RecallRecord): string {
+  const order = row.document_order;
+  if (!order || !publicData) return '';
+  let body: string;
+  if (order.status === 'unanimous' && order.order && order.suggested) {
+    const count = order.order === 'dmy' ? order.dmy_count : order.mdy_count;
+    const sources = order.evidence_ids
+      .map((id) => publicData?.records.find((source) => source.id === id))
+      .filter((source): source is RecallRecord => !!source);
+    body = `<p class="convention-suggestion">Suggested reading <code>${escape(order.suggested)}</code>. <strong class="measured">${count}</strong> other date${count === 1 ? '' : 's'} in this notice can only be read ${orderName(order.order)}, and none can only be read the other way.</p>
+      <ul class="convention-sources">${sources.map((source) => `<li><code>${escape(source.raw_text)}</code> ${escape(source.header)}, batch ${escape(source.batch || 'unavailable')}, row ${source.row_index + 1}</li>`).join('')}</ul>
+      <p class="convention-limit">A suggestion, not a confirmed date: the convention is inferred from this notice alone. The cell stays unresolved until a reviewer confirms it.</p>`;
+  } else if (order.status === 'conflict') {
+    body = `<p class="convention-limit">This notice has ${order.dmy_count} day-first and ${order.mdy_count} month-first dates, so no reading is suggested.</p>`;
+  } else {
+    body = `<p class="convention-limit">No other date in this notice reveals its order, so no reading is suggested.</p>`;
+  }
+  return `<section class="convention-evidence" aria-label="Same-notice date order evidence"><h4>Same-notice date order</h4>${body}</section>`;
+}
 function publicView() {
   if (!publicData)
     return `<div class="large-empty">${icon('circle-alert')}<h2>Public notices unavailable</h2><p>${escape(publicError)}</p></div>`;
@@ -742,7 +769,7 @@ function publicView() {
           <tr class="${selected?.id === row.id ? 'public-selected' : ''}" data-public-field="${escape(row.id)}">
             <td><button class="table-link" data-public-field="${escape(row.id)}">${escape(row.batch || 'No batch text')}${icon('arrow-up-right')}</button><small title="${escape(row.title)}">${escape(row.title)}</small></td>
             <td><span class="role-pill">${escape(row.role)}</span></td><td class="raw-date">${escape(row.raw_text)}</td>
-            <td class="date-cell ${row.normalized === null ? 'needs-attention' : 'has-date'}">${escape(cellInterpretation(row))}</td>
+            <td class="date-cell ${row.normalized === null ? 'needs-attention' : 'has-date'}">${escape(cellInterpretation(row))}${orderBadge(row)}</td>
           </tr>`,
                 )
                 .join('')}</tbody></table></div>`
@@ -757,6 +784,7 @@ function publicView() {
         <div class="evidence-value"><span>${escape(selected.role)} · Batch ${escape(selected.batch || 'unavailable')}</span><h2>${escape(cellInterpretation(selected))}</h2><small>Source value: <code>${escape(selected.raw_text)}</code></small></div>
         <div class="evidence-state ${selected.normalized === null ? 'is-uncertain' : ''}">${icon(selected.normalized === null ? 'circle-alert' : 'scan-line')}<span>${escape(selected.review_reasons.join(', ').replaceAll('_', ' ') || 'Verify against the original notice')}</span></div>
         ${selected.candidates.length > 1 ? `<div class="possible-dates"><span>Possible interpretations</span>${selected.candidates.map((value) => `<code>${escape(value)}</code>`).join('')}</div>` : ''}
+        ${orderEvidence(selected)}
         <div class="source-document"><span class="source-document-icon">${icon('file-text')}</span><div><span>ORIGINAL DOCUMENT</span><h3>${escape(doc.title)}</h3></div></div>
         <div class="source-table-heading"><h3>Source table</h3><span>Table ${table.table_index + 1} · Row ${selected.row_index + 1}</span></div>
         <dl class="source-record">${table.headers.map((header, index) => `<div class="${index === selected.column_index ? 'selected-source-pair' : ''}"><dt>${escape(header)}</dt><dd${index === selected.column_index ? ' class="source-cell-selected"' : ''}>${escape(table.rows[selected.row_index][index])}</dd></div>`).join('')}</dl>
@@ -916,6 +944,8 @@ root.addEventListener('click', async (event) => {
             cutoff_inclusive: row.cutoff?.inclusive ?? null,
             cutoff_precision: row.cutoff?.precision ?? null,
             source_statement: row.statement,
+            document_order: row.document_order?.status ?? null,
+            suggested_date: row.document_order?.suggested ?? null,
             review_flags: row.review_reasons.join(' | '),
             table: row.table_index + 1,
             row: row.row_index + 1,

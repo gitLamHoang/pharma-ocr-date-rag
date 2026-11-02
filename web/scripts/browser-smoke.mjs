@@ -333,6 +333,14 @@ try {
   const cutoffCsvText = await readFile(await cutoffCsvFile.path(), 'utf8');
   assert.match(cutoffCsvText, /"cutoff_upper","cutoff_inclusive","cutoff_precision"/);
   assert.match(cutoffCsvText, /"2029-05","true","month"/);
+  await page.selectOption('#recall-kind', 'ambiguous_date');
+  await page.locator('.public-register .badge.convention').first().waitFor();
+  assert.match(
+    await page.locator('.convention-suggestion').innerText(),
+    /Suggested reading \d{4}-\d{2}-\d{2}/,
+  );
+  assert.match(await page.locator('.convention-limit').innerText(), /not a confirmed date/);
+  assert.ok(await page.locator('.convention-sources li').count());
   await page.selectOption('#recall-kind', 'non_date');
   assert.equal(await page.locator('.public-register tbody tr').count(), 25);
   assert.match(await page.locator('.public-pagination').innerText(), /Page 1 \/ 2/);
