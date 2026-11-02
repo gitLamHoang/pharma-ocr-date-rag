@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Source: MHRA / GOV.UK.",
   "licence": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
   "snapshotRetrievedAt": "2026-09-26T21:12:36.785174+00:00",
@@ -5208,7 +5208,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-01-12",
+        "evidence_ids": [
+          "5945f7e8-86f9-4428-9126-dcc9f5192a84:0:0:1",
+          "5945f7e8-86f9-4428-9126-dcc9f5192a84:0:0:3",
+          "5945f7e8-86f9-4428-9126-dcc9f5192a84:0:1:1"
+        ],
+        "dmy_count": 8,
+        "mdy_count": 0
+      }
     },
     {
       "id": "5945f7e8-86f9-4428-9126-dcc9f5192a84:0:3:1",
@@ -6473,7 +6485,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-04-07",
+        "evidence_ids": [
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:1",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:3",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:1:1"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "97e45583-5a82-499d-bd02-51f114899ca2:1:7:1",
@@ -6584,7 +6608,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-03-12",
+        "evidence_ids": [
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:1",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:3",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:1:1"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "97e45583-5a82-499d-bd02-51f114899ca2:2:1:1",
@@ -6857,7 +6893,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-05-06",
+        "evidence_ids": [
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:1",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:3",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:1:1"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "97e45583-5a82-499d-bd02-51f114899ca2:2:6:1",
@@ -6968,7 +7016,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-09",
+        "evidence_ids": [
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:1",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:3",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:1:1"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "97e45583-5a82-499d-bd02-51f114899ca2:3:1:1",
@@ -7133,7 +7193,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-06-08",
+        "evidence_ids": [
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:1",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:3",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:1:1"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "97e45583-5a82-499d-bd02-51f114899ca2:3:4:1",
@@ -7190,7 +7262,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-07-03",
+        "evidence_ids": [
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:1",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:0:3",
+          "97e45583-5a82-499d-bd02-51f114899ca2:0:1:1"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "97e45583-5a82-499d-bd02-51f114899ca2:3:5:1",
@@ -7552,7 +7636,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-10-01",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:0:3",
@@ -7582,7 +7676,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-11-12",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:1:1",
@@ -7612,7 +7716,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-10-01",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:1:3",
@@ -7642,7 +7756,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-11-12",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:2:1",
@@ -7672,7 +7796,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-12-01",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:2:3",
@@ -7702,7 +7836,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-01-02",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:3:1",
@@ -7732,7 +7876,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-12-01",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:3:3",
@@ -7762,7 +7916,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-01-02",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:1",
@@ -7792,7 +7956,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-12-01",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3",
@@ -7849,7 +8023,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2027-03-01",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:5:3",
@@ -7879,7 +8063,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-04-08",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:6:1",
@@ -7909,7 +8103,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2027-04-01",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:6:3",
@@ -7939,7 +8143,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-05-12",
+        "evidence_ids": [
+          "22035cc6-01f6-4c3b-b44d-3e6d4e055fe9:0:4:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4a2512df-a988-4465-8470-ecce47f171bb:0:0:1",
@@ -8214,7 +8428,15 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "no_evidence",
+        "order": null,
+        "suggested": null,
+        "evidence_ids": [],
+        "dmy_count": 0,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3124293c-69c6-43b9-8e33-812460b16c07:0:0:1",
@@ -8379,7 +8601,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-06-01",
+        "evidence_ids": [
+          "3124293c-69c6-43b9-8e33-812460b16c07:0:0:1",
+          "3124293c-69c6-43b9-8e33-812460b16c07:0:0:3",
+          "3124293c-69c6-43b9-8e33-812460b16c07:0:1:1"
+        ],
+        "dmy_count": 5,
+        "mdy_count": 0
+      }
     },
     {
       "id": "11a8abde-4a3b-4e4a-a1ca-c3484d4c9332:0:0:1",
@@ -8442,7 +8676,15 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "no_evidence",
+        "order": null,
+        "suggested": null,
+        "evidence_ids": [],
+        "dmy_count": 0,
+        "mdy_count": 0
+      }
     },
     {
       "id": "11a8abde-4a3b-4e4a-a1ca-c3484d4c9332:0:1:1",
@@ -8505,7 +8747,15 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "no_evidence",
+        "order": null,
+        "suggested": null,
+        "evidence_ids": [],
+        "dmy_count": 0,
+        "mdy_count": 0
+      }
     },
     {
       "id": "38ac9607-61ea-486b-bc76-5be8618eba6f:0:0:1",
@@ -8620,7 +8870,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-04",
+        "evidence_ids": [
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:2:3",
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:3:3",
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:5:3"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "9b54c70d-eda8-4e33-9acc-751e972a3186:1:1:1",
@@ -8679,7 +8941,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-07-01",
+        "evidence_ids": [
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:2:3",
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:3:3",
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:5:3"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "9b54c70d-eda8-4e33-9acc-751e972a3186:1:2:1",
@@ -8850,7 +9124,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-05-07",
+        "evidence_ids": [
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:2:3",
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:3:3",
+          "9b54c70d-eda8-4e33-9acc-751e972a3186:1:5:3"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "9b54c70d-eda8-4e33-9acc-751e972a3186:1:5:1",
@@ -9181,7 +9467,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-03",
+        "evidence_ids": [
+          "55a2aabf-147c-4cd6-bfd5-32b708e2c9f6:0:0:1",
+          "55a2aabf-147c-4cd6-bfd5-32b708e2c9f6:0:0:3",
+          "55a2aabf-147c-4cd6-bfd5-32b708e2c9f6:0:1:1"
+        ],
+        "dmy_count": 5,
+        "mdy_count": 0
+      }
     },
     {
       "id": "55a2aabf-147c-4cd6-bfd5-32b708e2c9f6:0:2:1",
@@ -9406,7 +9704,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-04",
+        "evidence_ids": [
+          "b75ab20b-40ac-4704-ba57-460881940f56:0:0:3",
+          "b75ab20b-40ac-4704-ba57-460881940f56:0:1:3",
+          "b75ab20b-40ac-4704-ba57-460881940f56:0:4:3"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "b75ab20b-40ac-4704-ba57-460881940f56:0:3:1",
@@ -9465,7 +9775,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-03-11",
+        "evidence_ids": [
+          "b75ab20b-40ac-4704-ba57-460881940f56:0:0:3",
+          "b75ab20b-40ac-4704-ba57-460881940f56:0:1:3",
+          "b75ab20b-40ac-4704-ba57-460881940f56:0:4:3"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "b75ab20b-40ac-4704-ba57-460881940f56:0:4:1",
@@ -10718,7 +11040,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-01-05",
+        "evidence_ids": [
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:0:1",
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:0:3",
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:1:1"
+        ],
+        "dmy_count": 9,
+        "mdy_count": 0
+      }
     },
     {
       "id": "de6333a0-3d26-46c8-8e4c-86830f955529:0:4:1",
@@ -10775,7 +11109,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-06",
+        "evidence_ids": [
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:0:1",
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:0:3",
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:1:1"
+        ],
+        "dmy_count": 9,
+        "mdy_count": 0
+      }
     },
     {
       "id": "de6333a0-3d26-46c8-8e4c-86830f955529:0:5:1",
@@ -10832,7 +11178,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-12",
+        "evidence_ids": [
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:0:1",
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:0:3",
+          "de6333a0-3d26-46c8-8e4c-86830f955529:0:1:1"
+        ],
+        "dmy_count": 9,
+        "mdy_count": 0
+      }
     },
     {
       "id": "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:0:1",
@@ -10889,7 +11247,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-10",
+        "evidence_ids": [
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:0:1",
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:1:1",
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:2:1"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:1:1",
@@ -10946,7 +11316,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-10",
+        "evidence_ids": [
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:0:1",
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:1:1",
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:2:1"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:2:1",
@@ -11003,7 +11385,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-03-10",
+        "evidence_ids": [
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:0:1",
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:1:1",
+          "e6733390-7f46-4ea7-adc8-e6f6261a43d3:0:2:1"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "20958540-a28b-4373-9c64-976f5112a3bb:0:0:1",
@@ -11654,7 +12048,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-08-12",
+        "evidence_ids": [
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:0:1",
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:1:1",
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:2:1"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:1:1",
@@ -11711,7 +12117,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-12-03",
+        "evidence_ids": [
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:0:1",
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:1:1",
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:2:1"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:2:1",
@@ -11768,7 +12186,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-04",
+        "evidence_ids": [
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:0:1",
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:1:1",
+          "8cac8be7-41bf-43dd-bda8-eaf9a4833d04:0:2:1"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:0:1",
@@ -11827,7 +12257,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-05-01",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:1:1",
@@ -11998,7 +12440,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-08-01",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:4:1",
@@ -12113,7 +12567,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-11-04",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:6:1",
@@ -12340,7 +12806,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-03-06",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:10:1",
@@ -12511,7 +12989,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-07-11",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:13:1",
@@ -12738,7 +13228,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-10-03",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:17:1",
@@ -12797,7 +13299,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-12-02",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:0:18:1",
@@ -12856,7 +13370,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-01-09",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:0:1",
@@ -12915,7 +13441,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-02-09",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:1:1",
@@ -13030,7 +13568,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-11-09",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:3:1",
@@ -13145,7 +13695,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-06-04",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:5:1",
@@ -13316,7 +13878,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-12-11",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:8:1",
@@ -13431,7 +14005,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-07-03",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:10:1",
@@ -13602,7 +14188,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-01-12",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:13:1",
@@ -13717,7 +14315,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2022-11-01",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:15:1",
@@ -13776,7 +14386,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-03-09",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:16:1",
@@ -13891,7 +14513,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-03-12",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:18:1",
@@ -13950,7 +14584,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-03-02",
+        "evidence_ids": [
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:1:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:2:3",
+          "020a35e6-2d26-4991-b443-8dd20fece155:0:4:3"
+        ],
+        "dmy_count": 33,
+        "mdy_count": 0
+      }
     },
     {
       "id": "020a35e6-2d26-4991-b443-8dd20fece155:1:19:1",
@@ -15659,7 +16305,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-11-05",
+        "evidence_ids": [
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:3:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:4:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:5:3"
+        ],
+        "dmy_count": 4,
+        "mdy_count": 0
+      }
     },
     {
       "id": "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:1:1",
@@ -15718,7 +16376,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-11-12",
+        "evidence_ids": [
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:3:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:4:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:5:3"
+        ],
+        "dmy_count": 4,
+        "mdy_count": 0
+      }
     },
     {
       "id": "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:2:1",
@@ -15777,7 +16447,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-04",
+        "evidence_ids": [
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:3:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:4:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:5:3"
+        ],
+        "dmy_count": 4,
+        "mdy_count": 0
+      }
     },
     {
       "id": "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:3:1",
@@ -16004,7 +16686,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-09-02",
+        "evidence_ids": [
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:3:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:4:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:5:3"
+        ],
+        "dmy_count": 4,
+        "mdy_count": 0
+      }
     },
     {
       "id": "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:7:1",
@@ -16063,7 +16757,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-11-05",
+        "evidence_ids": [
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:3:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:4:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:5:3"
+        ],
+        "dmy_count": 4,
+        "mdy_count": 0
+      }
     },
     {
       "id": "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:8:1",
@@ -16178,7 +16884,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2026-02-05",
+        "evidence_ids": [
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:3:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:4:3",
+          "f8e15dfb-2e1e-4cb9-8aed-44a74c772af7:0:5:3"
+        ],
+        "dmy_count": 4,
+        "mdy_count": 0
+      }
     },
     {
       "id": "d02f3375-57b6-4329-b242-9a50b99ccd5d:0:0:1",
@@ -16343,7 +17061,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-08-04",
+        "evidence_ids": [
+          "a1378236-73f8-435f-b067-d6e0d58176c0:0:0:1",
+          "a1378236-73f8-435f-b067-d6e0d58176c0:0:0:3",
+          "a1378236-73f8-435f-b067-d6e0d58176c0:0:1:1"
+        ],
+        "dmy_count": 7,
+        "mdy_count": 0
+      }
     },
     {
       "id": "a1378236-73f8-435f-b067-d6e0d58176c0:0:2:1",
@@ -16670,7 +17400,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-03-10",
+        "evidence_ids": [
+          "021b919e-dced-40e2-a76b-b06de5fa2890:0:0:1"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "b0db8ec4-6ff0-49c8-a2f6-3e4e620219e3:0:0:1",
@@ -16727,7 +17467,15 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "no_evidence",
+        "order": null,
+        "suggested": null,
+        "evidence_ids": [],
+        "dmy_count": 0,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
@@ -16946,7 +17694,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-04",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:0:4:1",
@@ -17057,7 +17817,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-11-01",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:1:1:1",
@@ -17168,7 +17940,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-01-11",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:1:3:1",
@@ -17225,7 +18009,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-12-05",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:1:4:1",
@@ -17498,7 +18294,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-08-01",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:1:9:1",
@@ -17609,7 +18417,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-09-11",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:1:11:1",
@@ -17720,7 +18540,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-11-08",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:2:1:1",
@@ -17777,7 +18609,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-12-08",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:2:2:1",
@@ -17996,7 +18840,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-12-06",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:2:6:1",
@@ -18539,7 +19395,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-12-01",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:3:1",
@@ -18596,7 +19464,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-12-05",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:4:1",
@@ -18653,7 +19533,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-12-09",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:5:1",
@@ -18710,7 +19602,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-04",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:6:1",
@@ -18767,7 +19671,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-04-11",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:7:1",
@@ -18824,7 +19740,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-06-04",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:8:1",
@@ -19043,7 +19971,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-08-05",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:12:1",
@@ -19154,7 +20094,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-11-06",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "274a669f-08e6-4a6b-84ae-98e97969b82a:3:14:1",
@@ -19211,7 +20163,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-12-09",
+        "evidence_ids": [
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:1",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:0:3",
+          "274a669f-08e6-4a6b-84ae-98e97969b82a:0:1:1"
+        ],
+        "dmy_count": 68,
+        "mdy_count": 0
+      }
     },
     {
       "id": "e45548c7-3fa0-49b1-855d-4afa8e7a0361:0:0:1",
@@ -19268,7 +20232,18 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-03-06",
+        "evidence_ids": [
+          "e45548c7-3fa0-49b1-855d-4afa8e7a0361:0:0:1",
+          "e45548c7-3fa0-49b1-855d-4afa8e7a0361:0:1:1"
+        ],
+        "dmy_count": 2,
+        "mdy_count": 0
+      }
     },
     {
       "id": "e45548c7-3fa0-49b1-855d-4afa8e7a0361:0:1:1",
@@ -19325,7 +20300,18 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-05-06",
+        "evidence_ids": [
+          "e45548c7-3fa0-49b1-855d-4afa8e7a0361:0:0:1",
+          "e45548c7-3fa0-49b1-855d-4afa8e7a0361:0:1:1"
+        ],
+        "dmy_count": 2,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
@@ -19382,7 +20368,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-11-07",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
@@ -19439,7 +20437,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-12-11",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1",
@@ -19496,7 +20506,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-01-08",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:3:1",
@@ -19553,7 +20575,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-02-09",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:4:1",
@@ -19610,7 +20644,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-05-10",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:5:1",
@@ -19667,7 +20713,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-08-12",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:6:1",
@@ -19832,7 +20890,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-10-03",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:9:1",
@@ -19997,7 +21067,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-12-03",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:12:1",
@@ -20108,7 +21190,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-01-07",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:14:1",
@@ -20219,7 +21313,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-03",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:16:1",
@@ -20276,7 +21382,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-12",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:17:1",
@@ -20333,7 +21451,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-03-04",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:18:1",
@@ -20768,7 +21898,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-07-08",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:26:1",
@@ -20825,7 +21967,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-08-04",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:27:1",
@@ -21044,7 +22198,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-10-09",
+        "evidence_ids": [
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:0:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:1:1",
+          "4850b806-6676-41a1-87fe-2dc1e56c0017:0:2:1"
+        ],
+        "dmy_count": 50,
+        "mdy_count": 0
+      }
     },
     {
       "id": "4850b806-6676-41a1-87fe-2dc1e56c0017:0:31:1",
@@ -21209,7 +22375,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-03-10",
+        "evidence_ids": [
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:0:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:3"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:1",
@@ -21860,7 +23038,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-08-10",
+        "evidence_ids": [
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:0:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:3"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "fcb32917-533d-484a-a1d3-f6116901ae5e:2:0:1",
@@ -22133,7 +23323,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-07-10",
+        "evidence_ids": [
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:0:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:3"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "fcb32917-533d-484a-a1d3-f6116901ae5e:2:5:1",
@@ -22190,7 +23392,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2023-08-10",
+        "evidence_ids": [
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:0:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:1",
+          "fcb32917-533d-484a-a1d3-f6116901ae5e:0:1:3"
+        ],
+        "dmy_count": 34,
+        "mdy_count": 0
+      }
     },
     {
       "id": "fdd33bd7-e065-4f0b-8e0e-d63f1f189b43:0:0:1",
@@ -22409,7 +23623,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-11",
+        "evidence_ids": [
+          "ba57afbb-67af-4047-b0d0-8dbcb5a85799:0:0:1",
+          "ba57afbb-67af-4047-b0d0-8dbcb5a85799:0:1:1",
+          "ba57afbb-67af-4047-b0d0-8dbcb5a85799:0:1:3"
+        ],
+        "dmy_count": 3,
+        "mdy_count": 0
+      }
     },
     {
       "id": "ba57afbb-67af-4047-b0d0-8dbcb5a85799:0:1:1",
@@ -22520,7 +23746,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-05-08",
+        "evidence_ids": [
+          "91f568c1-b994-4fff-9e21-3ddf4f358dff:0:0:1"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "da5f802d-5a7d-47fc-bdbc-19ef85e364c3:0:0:1",
@@ -22849,7 +24085,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-07-04",
+        "evidence_ids": [
+          "068a4f88-9e27-4228-94da-eb6b8f6fb580:0:0:1"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "15254999-514a-446e-af7d-5a4c784f934f:0:0:1",
@@ -22906,7 +24152,18 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-07-04",
+        "evidence_ids": [
+          "15254999-514a-446e-af7d-5a4c784f934f:0:2:3",
+          "15254999-514a-446e-af7d-5a4c784f934f:1:2:3"
+        ],
+        "dmy_count": 2,
+        "mdy_count": 0
+      }
     },
     {
       "id": "15254999-514a-446e-af7d-5a4c784f934f:0:1:1",
@@ -22963,7 +24220,18 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-07-04",
+        "evidence_ids": [
+          "15254999-514a-446e-af7d-5a4c784f934f:0:2:3",
+          "15254999-514a-446e-af7d-5a4c784f934f:1:2:3"
+        ],
+        "dmy_count": 2,
+        "mdy_count": 0
+      }
     },
     {
       "id": "15254999-514a-446e-af7d-5a4c784f934f:0:2:1",
@@ -23263,7 +24531,15 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "no_evidence",
+        "order": null,
+        "suggested": null,
+        "evidence_ids": [],
+        "dmy_count": 0,
+        "mdy_count": 0
+      }
     },
     {
       "id": "0d38a581-75b0-4e31-bb45-f1760c244246:0:0:3",
@@ -23725,7 +25001,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-02-11",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:8:1",
@@ -23998,7 +25286,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-03-11",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:13:1",
@@ -24109,7 +25409,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-04-02",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:15:1",
@@ -24166,7 +25478,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-04-02",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:16:1",
@@ -24223,7 +25547,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-04-02",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:17:1",
@@ -24280,7 +25616,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-04-02",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:18:1",
@@ -24337,7 +25685,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-04-02",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:19:1",
@@ -24394,7 +25754,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-04-08",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:20:1",
@@ -24667,7 +26039,19 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-06-11",
+        "evidence_ids": [
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:1",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:0:3",
+          "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:1:1"
+        ],
+        "dmy_count": 43,
+        "mdy_count": 0
+      }
     },
     {
       "id": "3b3f1d33-2044-4f2c-b797-eabc849a1352:0:25:1",
@@ -25212,7 +26596,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-10-02",
+        "evidence_ids": [
+          "f914b3e1-3c8c-4fb4-979e-4bcb80c6a02a:0:1:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "f914b3e1-3c8c-4fb4-979e-4bcb80c6a02a:0:1:1",
@@ -25327,7 +26721,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2024-10-02",
+        "evidence_ids": [
+          "f914b3e1-3c8c-4fb4-979e-4bcb80c6a02a:0:1:3"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "fb0cc4cb-b751-41be-a530-700574cb55d3:0:0:1",
@@ -25384,7 +26788,17 @@
       "value_kind": "ambiguous_date",
       "cutoff": null,
       "statement": null,
-      "status": "needs_review"
+      "status": "needs_review",
+      "document_order": {
+        "status": "unanimous",
+        "order": "dmy",
+        "suggested": "2025-03-10",
+        "evidence_ids": [
+          "fb0cc4cb-b751-41be-a530-700574cb55d3:0:0:1"
+        ],
+        "dmy_count": 1,
+        "mdy_count": 0
+      }
     },
     {
       "id": "6bceb67e-818c-4f1e-8930-e066be9fbfed:0:0:1",
@@ -25757,10 +27171,11 @@
     "data/public_mhra/documents.json": "54282b79c3a90fe852113612fd1ab32f6a6a015c7c94981d70fba99cce8c8899",
     "data/public_mhra/header_labels.json": "6a82be44b62250a3884b104e5fca25a7e55cb840915c9231c6380c1ea8c394f1",
     "data/public_mhra/protocol.json": "82234e6362996a343e8d94cf681e44e7a5d302d91b82dd19421a2a8ba6cb3950",
-    "scripts/train_mhra.py": "9f0915e76064be5ff170275282d35d86c925f41dcd26e9f19e7f9ddbe193bee6",
+    "scripts/train_mhra.py": "e39433e9c345476f1fac6b965851817e2be6b0e232ca6137674fca4176fa6f78",
     "src/pharma_ocr_date_rag/public_data.py": "6964040b24ee6e3ab6c42852229c39ec0f071782931eca9f4677f25db21fc4a7",
     "src/pharma_ocr_date_rag/recalls.py": "2a7c2cf69d9a951a353a6b0c5311d1aa808bd44106be2fb18af7dc34122959c4",
     "src/pharma_ocr_date_rag/dates.py": "b52962874f966f7012b6605967003e2029df4c092f58b38f8eb42495351aaf47",
-    "src/pharma_ocr_date_rag/languages.py": "6dc0105a524dd5de57a06092a48eb61fc5aa3a9d5b12e06afa2eb29ae5c082ec"
+    "src/pharma_ocr_date_rag/languages.py": "6dc0105a524dd5de57a06092a48eb61fc5aa3a9d5b12e06afa2eb29ae5c082ec",
+    "src/pharma_ocr_date_rag/conventions.py": "e575b967ead404779d0ad549b8822d5a405cf6f9acc0b1ab9597bf3458932bc2"
   }
 }

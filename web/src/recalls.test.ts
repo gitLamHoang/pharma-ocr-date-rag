@@ -85,3 +85,42 @@ test('a source statement cannot be relabeled as a date or a different statement'
     assert.throws(() => parseRecalls(data), kind);
   }
 });
+
+test('same-notice order suggestions cite revealing cells and never resolve the date', () => {
+  const data = parseRecalls(load());
+  const ambiguous = filterRecalls(data, '', '', '', true, 'ambiguous_date');
+  assert.equal(ambiguous.length, 123);
+  const suggested = ambiguous.filter((row) => row.document_order?.suggested);
+  assert.equal(suggested.length, 118);
+  assert.ok(suggested.every((row) => row.normalized === null));
+  assert.equal(cellInterpretation(suggested[0]), 'Ambiguous date');
+  assert.equal(ambiguous.filter((row) => row.document_order?.status === 'no_evidence').length, 5);
+});
+test('forged or contradictory order evidence fails closed', () => {
+  const pick = (data: ReturnType<typeof load>) =>
+    data.records.find(
+      (row: { document_order?: { suggested: string | null } }) => row.document_order?.suggested,
+    );
+  for (const kind of ['suggested', 'evidence', 'foreign', 'conflict', 'resolved', 'date']) {
+    const data = load();
+    const row = pick(data);
+    if (kind === 'suggested') row.document_order.suggested = '1999-01-01';
+    if (kind === 'evidence') row.document_order.evidence_ids = [row.id];
+    if (kind === 'foreign') {
+      const other = data.records.find(
+        (item: { document_id: string; value_kind: string; raw_text: string }) =>
+          item.document_id !== row.document_id &&
+          item.value_kind === 'date' &&
+          /^3\d\//.test(item.raw_text),
+      );
+      row.document_order.evidence_ids = [other.id];
+    }
+    if (kind === 'conflict') row.document_order.mdy_count = 1;
+    if (kind === 'resolved') row.normalized = row.document_order.suggested;
+    if (kind === 'date') {
+      const date = data.records.find((item: { value_kind: string }) => item.value_kind === 'date');
+      date.document_order = row.document_order;
+    }
+    assert.throws(() => parseRecalls(data), kind);
+  }
+});

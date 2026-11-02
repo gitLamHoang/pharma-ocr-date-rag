@@ -18,6 +18,14 @@ export interface RecallDocument {
   source: { sha256: string };
   tables: Array<{ table_index: number; heading: string; headers: string[]; rows: string[][] }>;
 }
+export interface DocumentOrder {
+  status: 'unanimous' | 'conflict' | 'no_evidence';
+  order: 'dmy' | 'mdy' | null;
+  suggested: string | null;
+  evidence_ids: string[];
+  dmy_count: number;
+  mdy_count: number;
+}
 export interface RecallRecord {
   id: string;
   document_id: string;
@@ -42,6 +50,7 @@ export interface RecallRecord {
   review_reasons: string[];
   model_score: number;
   status: 'needs_review';
+  document_order?: DocumentOrder;
 }
 export interface RecallData {
   schemaVersion: number;
@@ -65,7 +74,7 @@ export function parseRecalls(value: unknown): RecallData {
   const data = value as RecallData;
   if (
     !data ||
-    data.schemaVersion !== 2 ||
+    data.schemaVersion !== 3 ||
     !Array.isArray(data.documents) ||
     !Array.isArray(data.records)
   ) {
@@ -111,7 +120,51 @@ export function parseRecalls(value: unknown): RecallData {
     }
     ids.add(row.id);
   }
+  const byId = new Map(data.records.map((row) => [row.id, row]));
+  for (const row of data.records) {
+    if (!validOrder(row, byId)) throw new Error('Date order evidence does not match its notice.');
+  }
   return data;
+}
+const revealsOrder = (raw: string, order: 'dmy' | 'mdy'): boolean => {
+  const match = /^\s*(\d{1,2})[-/.](\d{1,2})[-/.]([12]\d{3})\s*$/.exec(raw);
+  if (!match) return false;
+  const [first, second] = [Number(match[1]), Number(match[2])];
+  return order === 'dmy' ? first > 12 && second <= 12 : second > 12 && first <= 12;
+};
+function validOrder(row: RecallRecord, byId: Map<string, RecallRecord>): boolean {
+  const order = row.document_order;
+  if (order === undefined) return row.value_kind !== 'ambiguous_date';
+  if (row.value_kind !== 'ambiguous_date' || row.normalized !== null) return false;
+  if (!Number.isInteger(order.dmy_count) || !Number.isInteger(order.mdy_count)) return false;
+  if (!Array.isArray(order.evidence_ids) || order.evidence_ids.length > 3) return false;
+  if (order.status === 'unanimous') {
+    const count = order.order === 'dmy' ? order.dmy_count : order.mdy_count;
+    const other = order.order === 'dmy' ? order.mdy_count : order.dmy_count;
+    return (
+      (order.order === 'dmy' || order.order === 'mdy') &&
+      count > 0 &&
+      other === 0 &&
+      order.evidence_ids.length === Math.min(3, count) &&
+      (order.suggested === null || row.candidates.includes(order.suggested)) &&
+      order.evidence_ids.every((id) => {
+        const source = byId.get(id);
+        return (
+          source?.document_id === row.document_id &&
+          source.value_kind === 'date' &&
+          revealsOrder(source.raw_text, order.order as 'dmy' | 'mdy')
+        );
+      })
+    );
+  }
+  return (
+    order.order === null &&
+    order.suggested === null &&
+    order.evidence_ids.length === 0 &&
+    (order.status === 'conflict'
+      ? order.dmy_count > 0 && order.mdy_count > 0
+      : order.status === 'no_evidence' && order.dmy_count === 0 && order.mdy_count === 0)
+  );
 }
 function validValue(row: RecallRecord): boolean {
   if (row.value_kind === 'cutoff') {

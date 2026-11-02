@@ -320,7 +320,7 @@ try {
   await page.locator('[data-action=export-public-json]').click();
   const cutoffFile = await cutoffDownload;
   const cutoffExport = JSON.parse(await readFile(await cutoffFile.path(), 'utf8'));
-  assert.equal(cutoffExport.schemaVersion, 2);
+  assert.equal(cutoffExport.schemaVersion, 3);
   assert.equal(cutoffExport.records.length, 3);
   assert.ok(
     cutoffExport.records.every(
