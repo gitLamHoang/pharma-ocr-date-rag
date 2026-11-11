@@ -250,6 +250,27 @@ describe("Review screen", () => {
     expect(document.activeElement).toBe(canvas);
   });
 
+  it("gives focus back to the date's row when the review dialog closes", async () => {
+    renderAt();
+    await loaded();
+    rowButton(1).focus();
+    fireEvent.click(rowButton(1));
+    key("e");
+    let dialog = await screen.findByRole("dialog");
+    fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(document.activeElement).toBe(rowButton(1));
+
+    // Opened from the shortcut with focus elsewhere: focus still lands on the row it was about.
+    (document.activeElement as HTMLElement).blur();
+    key("a");
+    dialog = await screen.findByRole("dialog");
+    fireEvent.change(within(dialog).getByLabelText("Reason"), { target: { value: "Matches the page" } });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Accept date" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(document.activeElement).toBe(rowButton(1));
+  });
+
   it("shows a frozen older run read-only", async () => {
     renderAt("/documents/1?run=3");
     await screen.findByRole("heading", { level: 1, name: "coa-lot-4471.pdf" });

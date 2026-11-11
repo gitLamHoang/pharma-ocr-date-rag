@@ -43,6 +43,19 @@ describe("ReprocessButton", () => {
     expect(onStarted).not.toHaveBeenCalled();
   });
 
+  it("gives focus back to the Reprocess button when the dialog closes", () => {
+    renderButton();
+    const button = screen.getByRole("button", { name: "Reprocess" });
+    button.focus();
+    fireEvent.click(button);
+    const cancel = within(screen.getByRole("dialog")).getByRole("button", { name: "Cancel" });
+    cancel.focus(); // a browser moves focus into the modal
+
+    fireEvent.click(cancel);
+
+    expect(document.activeElement).toBe(button);
+  });
+
   it("keeps the dialog open with the server's message when the run cannot start", async () => {
     vi.spyOn(api, "reprocess").mockRejectedValue(new ApiError(404, "Document 1 not found."));
     const { onStarted } = renderButton();

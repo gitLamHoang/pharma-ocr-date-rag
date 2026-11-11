@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import type { DateRecord, ReviewBody, Taxonomy } from "../api";
 import { isAmbiguous, isDateValue, type Labels } from "../dateDisplay";
 import { DateValue, type Decision } from "./DateRow";
+import { useModal } from "./useModal";
 
 /** The reviewer's name is remembered per browser under this key. */
 export const REVIEWER_KEY = "pharma-dates:reviewer";
@@ -51,6 +52,8 @@ export function ReviewDialog({ date, action, taxonomy, labels, onSubmit, onClose
   const dialog = useRef<HTMLDialogElement>(null);
   const reviewerInput = useRef<HTMLInputElement>(null);
   const reasonInput = useRef<HTMLInputElement>(null);
+  const valueInput = useRef<HTMLInputElement>(null);
+  const submitButton = useRef<HTMLButtonElement>(null);
   const [reviewer, setReviewer] = useState(savedReviewer);
   const [reason, setReason] = useState("");
   const [type, setType] = useState(date.current_type);
@@ -63,11 +66,10 @@ export function ReviewDialog({ date, action, taxonomy, labels, onSubmit, onClose
   const readings = date.candidates.length > 1;
   const copy = COPY[action];
 
+  // Closing gives focus back to the date's row, wherever the dialog was opened from.
+  useModal(dialog, () => document.querySelector<HTMLElement>(`[data-date-id="${date.id}"] .date-row__select`));
   useEffect(() => {
-    const element = dialog.current!;
-    element.showModal();
     (reviewerInput.current!.value ? reasonInput.current! : reviewerInput.current!).focus();
-    return () => element.close();
   }, []);
 
   function validate(): { errors: Errors; body: ReviewBody } {
@@ -97,7 +99,12 @@ export function ReviewDialog({ date, action, taxonomy, labels, onSubmit, onClose
     const { errors: found, body } = validate();
     setErrors(found);
     setFailure(null);
-    if (Object.keys(found).length > 0) return;
+    if (Object.keys(found).length > 0) {
+      // Say what is wrong where it is: the first invalid field, or the button the form error describes.
+      const first = found.value ? valueInput : found.reviewer ? reviewerInput : found.reason ? reasonInput : submitButton;
+      first.current?.focus();
+      return;
+    }
     saveReviewer(body.reviewer);
     setSaving(true);
     try {
@@ -181,6 +188,7 @@ export function ReviewDialog({ date, action, taxonomy, labels, onSubmit, onClose
                   Value
                 </label>
                 <input
+                  ref={valueInput}
                   id={field("value")}
                   className="input mono"
                   value={value}
@@ -251,7 +259,11 @@ export function ReviewDialog({ date, action, taxonomy, labels, onSubmit, onClose
           ) : null}
         </div>
 
-        {errors.form ? <p className="field__error">{errors.form}</p> : null}
+        {errors.form ? (
+          <p className="field__error" id={field("form-error")} role="alert">
+            {errors.form}
+          </p>
+        ) : null}
         {failure ? (
           <p className="review-dialog__failure" role="alert">
             {failure}
@@ -262,7 +274,13 @@ export function ReviewDialog({ date, action, taxonomy, labels, onSubmit, onClose
           <button type="button" className="button" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className="button button--primary" disabled={saving}>
+          <button
+            ref={submitButton}
+            type="submit"
+            className="button button--primary"
+            disabled={saving}
+            aria-describedby={errors.form ? field("form-error") : undefined}
+          >
             {saving ? "Saving" : copy.submit}
           </button>
         </footer>

@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { api } from "../api";
+import { useModal } from "./useModal";
 
 interface Props {
   documentId: number;
@@ -63,11 +64,8 @@ function ConfirmDialog({ documentId, latestRunId, pages, onStarted, onClose }: D
   const [starting, setStarting] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
 
-  useEffect(() => {
-    const element = dialog.current!;
-    element.showModal();
-    return () => element.close();
-  }, []);
+  // Once a run starts the Reprocess button is disabled: focus then goes to the screen's content.
+  useModal(dialog, () => document.getElementById("main"));
 
   async function start() {
     setStarting(true);

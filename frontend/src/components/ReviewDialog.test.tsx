@@ -181,4 +181,28 @@ describe("ReviewDialog", () => {
 
     expect(onClose).toHaveBeenCalled();
   });
+
+  it("moves focus to the first invalid field on a failed submit", async () => {
+    renderDialog(dateRecord(), "correct");
+    type("Reason", "typo");
+    fireEvent.change(screen.getByLabelText("Value"), { target: { value: "31/03/2027" } });
+
+    fireEvent.click(screen.getByRole("button", { name: "Save correction" }));
+
+    await waitFor(() => expect(screen.getByLabelText("Value")).toHaveFocus());
+  });
+
+  it("announces the form error and links it to the submit button", async () => {
+    localStorage.setItem(REVIEWER_KEY, "A. Reviewer");
+    renderDialog(dateRecord(), "correct");
+    type("Reason", "nothing changed");
+
+    fireEvent.click(screen.getByRole("button", { name: "Save correction" }));
+
+    const error = await screen.findByRole("alert");
+    expect(error).toHaveTextContent("Change the type or the value, or cancel.");
+    const submit = screen.getByRole("button", { name: "Save correction" });
+    expect(submit).toHaveAccessibleDescription("Change the type or the value, or cancel.");
+    expect(submit).toHaveFocus();
+  });
 });
