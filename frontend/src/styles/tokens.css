@@ -1,0 +1,151 @@
+/*
+ * Design tokens. See frontend/DESIGN.md for the direction behind them.
+ *
+ * Themes: every semantic token is `light-dark(light, dark)`. The OS preference picks the theme
+ * (`color-scheme: light dark`); `<html data-theme="light|dark">` forces one (the manual toggle).
+ * Components reference semantic tokens only, never the scales.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Midnight Navy: the main colour (60%). 900 is the brand value. */
+  --navy-50: #f1f4fb;
+  --navy-100: #e5eaf6;
+  --navy-200: #d0d7eb;
+  --navy-300: #aeb7d2;
+  --navy-400: #8791b0;
+  --navy-500: #636e8e;
+  --navy-600: #4a5575;
+  --navy-700: #353f62;
+  --navy-800: #262f55;
+  --navy-900: #1b2447;
+  --navy-950: #11172f;
+
+  /* Powder Blue: surfaces, panels, the frame tint (30%). 200 is the brand value. */
+  --powder-50: #f5f7fc;
+  --powder-100: #ebeff9;
+  --powder-200: #c5d0ee;
+  --powder-300: #a9b7df;
+  --powder-400: #8c9dce;
+  --powder-500: #6f81b7;
+  --powder-600: #56679c;
+  --powder-700: #43517d;
+  --powder-800: #323d5e;
+  --powder-900: #222a42;
+
+  /* Sunflower: accent only (10%): the primary action, the selected date, focus, "needs review". 400 is the brand value. */
+  --sun-50: #fff9e6;
+  --sun-100: #fff0c2;
+  --sun-200: #ffe38a;
+  --sun-300: #ffd35c;
+  --sun-400: #ffc93c;
+  --sun-500: #f0b01a;
+  --sun-600: #c98e00;
+  --sun-700: #9a6b00;
+  --sun-800: #6e4c00;
+  --sun-900: #4a3300;
+
+  /* Grounds. --bg is the frame (sidebar + top bar), --surface the sheet the work sits on. */
+  --bg: light-dark(var(--powder-100), var(--navy-950));
+  --surface: light-dark(#ffffff, var(--navy-900));
+  --surface-2: light-dark(var(--powder-50), var(--navy-800));
+  --active: light-dark(#dfe5f4, #2f3962);
+  --border: light-dark(#dde3f1, #2e3860);
+  --rule: light-dark(#e9edf6, #263052);
+  --control: light-dark(var(--navy-400), #6f7ba3);
+
+  /* Ink. Body text is always navy (light) or near-white (dark), never sunflower. */
+  --text: light-dark(var(--navy-900), #eef1fa);
+  --muted: light-dark(#5a6587, #a3b0d6);
+
+  /* Accent and focus. */
+  --accent: var(--sun-400);
+  --accent-hover: var(--sun-300);
+  --accent-ink: var(--navy-900);
+  --accent-tint: light-dark(var(--sun-100), #3b3a3c);
+  --focus: var(--sun-400);
+  --focus-edge: light-dark(var(--navy-900), var(--sun-400));
+
+  /* Status: ink on its own pale tint. */
+  --danger: light-dark(#b3261e, #ff9a8f);
+  --danger-bg: light-dark(#fdecea, #3d1f2e);
+  --warning: light-dark(#7a5300, var(--sun-300));
+  --warning-bg: light-dark(var(--sun-50), #36321f);
+  --info: light-dark(#2f4c93, var(--powder-200));
+  --info-bg: light-dark(var(--navy-100), #2a3463);
+  --positive: light-dark(#1f7a4d, #7fd6a8);
+  --positive-bg: light-dark(#e3f4ea, #193b39);
+
+  /*
+   * Date families. --fam-* is drawn on page images (white paper in both themes): highlight
+   * boxes and their labels, 4.5:1 or more on paper. --fam-*-ui is the same hue for dots and
+   * labels in the interface, lifted in the dark theme. Seven hues apart, none of them sunflower,
+   * which is reserved for the selected date.
+   */
+  --fam-product: #0f766e;
+  --fam-document: #1f5fbf;
+  --fam-signature: #b4235a;
+  --fam-legal: #7e2e9a;
+  --fam-audit: #a34a07;
+  --fam-logistics: #4b6f12;
+  --fam-other: #5b6478;
+  --fam-product-ui: light-dark(var(--fam-product), #5cc8ba);
+  --fam-document-ui: light-dark(var(--fam-document), #93b6f2);
+  --fam-signature-ui: light-dark(var(--fam-signature), #f394b8);
+  --fam-legal-ui: light-dark(var(--fam-legal), #d6a2ea);
+  --fam-audit-ui: light-dark(var(--fam-audit), #f2a868);
+  --fam-logistics-ui: light-dark(var(--fam-logistics), #b0d16e);
+  --fam-other-ui: light-dark(var(--fam-other), #b5bccd);
+
+  /* Type: one family at two widths (condensed for headings), plus a mono for dates and IDs. */
+  --font-ui: "Archivo Variable", "Archivo", system-ui, sans-serif;
+  --font-display: "Archivo Variable", "Archivo Narrow", "Arial Narrow", system-ui, sans-serif;
+  --font-display-stretch: 68%;
+  --font-mono: "Fragment Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --fs-12: 0.75rem; /* meta, table headers, badges */
+  --fs-13: 0.8125rem; /* secondary cells, sublines */
+  --fs-14: 0.875rem; /* body, cells, controls */
+  --fs-16: 1rem; /* card and panel titles */
+  --fs-20: 1.25rem; /* section headings (display) */
+  --fs-28: 1.75rem; /* page title (display) */
+  --lh-tight: 1.15;
+  --lh-ui: 1.43;
+
+  /* Space, size, shape. 4px base; one gutter. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --gap: var(--space-4);
+  --sheet-pad: var(--space-6);
+  --sheet-inset: 8px;
+  --sidebar-width: 228px;
+  --topbar-height: 48px;
+  --control-height: 32px;
+  --row-height: 44px;
+  --radius-sheet: 16px;
+  --radius-card: 8px;
+  --radius-control: 6px;
+  --radius-chip: 4px;
+
+  /* Motion: state changes only. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur: 180ms;
+
+  /* Only what floats (menus, dialogs) casts a shadow. */
+  --shadow-float: 0 8px 24px rgb(17 23 47 / 0.16), 0 1px 3px rgb(17 23 47 / 0.12);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}

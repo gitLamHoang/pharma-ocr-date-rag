@@ -1,0 +1,515 @@
+/*
+ * Base layer and shell: the tinted frame (top bar) and the white sheet the work sits on.
+ * Shared primitives (buttons, fields, segmented control, status pills) live here too so every
+ * screen uses one vocabulary. Values come from tokens.css only.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--fs-14);
+  line-height: var(--lh-ui);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: var(--font-display-stretch);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--fs-28);
+}
+
+h2 {
+  font-size: var(--fs-20);
+}
+
+h3 {
+  font-family: var(--font-ui);
+  font-stretch: 100%;
+  font-size: var(--fs-16);
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--sun-200);
+  color: var(--navy-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-edge);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--focus);
+  border-radius: var(--radius-control);
+}
+
+* {
+  scrollbar-color: var(--control) transparent;
+  scrollbar-width: thin;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Dates, values and IDs: the mono's one job. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  letter-spacing: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-2);
+  top: var(--space-2);
+  z-index: 10;
+  padding: var(--space-2) var(--space-3);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  border-radius: var(--radius-control);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Shell ------------------------------------------------------------------ */
+
+.app {
+  display: grid;
+  grid-template-rows: var(--topbar-height) 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  padding: 0 calc(var(--sheet-inset) + var(--space-4));
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-stretch: var(--font-display-stretch);
+  font-size: var(--fs-20);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.brand__mark {
+  width: 24px;
+  height: 24px;
+}
+
+.brand__mark-ground {
+  fill: light-dark(var(--navy-900), var(--navy-700));
+}
+
+.brand__mark-box {
+  fill: none;
+  stroke: var(--sun-400);
+  stroke-width: 2.5;
+}
+
+.brand__mark-line {
+  stroke: var(--powder-200);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.topbar__nav {
+  display: flex;
+  align-self: stretch;
+  gap: var(--space-4);
+}
+
+.topbar__link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: inset 0 -2px 0 transparent;
+  transition: color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.topbar__link:hover {
+  color: var(--text);
+}
+
+.topbar__link[aria-current="page"] {
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--text);
+}
+
+.topbar__link:focus-visible {
+  border-radius: var(--radius-chip);
+}
+
+.topbar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-left: auto;
+  min-width: 0;
+}
+
+.health {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--fs-13);
+  white-space: nowrap;
+}
+
+.health::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--control);
+}
+
+.health--ai::before {
+  background: var(--positive);
+}
+
+.health--down {
+  color: var(--danger);
+}
+
+.health--down::before {
+  background: var(--danger);
+}
+
+.health__label {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.health--down .health__label {
+  color: inherit;
+}
+
+.health__model {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono);
+}
+
+/* The sheet: white, inset from the window's sides and bottom, hairline edge, no shadow. */
+.sheet {
+  min-width: 0;
+  margin: 0 var(--sheet-inset) var(--sheet-inset);
+  padding: var(--sheet-pad);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sheet);
+}
+
+.sheet:focus {
+  outline: none;
+}
+
+.screen {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  min-height: 36px;
+}
+
+.title-row > :last-child:not(h1) {
+  margin-left: auto;
+}
+
+/* Controls --------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--control);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.button:hover {
+  background: var(--surface-2);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.button--primary:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+}
+
+.button--quiet {
+  border-color: transparent;
+  background: transparent;
+}
+
+.button--danger {
+  color: var(--danger);
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  border-color: var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.field__label {
+  font-weight: 500;
+}
+
+.field__hint {
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.input {
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--control);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+
+textarea.input {
+  height: auto;
+  min-height: 72px;
+  padding: var(--space-2) var(--space-3);
+  resize: vertical;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+/* Segmented control built on native radios. */
+.segmented {
+  display: inline-flex;
+  margin: 0;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--active);
+}
+
+.segmented__option {
+  position: relative;
+  display: inline-flex;
+}
+
+.segmented__option input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segmented__option span {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-chip);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.segmented__option:hover span {
+  color: var(--text);
+}
+
+.segmented__option input:checked + span {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.segmented__option input:focus-visible + span {
+  outline: 2px solid var(--focus-edge);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
+/* Status pills: ink on its own pale tint. */
+.pill {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+  height: 20px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pill--positive {
+  background: var(--positive-bg);
+  color: var(--positive);
+}
+
+.pill--warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.pill--danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.pill--info {
+  background: var(--info-bg);
+  color: var(--info);
+}
+
+/* "Needs review" is the one count that takes the accent. */
+.pill--review {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+  }
+
+  .brand__name,
+  .health__model {
+    display: none;
+  }
+
+  .sheet {
+    margin: 0;
+    border-width: 1px 0 0;
+    border-radius: 0;
+    padding: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
