@@ -78,6 +78,13 @@ function ReviewScreen() {
 
   const dates = useQuery({ queryKey: ["dates", runId], queryFn: () => api.getDates(runId!), enabled: ready });
   const flags = useQuery({ queryKey: ["flags", runId], queryFn: () => api.getFlags(runId!), enabled: ready });
+  // The shown run's own pages: the document's pages are the latest run's, empty while it reads.
+  const runPages = useQuery({
+    queryKey: ["pages", runId],
+    queryFn: () => api.getPages(runId!),
+    enabled: ready,
+    staleTime: Infinity,
+  });
   const taxonomy = useQuery({ queryKey: ["taxonomy"], queryFn: () => api.getTaxonomy(), staleTime: Infinity });
   const labels = useMemo(() => makeLabels(taxonomy.data), [taxonomy.data]);
 
@@ -214,6 +221,7 @@ function ReviewScreen() {
   }
 
   const doc = detail.data;
+  const pages = runPages.data ?? (showsLatest ? doc?.pages : undefined);
   const needReview = dates.data?.filter((d) => d.status === "needs_review").length;
   const carried =
     reprocessed !== null && runId === reprocessed.run && dates.data
@@ -298,14 +306,18 @@ function ReviewScreen() {
       ) : (
         <div className="review">
           <div className="review__viewer">
-            <PageViewer
-              documentId={documentId}
-              pages={doc.pages}
-              dates={dates.data ?? []}
-              selectedId={selection.active}
-              linkedIds={selection.ids}
-              onSelect={(id) => select(id, true)}
-            />
+            {pages === undefined ? (
+              <div className="viewer viewer--empty" aria-hidden="true" />
+            ) : (
+              <PageViewer
+                runId={runId!}
+                pages={pages}
+                dates={dates.data ?? []}
+                selectedId={selection.active}
+                linkedIds={selection.ids}
+                onSelect={(id) => select(id, true)}
+              />
+            )}
           </div>
           <aside className="review__panel" aria-label="Dates">
             {dates.isError || flags.isError ? (

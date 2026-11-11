@@ -65,6 +65,7 @@ beforeEach(() => {
   vi.spyOn(api, "getHistory").mockResolvedValue([]);
   vi.spyOn(api, "reviewDate").mockResolvedValue(reviewEvent());
   vi.spyOn(api, "getDiscarded").mockResolvedValue([]);
+  vi.spyOn(api, "getPages").mockImplementation(async () => documentDetail().pages);
   localStorage.setItem("pharma-dates:reviewer", "J. Doe");
 });
 
@@ -200,6 +201,20 @@ describe("Review screen", () => {
     await waitFor(() => expect(api.getDates).toHaveBeenCalledWith(5));
     await waitFor(() => expect(row(11)).not.toBeNull());
     expect(screen.queryByText(/This run was replaced/)).not.toBeInTheDocument();
+  });
+
+  it("shows a frozen run's own pages while a newer run is still reading", async () => {
+    vi.mocked(api.getDocument).mockResolvedValue(
+      documentDetail({ run: { id: 5, status: "reading", error: null, ai_used: false, ai_model: null }, pages: [] }),
+    );
+    renderAt("/documents/1?run=4");
+    await loaded();
+
+    expect(api.getPages).toHaveBeenCalledWith(4);
+    expect(screen.queryByText("This run has no page images.")).not.toBeInTheDocument();
+    const image = await screen.findByRole("img", { name: "Page 1 of 2" });
+    expect(image.getAttribute("src")).toBe("/api/runs/4/pages/1.png");
+    expect(box(1)).not.toBeNull();
   });
 
   it("shows a frozen older run read-only", async () => {

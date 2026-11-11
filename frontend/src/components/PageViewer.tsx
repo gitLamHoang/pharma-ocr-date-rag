@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { api, type DateRecord, type PageInfo } from "../api";
 
 interface Props {
-  documentId: number;
+  /** The run shown: its own page images, even while a newer run is reading. */
+  runId: number;
   pages: PageInfo[];
   dates: DateRecord[];
   /** The active date: the viewer turns to its page and keeps its box in view. */
@@ -22,7 +23,7 @@ function reducedMotion(): boolean {
 }
 
 /** The page image with a box on every date, a thumbnail rail and zoom (100 % fits the width). */
-export function PageViewer({ documentId, pages, dates, selectedId, onSelect, linkedIds = [] }: Props) {
+export function PageViewer({ runId, pages, dates, selectedId, onSelect, linkedIds = [] }: Props) {
   const [pageNo, setPageNo] = useState(pages[0]?.n ?? 1);
   const [zoom, setZoom] = useState(FIT);
   const [failed, setFailed] = useState<number | null>(null);
@@ -122,7 +123,7 @@ export function PageViewer({ documentId, pages, dates, selectedId, onSelect, lin
               >
                 <img
                   className="thumb__image"
-                  src={api.pageImageUrl(documentId, p.n)}
+                  src={api.pageImageUrl(runId, p.n)}
                   alt=""
                   loading="lazy"
                   style={{ aspectRatio: `${p.width} / ${p.height}` }}
@@ -157,7 +158,7 @@ export function PageViewer({ documentId, pages, dates, selectedId, onSelect, lin
               <img
                 key={`${page.n}-${attempt}`}
                 className="viewer__image"
-                src={api.pageImageUrl(documentId, page.n)}
+                src={api.pageImageUrl(runId, page.n)}
                 alt={`Page ${page.n} of ${pages.length}`}
                 onError={() => setFailed(page.n)}
               />

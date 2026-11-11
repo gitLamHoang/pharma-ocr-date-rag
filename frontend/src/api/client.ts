@@ -8,6 +8,7 @@ import type {
   ExportFormat,
   Flag,
   Health,
+  PageInfo,
   ReprocessResult,
   ReviewBody,
   ReviewEvent,
@@ -74,7 +75,9 @@ export function uploadDocument(file: File): Promise<UploadResult> {
 
 export const getDocument = (id: number): Promise<DocumentDetail> => request(`/documents/${id}`);
 
-export const pageImageUrl = (id: number, n: number): string => `${BASE}/documents/${id}/pages/${n}.png`;
+export const getPages = (runId: number): Promise<PageInfo[]> => request(`/runs/${runId}/pages`);
+
+export const pageImageUrl = (runId: number, n: number): string => `${BASE}/runs/${runId}/pages/${n}.png`;
 
 export const getDates = (runId: number): Promise<DateRecord[]> => request(`/runs/${runId}/dates`);
 
@@ -96,6 +99,7 @@ export const httpDataSource: DataSource = {
   listDocuments,
   uploadDocument,
   getDocument,
+  getPages,
   pageImageUrl,
   getDates,
   getFlags,

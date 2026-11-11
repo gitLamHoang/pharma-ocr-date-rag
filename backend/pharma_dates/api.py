@@ -175,10 +175,18 @@ def create_app(
     def page_image(document_id: Id, n: Id):
         get_document(document_id)
         run = store.latest_run(document_id)
-        page = next((p for p in store.pages_for_run(run.id) if p.n == n), None) if run else None
-        if page is None or not page.image_path or not Path(page.image_path).is_file():
-            raise HTTPException(404, f"Page {n} not found.")
-        return FileResponse(page.image_path, media_type="image/png")
+        return _page_png(store.pages_for_run(run.id) if run else [], n)
+
+    @app.get("/api/runs/{run_id}/pages")
+    def run_pages(run_id: Id):
+        """The pages of one run (a frozen run keeps its own while a newer run is still reading)."""
+        get_run(run_id)
+        return [{"n": p.n, "width": p.width, "height": p.height} for p in store.pages_for_run(run_id)]
+
+    @app.get("/api/runs/{run_id}/pages/{n}.png")
+    def run_page_image(run_id: Id, n: Id):
+        get_run(run_id)
+        return _page_png(store.pages_for_run(run_id), n)
 
     @app.post("/api/documents/{document_id}/reprocess", status_code=202, dependencies=[Depends(_same_origin)])
     def reprocess(document_id: Id):
@@ -310,6 +318,13 @@ def _missing_langs(langs: str) -> list[str]:
     except (pytesseract.TesseractNotFoundError, pytesseract.TesseractError, OSError):
         installed = set()
     return [lang for lang in wanted if lang not in installed]
+
+
+def _page_png(pages, n: int) -> FileResponse:
+    page = next((p for p in pages if p.n == n), None)
+    if page is None or not page.image_path or not Path(page.image_path).is_file():
+        raise HTTPException(404, f"Page {n} not found.")
+    return FileResponse(page.image_path, media_type="image/png")
 
 
 def _same_origin(request: Request) -> None:

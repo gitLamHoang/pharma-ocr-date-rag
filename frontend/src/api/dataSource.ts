@@ -6,6 +6,7 @@ import type {
   ExportFormat,
   Flag,
   Health,
+  PageInfo,
   ReprocessResult,
   ReviewBody,
   ReviewEvent,
@@ -24,8 +25,10 @@ export interface DataSource {
   listDocuments(): Promise<DocumentSummary[]>;
   uploadDocument(file: File): Promise<UploadResult>;
   getDocument(id: number): Promise<DocumentDetail>;
-  /** A URL an `<img>` can load for page `n` (1-based) of the document's latest run. */
-  pageImageUrl(id: number, n: number): string;
+  /** The pages of one run (a frozen run keeps its own while a newer run is still reading). */
+  getPages(runId: number): Promise<PageInfo[]>;
+  /** A URL an `<img>` can load for page `n` (1-based) of the run. */
+  pageImageUrl(runId: number, n: number): string;
   getDates(runId: number): Promise<DateRecord[]>;
   getFlags(runId: number): Promise<Flag[]>;
   getDiscarded(runId: number): Promise<DiscardedSuggestion[]>;

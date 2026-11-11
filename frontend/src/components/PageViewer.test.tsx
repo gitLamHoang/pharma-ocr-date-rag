@@ -12,7 +12,7 @@ const PAGES: PageInfo[] = [
 function renderViewer(dates: DateRecord[], props: Partial<Parameters<typeof PageViewer>[0]> = {}) {
   const onSelect = vi.fn();
   const view = render(
-    <PageViewer documentId={1} pages={PAGES} dates={dates} selectedId={null} onSelect={onSelect} {...props} />,
+    <PageViewer runId={1} pages={PAGES} dates={dates} selectedId={null} onSelect={onSelect} {...props} />,
   );
   return { onSelect, ...view };
 }
@@ -46,7 +46,7 @@ describe("PageViewer", () => {
     expect(box(1)).toHaveAttribute("data-family", "signature");
     expect(box(2)).toBeNull();
     expect(box(3)).toBeNull();
-    expect(pageImage().src).toContain("/api/documents/1/pages/1.png");
+    expect(pageImage().src).toContain("/api/runs/1/pages/1.png");
   });
 
   it("selects a date when its box is clicked", () => {
@@ -70,7 +70,7 @@ describe("PageViewer", () => {
     const { rerender } = renderViewer(dates);
     expect(pageImage()).toHaveAccessibleName("Page 1 of 2");
 
-    rerender(<PageViewer documentId={1} pages={PAGES} dates={dates} selectedId={2} onSelect={() => {}} />);
+    rerender(<PageViewer runId={1} pages={PAGES} dates={dates} selectedId={2} onSelect={() => {}} />);
 
     expect(pageImage()).toHaveAccessibleName("Page 2 of 2");
     expect(box(2)).toHaveAttribute("aria-pressed", "true");
@@ -116,7 +116,7 @@ describe("PageViewer", () => {
   });
 
   it("says when the run has no page images", () => {
-    render(<PageViewer documentId={1} pages={[]} dates={[]} selectedId={null} onSelect={() => {}} />);
+    render(<PageViewer runId={1} pages={[]} dates={[]} selectedId={null} onSelect={() => {}} />);
 
     expect(screen.getByText("This run has no page images.")).toBeInTheDocument();
   });

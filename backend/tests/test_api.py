@@ -280,6 +280,23 @@ async def test_page_image(http, app, native_pdf):
     assert (await http.get("/api/documents/999/pages/1.png")).status_code == 404
 
 
+async def test_run_pages_stay_viewable_while_a_reprocess_reads(http, app, native_pdf):
+    body = await upload(http, app, native_pdf)
+    old_run = body["run_id"]
+    newer = app.state.store.create_run(body["document_id"], "1.0.0", None, False)  # queued: no pages yet
+    assert (await http.get(f"/api/documents/{body['document_id']}")).json()["pages"] == []
+
+    pages = (await http.get(f"/api/runs/{old_run}/pages")).json()
+    assert [set(p) for p in pages] == [{"n", "width", "height"}]
+    assert pages[0]["n"] == 1 and pages[0]["width"] > 1000
+    response = await http.get(f"/api/runs/{old_run}/pages/1.png")
+    assert response.status_code == 200 and response.content.startswith(b"\x89PNG")
+    assert (await http.get(f"/api/runs/{old_run}/pages/2.png")).status_code == 404
+    assert (await http.get(f"/api/runs/{newer}/pages")).json() == []
+    assert (await http.get("/api/runs/999/pages")).status_code == 404
+    assert (await http.get("/api/runs/999/pages/1.png")).status_code == 404
+
+
 # Run results
 
 

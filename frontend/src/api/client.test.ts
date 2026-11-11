@@ -29,6 +29,7 @@ describe("API client requests", () => {
     ["getTaxonomy", () => client.getTaxonomy(), "/api/taxonomy"],
     ["listDocuments", () => client.listDocuments(), "/api/documents"],
     ["getDocument", () => client.getDocument(7), "/api/documents/7"],
+    ["getPages", () => client.getPages(12), "/api/runs/12/pages"],
     ["getDates", () => client.getDates(12), "/api/runs/12/dates"],
     ["getFlags", () => client.getFlags(12), "/api/runs/12/flags"],
     ["getDiscarded", () => client.getDiscarded(12), "/api/runs/12/discarded"],
@@ -77,8 +78,8 @@ describe("API client requests", () => {
 });
 
 describe("API client URLs", () => {
-  it("pageImageUrl points at the page PNG without fetching", () => {
-    expect(client.pageImageUrl(7, 2)).toBe("/api/documents/7/pages/2.png");
+  it("pageImageUrl points at the run's page PNG without fetching", () => {
+    expect(client.pageImageUrl(7, 2)).toBe("/api/runs/7/pages/2.png");
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -132,6 +133,7 @@ describe("httpDataSource", () => {
         "getFlags",
         "getHealth",
         "getHistory",
+        "getPages",
         "getTaxonomy",
         "listDocuments",
         "pageImageUrl",
