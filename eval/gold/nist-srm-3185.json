@@ -1,0 +1,7 @@
+[
+  {"page": 1, "raw_text": "1 March 2029", "date_type": "certificate_valid_until", "normalized": "2029-03-01"},
+  {"page": 1, "raw_text": "14 August 2017", "date_type": "certificate_issue_date", "normalized": "2017-08-14"},
+  {"page": 3, "raw_text": "Aug 2017", "date_type": "other_date", "normalized": "2017-08"},
+  {"page": 3, "raw_text": "Aug 2017", "date_type": "other_date", "normalized": "2017-08"},
+  {"page": 3, "raw_text": "Aug 2017", "date_type": "other_date", "normalized": "2017-08"}
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "id": "fda-483-2025-device",
+    "title": "FDA Form 483 inspectional observations, medical device manufacturer, 2025",
+    "url": "https://www.fda.gov/media/188590/download",
+    "ext": ".pdf",
+    "sha256": "e38494ccc8f414e67a3a393c46d37e8674754430e111c69249287f07d1f0e492",
+    "kind": "native text",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "Digital signature blocks; inspection date range written as two dates."
+  },
+  {
+    "id": "fda-483-2025-gene-therapy",
+    "title": "FDA Form 483 inspectional observations, gene therapy manufacturer, 2025",
+    "url": "https://www.fda.gov/media/190192/download",
+    "ext": ".pdf",
+    "sha256": "7fd7cb628f44ce6ab79be5c61b3a700be30ea3be99bd74c38cfa91e9455ac22c",
+    "kind": "scan with OCR text layer, redacted",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "The page 2 header is in the image but missing from the text layer."
+  },
+  {
+    "id": "fda-483-2022-biologics",
+    "title": "FDA Form 483 inspectional observations, licensed biological manufacturer, 2022",
+    "url": "https://www.fda.gov/media/188948/download",
+    "ext": ".pdf",
+    "sha256": "1c7a76b5b096f13f973eb122bb34dccc353e071521f7f67eb12bad1f0204230f",
+    "kind": "degraded scan with poor OCR text layer, redacted",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "Compact dates such as 27Sep2021. Not labelled: the range 11/10-18/2022 and a rotated handwritten date beside a signature."
+  },
+  {
+    "id": "fda-483-2011-api",
+    "title": "FDA Form 483 inspectional observations, API manufacturer, 2011",
+    "url": "https://www.fda.gov/media/82442/download",
+    "ext": ".pdf",
+    "sha256": "d17ba0dfbaea01298ebb1eba244cd6a0c1bd5aac47b10d124a0b822c59cbe11c",
+    "kind": "scan with OCR text layer, redacted",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "The OCR layer misreads 06/21/2011 as 06/2112011. Not labelled: the date list 06/14,15,16,19,20,21/2011."
+  },
+  {
+    "id": "fda-nda-2024-approval",
+    "title": "FDA NDA approval letter, 2024",
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/216984Orig1s000ltr.pdf",
+    "ext": ".pdf",
+    "sha256": "3f06bec95f29d638867f92627be0f2616b4fdcf641fa92e4e9a0a058af2429d5",
+    "kind": "native text",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "The same date printed twice on one page with two meanings (dated / received)."
+  },
+  {
+    "id": "fda-snda-2024-approval",
+    "title": "FDA supplemental NDA approval letter, 2024",
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/213246Orig1s011;%20s013ltr.pdf",
+    "ext": ".pdf",
+    "sha256": "ccb1cd75445c1551981abdc9149f317e6b46208598f76613fe1458e69e7a0680",
+    "kind": "native text",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "Month-only milestones (03/2026, 09/2033)."
+  },
+  {
+    "id": "fda-anda-2024-approval",
+    "title": "FDA ANDA approval letter, 2024",
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/208443Orig1s000ltr.pdf",
+    "ext": ".pdf",
+    "sha256": "574c2fe0417906e4f1f31e3f33c08cebc2b02048503e6400eea9737ab16fe2fa",
+    "kind": "native text",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "Patent expiration dates in a table labelled 'Expiration Date' (not product expiry)."
+  },
+  {
+    "id": "fda-snda-1999-scan",
+    "title": "FDA supplemental NDA approval letter, 1999",
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/1999/20702S18LTR.PDF",
+    "ext": ".pdf",
+    "sha256": "4225e5b889e47bec715fb1e108ee43cc9a66d3f2e353a657c1a19d9edfd38d0b",
+    "kind": "scan without text layer (OCR path)",
+    "licence": "US federal government work (FDA), public domain in the US (17 U.S.C. 105).",
+    "notes": "Stamped letter date DEC 2 1999. Not labelled: the list 'May 13 (fax), October 20 and 25 (fax), November 5 (2), 17, and 23, 1999'."
+  },
+  {
+    "id": "nist-srm-870",
+    "title": "NIST SRM 870 certificate of analysis (LC column test mixture)",
+    "url": "https://tsapps.nist.gov/srmext/certificates/870.pdf",
+    "ext": ".pdf",
+    "sha256": "4a2c7a6c9c560d0a3c8c310892e9a7c46a6ab56aad280d2e7803e515b582568f",
+    "kind": "native text",
+    "licence": "US federal government work (NIST), public domain in the US (17 U.S.C. 105).",
+    "notes": "Certificate revision history; month-only 'accessed' dates. Years alone in citations are not labelled."
+  },
+  {
+    "id": "nist-srm-1991",
+    "title": "NIST SRM 1991 certificate of analysis",
+    "url": "https://tsapps.nist.gov/srmext/certificates/1991.pdf",
+    "ext": ".pdf",
+    "sha256": "a54ccfeb4243e5cf40a5b01e72d91cdbef6af676b41b660e5873bd6ecc04a04d",
+    "kind": "native text",
+    "licence": "US federal government work (NIST), public domain in the US (17 U.S.C. 105).",
+    "notes": "Validity date, issue date, revision history."
+  },
+  {
+    "id": "nist-srm-3185",
+    "title": "NIST SRM 3185 certificate of analysis",
+    "url": "https://tsapps.nist.gov/srmext/certificates/3185.pdf",
+    "ext": ".pdf",
+    "sha256": "681a5600e39c5f72bd83d6d1ac81632738fa3da25aba14e9bc4fdc9aec698ceb",
+    "kind": "native text",
+    "licence": "US federal government work (NIST), public domain in the US (17 U.S.C. 105).",
+    "notes": "Lot No. 170309 looks like a YYMMDD date but is a lot number (not labelled)."
+  },
+  {
+    "id": "mhra-recall-2026-a42",
+    "title": "MHRA Class 2 medicines recall EL(26)A/42",
+    "url": "https://assets.publishing.service.gov.uk/media/6acc9be9b016250bca013bac/Class_2_Medicines_Recall_-_Norgine_Pharmaceuticals_Limited__Pedmarqsi_80_mg_mL_solution_for_infusion__EL_26_A-42.pdf",
+    "ext": ".pdf",
+    "sha256": "45baf34551c5ce469e8119a9433c9fea7e075e4a1ab224e2aab19c83315ab48c",
+    "kind": "native text",
+    "licence": "Crown copyright, Open Government Licence v3.0 (GOV.UK).",
+    "notes": "Ambiguous DD/MM first-distributed date (09/01/2025); month-only expiry."
+  },
+  {
+    "id": "mhra-recall-2026-a11",
+    "title": "MHRA Class 2 medicines recall EL(26)A/11",
+    "url": "https://assets.publishing.service.gov.uk/media/69aaf5ef917847c0a4c89964/CLASS_2_MEDICINES_RECALL__CRESCENT_PHARMA_LIMITED__RAMIPRIL_5_MG_CAPSULES__EL_26_A11.pdf",
+    "ext": ".pdf",
+    "sha256": "dfcb49e0d68b7824dce9851650f4b62fbd2999a03eec29872822a49390345589",
+    "kind": "native text with photographs",
+    "licence": "Crown copyright, Open Government Licence v3.0 (GOV.UK).",
+    "notes": "Page 4: the expiry 10/2026 is printed only inside a carton photograph (no text layer)."
+  },
+  {
+    "id": "mhra-defect-2026-a16",
+    "title": "MHRA Class 4 medicines defect information EL(26)A/16",
+    "url": "https://assets.publishing.service.gov.uk/media/69c2b7cc3ed0546101e0dbfc/Class_4_Medicines_Defect_Notification_Quadrant_Pharmaceuticals_Limited__Vesomni_6_mg_0.4_mg_modified_release_tablets___EL26A16.pdf",
+    "ext": ".pdf",
+    "sha256": "e3ce4ad10ddc7a02f929ffec4da3aaebe8c3b21be808f56e313acdf5bacc3faa",
+    "kind": "native text",
+    "licence": "Crown copyright, Open Government Licence v3.0 (GOV.UK).",
+    "notes": "Batch table: three ambiguous DD/MM dates next to unambiguous ones (31/12/2025) that show the order."
+  },
+  {
+    "id": "hcch-apostille-model",
+    "title": "Model Apostille certificate (Annex to the 1961 Apostille Convention)",
+    "url": "https://assets.hcch.net/upload/apostille.pdf",
+    "ext": ".pdf",
+    "sha256": "a35daf39bf95f3c0b0129426c1069680303920be85d0f78ce6a0a8a267fa66fb",
+    "kind": "native text, blank form",
+    "licence": "HCCH: reproduction authorised, except for commercial purposes, provided the source is acknowledged.",
+    "notes": "No English dates: the only date is the French convention date '5 octobre 1961' (English only, not labelled). Any date found here is a false positive."
+  }
+]

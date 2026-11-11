@@ -1,0 +1,1949 @@
+/*
+ * Base layer and shell: the tinted frame (top bar) and the white sheet the work sits on.
+ * Shared primitives (buttons, fields, segmented control, status pills) live here too so every
+ * screen uses one vocabulary. Values come from tokens.css only.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--fs-14);
+  line-height: var(--lh-ui);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: var(--font-display-stretch);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--fs-28);
+}
+
+h2 {
+  font-size: var(--fs-20);
+}
+
+h3 {
+  font-family: var(--font-ui);
+  font-stretch: 100%;
+  font-size: var(--fs-16);
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--sun-200);
+  color: var(--navy-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-edge);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--focus);
+  border-radius: var(--radius-control);
+}
+
+* {
+  scrollbar-color: var(--control) transparent;
+  scrollbar-width: thin;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Dates, values and IDs: the mono's one job. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  letter-spacing: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-2);
+  top: var(--space-2);
+  z-index: 10;
+  padding: var(--space-2) var(--space-3);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  border-radius: var(--radius-control);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Shell ------------------------------------------------------------------ */
+
+.app {
+  display: grid;
+  grid-template-rows: var(--topbar-height) 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* The static (GitHub Pages) build: one line in the frame under the top bar, on every screen. */
+.app--static {
+  --banner-height: 28px;
+  grid-template-rows: var(--topbar-height) auto 1fr;
+}
+
+.mode-banner {
+  min-height: var(--banner-height);
+  margin: 0;
+  padding: 0 calc(var(--sheet-inset) + var(--space-4)) var(--space-2);
+  color: var(--muted);
+  font-size: var(--fs-13);
+  line-height: 20px;
+}
+
+.mode-banner__fact {
+  white-space: nowrap;
+}
+
+.mode-banner__fact:first-child {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* The break between two facts falls after the dot. */
+.mode-banner__sep {
+  white-space: normal;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  padding: 0 calc(var(--sheet-inset) + var(--space-4));
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-stretch: var(--font-display-stretch);
+  font-size: var(--fs-20);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.brand__mark {
+  width: 24px;
+  height: 24px;
+}
+
+.brand__mark-ground {
+  fill: light-dark(var(--navy-900), var(--navy-700));
+}
+
+.brand__mark-box {
+  fill: none;
+  stroke: var(--sun-400);
+  stroke-width: 2.5;
+}
+
+.brand__mark-line {
+  stroke: var(--powder-200);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.topbar__nav {
+  display: flex;
+  align-self: stretch;
+  gap: var(--space-4);
+}
+
+.topbar__link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: inset 0 -2px 0 transparent;
+  transition: color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.topbar__link:hover {
+  color: var(--text);
+}
+
+.topbar__link[aria-current="page"] {
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--text);
+}
+
+.topbar__link:focus-visible {
+  border-radius: var(--radius-chip);
+}
+
+.topbar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-left: auto;
+  min-width: 0;
+}
+
+.health {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--fs-13);
+  white-space: nowrap;
+}
+
+.health::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--control);
+}
+
+.health--ai::before {
+  background: var(--positive);
+}
+
+.health--down {
+  color: var(--danger);
+}
+
+.health--down::before {
+  background: var(--danger);
+}
+
+.health__label {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.health--down .health__label {
+  color: inherit;
+}
+
+.health__model {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono);
+}
+
+/* The sheet: white, inset from the window's sides and bottom, hairline edge, no shadow. */
+.sheet {
+  min-width: 0;
+  margin: 0 var(--sheet-inset) var(--sheet-inset);
+  padding: var(--sheet-pad);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sheet);
+}
+
+.sheet:focus {
+  outline: none;
+}
+
+.screen {
+  display: grid;
+  /* One column that never grows past the sheet (a long filename truncates instead). */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  min-height: 36px;
+}
+
+/* The title row's actions sit on its right edge. */
+.title-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+/* Controls --------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--control);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.button:hover {
+  background: var(--surface-2);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.button--primary:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+}
+
+.button--quiet {
+  border-color: transparent;
+  background: transparent;
+}
+
+.button--danger {
+  color: var(--danger);
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  border-color: var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.field__label {
+  font-weight: 500;
+}
+
+.field__hint {
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.input {
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--control);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+
+textarea.input {
+  height: auto;
+  min-height: 72px;
+  padding: var(--space-2) var(--space-3);
+  resize: vertical;
+}
+
+/* The native chevron sits against the border and keeps the UA's grey in dark mode: draw our own. */
+select.input {
+  appearance: none;
+  padding-right: 32px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) 50%,
+    calc(100% - 12px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+/* Segmented control built on native radios. */
+.segmented {
+  display: inline-flex;
+  margin: 0;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--active);
+}
+
+.segmented__option {
+  position: relative;
+  display: inline-flex;
+}
+
+.segmented__option input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segmented__option span {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-chip);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.segmented__option:hover span {
+  color: var(--text);
+}
+
+/* The chosen option is raised above the track in both themes (white on tint, lighter navy on navy). */
+.segmented__option input:checked + span {
+  background: light-dark(var(--surface), var(--navy-600));
+  color: var(--text);
+}
+
+.segmented__option input:focus-visible + span {
+  outline: 2px solid var(--focus-edge);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
+/* Status pills: ink on its own pale tint. */
+.pill {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+  height: 20px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pill--positive {
+  background: var(--positive-bg);
+  color: var(--positive);
+}
+
+.pill--warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.pill--danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.pill--info {
+  background: var(--info-bg);
+  color: var(--info);
+}
+
+/* "Needs review" is the one count that takes the accent. */
+.pill--review {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* A text-only action inside a sentence (Retry, choose files). */
+.text-button {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.text-button:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Inside a sentence the full halo would cover the next word. */
+.text-button:focus-visible {
+  outline-offset: 1px;
+  box-shadow: 0 0 0 3px var(--focus);
+  border-radius: var(--radius-chip);
+}
+
+.text-button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* A mode the screen is in (AI off), not an error: grey dot, ink text, panel ground. */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  font-size: var(--fs-13);
+  font-weight: 500;
+}
+
+.notice::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--control);
+}
+
+/* Figures share one right edge per column. */
+.num {
+  text-align: right;
+}
+
+/* Flat loading bars at the size of the value they stand in for. */
+.bar {
+  display: inline-block;
+  vertical-align: middle;
+  height: 12px;
+  border-radius: var(--radius-chip);
+  background: var(--active);
+}
+
+.bar--num {
+  width: 20px;
+}
+
+.bar--pill {
+  width: 64px;
+  height: 20px;
+}
+
+.bar--time {
+  width: 112px;
+}
+
+/* Documents: drop zone ------------------------------------------------------ */
+
+.upload {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.dropzone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 96px;
+  padding: var(--space-4) var(--space-6);
+  overflow: hidden;
+  border: 1px dashed var(--control);
+  border-radius: var(--radius-card);
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.dropzone[data-dragging] {
+  border-style: solid;
+  border-color: var(--text);
+  background: var(--surface-2);
+}
+
+.dropzone__mark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dropzone[data-dragging] .dropzone__mark {
+  stroke: var(--text);
+}
+
+.dropzone__text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dropzone__line {
+  font-weight: 500;
+}
+
+.dropzone__hint {
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.dropzone__status {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  font-size: var(--fs-13);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropzone__file {
+  font-weight: 600;
+}
+
+/* Upload has no byte progress from fetch, so the bar says "working", not "how far". */
+.dropzone__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  overflow: hidden;
+}
+
+.dropzone__progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 30%;
+  background: var(--text);
+  animation: upload-progress 1.2s var(--ease-out) infinite;
+}
+
+@keyframes upload-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+
+.upload__errors {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--danger);
+  font-size: var(--fs-13);
+  white-space: pre-line;
+}
+
+/* Documents: table ----------------------------------------------------------- */
+
+.doc-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.doc-table th {
+  height: 32px;
+  padding: 0 var(--space-3);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  text-align: left;
+  vertical-align: bottom;
+  padding-bottom: var(--space-2);
+  white-space: nowrap;
+}
+
+.doc-table th.num {
+  text-align: right;
+}
+
+.doc-table td {
+  height: var(--row-height);
+  padding: var(--space-2) var(--space-3);
+  vertical-align: middle;
+}
+
+/* Rules between rows only: none under the header. */
+.doc-table tbody tr + tr td {
+  border-top: 1px solid var(--rule);
+}
+
+.doc-table th:first-child,
+.doc-table td:first-child {
+  padding-left: 0;
+}
+
+.doc-table th:last-child,
+.doc-table td:last-child {
+  padding-right: 0;
+}
+
+.doc-table__pages {
+  width: 72px;
+}
+
+.doc-table__status {
+  width: 160px;
+}
+
+.doc-table__count {
+  width: 72px;
+}
+
+.doc-table__review {
+  width: 112px;
+}
+
+.doc-table__uploaded {
+  width: 148px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.doc-table td.doc-table__name {
+  overflow: hidden;
+}
+
+.doc-table__link {
+  display: block;
+  overflow: hidden;
+  font-weight: 500;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-table__link:hover {
+  text-decoration: underline;
+}
+
+.doc-table__subline {
+  display: none;
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+/* The server's reason a run failed: the row's subline, under the name where there is room. */
+.doc-table__error {
+  color: var(--danger);
+  font-size: var(--fs-13);
+}
+
+.doc-table__message td {
+  height: 64px;
+  color: var(--muted);
+}
+
+.doc-table__failure {
+  color: var(--danger);
+}
+
+.doc-table__failure .text-button {
+  color: inherit;
+}
+
+/* Tablet: uploaded-at moves under the name. */
+@media (max-width: 960px) {
+  .doc-table .doc-table__uploaded {
+    display: none;
+  }
+
+  .doc-table__subline {
+    display: block;
+  }
+
+  .doc-table__subline--phone {
+    display: none;
+  }
+
+  .doc-table__status {
+    width: 136px;
+  }
+
+  .doc-table__pages,
+  .doc-table__count {
+    width: 64px;
+  }
+
+  .doc-table__review {
+    width: 104px;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+  }
+
+  .brand__name,
+  .health__model {
+    display: none;
+  }
+
+  .mode-banner {
+    padding: 0 var(--space-4) var(--space-2);
+  }
+
+  .dropzone {
+    padding: var(--space-4);
+  }
+
+  /* Phone: name, status and needs review as columns; the other figures move under the name. */
+  .doc-table .doc-table__minor {
+    display: none;
+  }
+
+  .doc-table__subline--phone:not(:empty) {
+    display: block;
+  }
+
+  .doc-table__status {
+    width: 84px;
+  }
+
+  .doc-table__review {
+    width: 92px;
+  }
+
+  .dropzone__mark {
+    display: none;
+  }
+
+  .sheet {
+    margin: 0;
+    border-width: 1px 0 0;
+    border-radius: 0;
+    padding: var(--space-4);
+  }
+}
+
+/* Review: title row ----------------------------------------------------------- */
+
+.review-title {
+  flex-wrap: nowrap;
+}
+
+.review-title__name {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.breadcrumb {
+  flex: none;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* A long filename keeps one line; the full name is its tooltip. */
+.review-title h1 {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-title .title-row__actions {
+  flex: none;
+}
+
+.review__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.bar--title {
+  width: 240px;
+  height: 24px;
+}
+
+.bar--wide {
+  width: 100%;
+  max-width: 280px;
+}
+
+/* A notice that carries its own action on the right. */
+.notice > .button {
+  height: 28px;
+  margin-left: auto;
+}
+
+.notice--alert {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.notice--alert::before {
+  background: var(--danger);
+}
+
+.review__message {
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+}
+
+.review__message > * + * {
+  margin-top: var(--space-2);
+}
+
+.review__message--failure {
+  color: var(--danger);
+}
+
+.review__message--failure .text-button {
+  color: inherit;
+}
+
+.review__failure-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Export: a disclosure of two download links under the title row's button. */
+.export-menu {
+  position: relative;
+}
+
+.export-menu__chevron {
+  width: 16px;
+  height: 16px;
+  margin-right: -4px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.export-menu > [aria-expanded="true"] .export-menu__chevron {
+  transform: rotate(180deg);
+}
+
+.export-menu__list {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 2px;
+  width: 280px;
+  margin: 0;
+  padding: var(--space-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+  list-style: none;
+}
+
+.export-menu__item {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-control);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.export-menu__item:hover {
+  background: var(--surface-2);
+}
+
+.export-menu__item:focus-visible {
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 4px var(--focus);
+}
+
+.export-menu__label {
+  font-weight: 600;
+}
+
+.export-menu__hint {
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.reprocess__body {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 60ch;
+}
+
+/* Review: split ---------------------------------------------------------------- */
+
+.review {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: var(--gap);
+  min-height: 0;
+}
+
+.review__viewer {
+  min-width: 0;
+  min-height: 0;
+}
+
+.review__panel {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+  min-width: 0;
+}
+
+/*
+ * Desktop: the Review sheet fills the window under the top bar. The viewer takes the full height
+ * and the date panel scrolls on its own, so the page and its dates stay side by side.
+ */
+@media (min-width: 961px) {
+  .sheet:has(> .review-screen) {
+    display: flex;
+    height: calc(100dvh - var(--topbar-height) - var(--banner-height, 0px) - var(--sheet-inset));
+    min-height: 560px;
+  }
+
+  .review-screen {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .review-screen > .review {
+    flex: 1 1 auto;
+  }
+
+  .review__viewer {
+    height: 100%;
+  }
+
+  /* Room inside the scroller for focus rings; the negative margin keeps the column's edges. */
+  .review__panel {
+    height: 100%;
+    margin: -6px;
+    padding: 6px 12px 6px 6px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Page viewer ------------------------------------------------------------------ */
+
+.viewer {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+}
+
+.viewer--empty {
+  place-items: center;
+  grid-template-rows: 1fr;
+  min-height: 240px;
+}
+
+.viewer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 40px;
+  padding: 0 var(--space-1) 0 var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.viewer__where {
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.viewer__figure {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.viewer__zoom {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.viewer__icon {
+  width: var(--control-height);
+  padding: 0;
+}
+
+.viewer__icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.viewer__zoom-value {
+  min-width: 56px;
+  padding: 0 var(--space-2);
+  font-size: var(--fs-13);
+}
+
+.viewer .button--quiet:hover:not(:disabled) {
+  background: var(--active);
+}
+
+.viewer .button--quiet:disabled {
+  border-color: transparent;
+  background: transparent;
+}
+
+.viewer__body {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  min-height: 0;
+}
+
+.viewer__rail {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-height: 0;
+  padding: var(--space-2);
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+}
+
+.thumb {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.thumb:hover {
+  background: var(--active);
+}
+
+.thumb[aria-current="page"] {
+  border-color: var(--text);
+  background: var(--active);
+  color: var(--text);
+}
+
+.thumb__image {
+  display: block;
+  width: 100%;
+  border-radius: 2px;
+  background: var(--paper);
+  object-fit: contain;
+}
+
+.thumb__label {
+  display: grid;
+  font-size: var(--fs-12);
+  font-weight: 500;
+  line-height: 16px;
+  text-align: left;
+}
+
+.thumb__count {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.viewer__canvas {
+  /* Placed, not auto-placed, so the focus layer below can share its cell. */
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--space-4);
+  overflow: auto;
+}
+
+/* Focusable so the keyboard can scroll a zoomed page. The scrolled page paints over any ring on
+   the canvas itself, so the ring is a layer laid over the canvas's grid cell. */
+.viewer__canvas:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.viewer__body:has(> .viewer__canvas:focus-visible)::after {
+  content: "";
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 2px var(--focus-edge),
+    inset 0 0 0 5px var(--focus);
+}
+
+.viewer__page {
+  position: relative;
+  margin-inline: auto;
+  background: var(--paper);
+  outline: 1px solid var(--border);
+}
+
+.viewer__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.viewer__failed {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: var(--space-6);
+  color: var(--danger);
+  text-align: center;
+}
+
+.viewer__failed .text-button {
+  color: inherit;
+}
+
+/* A box sits just outside its words so the date stays readable. */
+.viewer__box {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.viewer__box::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--box);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--box) 12%, transparent);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.viewer__box:hover::before {
+  background: color-mix(in srgb, var(--box) 24%, transparent);
+}
+
+.viewer__box[aria-pressed="true"]::before {
+  inset: -4px;
+  border: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  box-shadow: 0 0 0 1px var(--accent-ink);
+}
+
+[data-family="product"] {
+  --box: var(--fam-product);
+  --fam-ui: var(--fam-product-ui);
+}
+
+[data-family="document"] {
+  --box: var(--fam-document);
+  --fam-ui: var(--fam-document-ui);
+}
+
+[data-family="signature"] {
+  --box: var(--fam-signature);
+  --fam-ui: var(--fam-signature-ui);
+}
+
+[data-family="legal"] {
+  --box: var(--fam-legal);
+  --fam-ui: var(--fam-legal-ui);
+}
+
+[data-family="audit"] {
+  --box: var(--fam-audit);
+  --fam-ui: var(--fam-audit-ui);
+}
+
+[data-family="logistics"] {
+  --box: var(--fam-logistics);
+  --fam-ui: var(--fam-logistics-ui);
+}
+
+[data-family="other"] {
+  --box: var(--fam-other);
+  --fam-ui: var(--fam-other-ui);
+}
+
+/* Date panel: flags, then the families ------------------------------------------- */
+
+.date-list {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.date-group__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.date-group[data-family] .date-group__title::before {
+  content: "";
+  flex: none;
+  align-self: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fam-ui);
+}
+
+.date-group[data-family] .date-group__name {
+  color: var(--fam-ui);
+}
+
+.date-group__count {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-stretch: 100%;
+  font-size: var(--fs-13);
+  font-weight: 500;
+}
+
+.date-group__rows,
+.flags__list,
+.history__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.date-group__rows {
+  margin-top: var(--space-2);
+}
+
+.date-row + .date-row {
+  border-top: 1px solid var(--rule);
+}
+
+.date-row[data-selected] {
+  border-radius: var(--radius-card);
+  background: var(--selected-bg);
+}
+
+/* The row after a selected one keeps its edge off the tint. */
+.date-row[data-selected] + .date-row,
+.date-row + .date-row[data-selected] {
+  border-top-color: transparent;
+}
+
+.date-row[data-active] {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.date-row__select {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-card);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+/* One step above --surface-2, so the neutral "Needs review" pill keeps its chip on hover (as flags do). */
+.date-row:not([data-selected]) .date-row__select:hover {
+  background: var(--active);
+}
+
+.date-row__select:focus-visible {
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 4px var(--focus);
+}
+
+.date-row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.date-value {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-2);
+  min-width: 0;
+  font-weight: 600;
+}
+
+.date-value .mono {
+  font-size: var(--fs-14);
+}
+
+.date-value__month {
+  color: var(--muted);
+  font-size: var(--fs-13);
+  font-weight: 400;
+}
+
+.date-row__type {
+  font-weight: 500;
+}
+
+.date-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px var(--space-3);
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.date-row__raw {
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+
+.date-row__context {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--fs-13);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date-row__match {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.date-row[data-active] .date-row__context {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.date-row__note {
+  color: var(--muted);
+  font-size: var(--fs-12);
+}
+
+.date-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.date-row__history {
+  margin-left: auto;
+}
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 var(--space-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 400;
+}
+
+.date-list__empty,
+.flags__empty {
+  font-size: var(--fs-13);
+}
+
+.flags {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.flags__list {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.flag {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--surface-2);
+  font-size: var(--fs-13);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.flag:hover {
+  background: var(--active);
+}
+
+.flag:focus-visible {
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 4px var(--focus);
+}
+
+.flag[aria-pressed="true"] {
+  background: var(--selected-bg);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.flag__message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.flags__more {
+  justify-self: start;
+  font-size: var(--fs-13);
+}
+
+/* History, under the active row. */
+/* Padding, not a bottom margin: the margin would collapse through the row and touch its ring. */
+.history {
+  margin: 0 var(--space-3);
+  padding: var(--space-2) 0 var(--space-3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-13);
+}
+
+.history__list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.history__action {
+  font-weight: 600;
+}
+
+.history__failure {
+  color: var(--danger);
+}
+
+.history__failure .text-button {
+  color: inherit;
+}
+
+/* Discarded AI suggestions: a collapsed debug list under the dates, never styled as a date. */
+.discarded {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-13);
+}
+
+.discarded__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-2);
+  margin: 0 calc(-1 * var(--space-2));
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.discarded__summary::-webkit-details-marker {
+  display: none;
+}
+
+.discarded__summary:hover {
+  background: var(--surface-2);
+}
+
+.discarded__summary::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin: 0 3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.discarded[open] > .discarded__summary::before {
+  transform: rotate(45deg);
+}
+
+.discarded__title {
+  font-size: var(--fs-14);
+  font-weight: 600;
+}
+
+.discarded__intro {
+  margin: var(--space-1) 0 var(--space-3);
+  max-width: 60ch;
+}
+
+.discarded__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.discarded__item {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) 0;
+}
+
+.discarded__item + .discarded__item {
+  border-top: 1px solid var(--rule);
+}
+
+.discarded__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+
+.discarded__quote {
+  overflow-wrap: anywhere;
+}
+
+.discarded__failure {
+  color: var(--danger);
+  font-size: var(--fs-13);
+}
+
+.discarded__failure .text-button {
+  color: inherit;
+}
+
+.panel-skeleton {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.panel-skeleton__row {
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* Review dialog: the one place a shadow appears. */
+.review-dialog {
+  width: min(480px, calc(100vw - 2 * var(--space-4)));
+  max-height: calc(100dvh - 2 * var(--space-4));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-float);
+}
+
+.review-dialog::backdrop {
+  background: var(--scrim);
+}
+
+.review-dialog__form {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+}
+
+.review-dialog__head {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.review-dialog__date {
+  display: grid;
+  gap: 2px;
+  font-size: var(--fs-13);
+}
+
+.review-dialog__date .date-value {
+  font-size: var(--fs-14);
+}
+
+.review-dialog__readings {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.review-dialog__readings legend {
+  padding: 0;
+}
+
+.review-dialog__reading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  cursor: pointer;
+}
+
+/* Drawn radios: the UA's dark-mode disc is a flat grey that belongs to no palette. */
+.review-dialog__reading input {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 1px solid var(--control);
+  border-radius: 50%;
+  background: var(--surface);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.review-dialog__reading input:checked {
+  border-color: var(--text);
+  background: var(--text);
+  box-shadow: inset 0 0 0 3px var(--surface);
+}
+
+.review-dialog__reading input:focus-visible {
+  border-radius: 50%;
+}
+
+.review-dialog__reading input:checked:focus-visible {
+  box-shadow:
+    inset 0 0 0 3px var(--surface),
+    0 0 0 5px var(--focus);
+}
+
+.field__error {
+  color: var(--danger);
+  font-size: var(--fs-13);
+}
+
+.review-dialog__failure {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-control);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: var(--fs-13);
+}
+
+.review-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+/* Tablet: the viewer stacks above the dates and the rail turns into a strip. */
+@media (max-width: 960px) {
+  .review {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The viewer stays at the top of the window while the dates scroll under it. */
+  .review__viewer {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: calc(50vh + var(--gap));
+    min-height: 376px;
+    padding-bottom: var(--gap);
+    background: var(--surface);
+  }
+
+  .date-row {
+    scroll-margin-top: calc(max(50vh, 360px) + 2 * var(--gap));
+  }
+
+  .viewer__body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .viewer__canvas,
+  .viewer__body:has(> .viewer__canvas:focus-visible)::after {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .viewer__rail {
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .thumb {
+    flex: none;
+    width: 56px;
+  }
+
+  .thumb__image {
+    max-height: 64px;
+  }
+}
+
+@media (max-width: 640px) {
+  .review-title {
+    flex-wrap: wrap;
+  }
+
+  /* The count takes its own line; export and reprocess sit together under it. */
+  .review-title .title-row__actions {
+    flex: 1 1 100%;
+    align-items: center;
+    margin-left: 0;
+  }
+
+  .review__summary {
+    flex: 1 1 100%;
+  }
+
+  /* Export now starts the line, so its menu opens to the right, inside the screen. */
+  .export-menu__list {
+    right: auto;
+    left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+
+  .dropzone__progress::after {
+    animation: none;
+    width: 100%;
+    opacity: 0.4;
+  }
+}

@@ -1,0 +1,15 @@
+[
+  {"page": 1, "raw_text": "26 March 2026", "date_type": "issue_date", "normalized": "2026-03-26"},
+  {"page": 1, "raw_text": "31/12/2026", "date_type": "expiry_date", "normalized": "2026-12-31"},
+  {"page": 1, "raw_text": "31/12/2025", "date_type": "shipping_date", "normalized": "2025-12-31"},
+  {"page": 1, "raw_text": "30/09/2026", "date_type": "expiry_date", "normalized": "2026-09-30"},
+  {"page": 1, "raw_text": "31/12/2025", "date_type": "shipping_date", "normalized": "2025-12-31"},
+  {"page": 1, "raw_text": "31/12/2026", "date_type": "expiry_date", "normalized": "2026-12-31"},
+  {"page": 1, "raw_text": "31/12/2025", "date_type": "shipping_date", "normalized": "2025-12-31"},
+  {"page": 1, "raw_text": "31/12/2026", "date_type": "expiry_date", "normalized": "2026-12-31"},
+  {"page": 1, "raw_text": "05/01/2026", "date_type": "shipping_date", "candidates": ["2026-01-05", "2026-05-01"]},
+  {"page": 1, "raw_text": "31/12/2026", "date_type": "expiry_date", "normalized": "2026-12-31"},
+  {"page": 1, "raw_text": "06/02/2026", "date_type": "shipping_date", "candidates": ["2026-02-06", "2026-06-02"]},
+  {"page": 1, "raw_text": "30/04/2027", "date_type": "expiry_date", "normalized": "2027-04-30"},
+  {"page": 1, "raw_text": "12/02/2026", "date_type": "shipping_date", "candidates": ["2026-02-12", "2026-12-02"]}
+]

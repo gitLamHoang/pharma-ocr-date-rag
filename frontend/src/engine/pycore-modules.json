@@ -1,0 +1,16 @@
+{
+  "comment": "The pure Python core bundled into the static (GitHub Pages) build and run in Pyodide. Paths are relative to backend/. Standard library + pydantic only (backend/tests/test_browser_core.py checks it).",
+  "modules": [
+    "pharma_dates/__init__.py",
+    "pharma_dates/models.py",
+    "pharma_dates/taxonomy.py",
+    "pharma_dates/candidates.py",
+    "pharma_dates/classify.py",
+    "pharma_dates/validate.py",
+    "pharma_dates/browser.py",
+    "pharma_dates/rules/__init__.py",
+    "pharma_dates/rules/conventions.py",
+    "pharma_dates/rules/dates.py",
+    "pharma_dates/rules/languages.py"
+  ]
+}

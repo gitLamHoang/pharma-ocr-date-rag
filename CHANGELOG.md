@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0 - 2026-11-11 - Rebuild as a date extraction and review app
+
+- Replaced the prototype with a FastAPI backend and a React review app. Upload a PDF or scan; every date comes back with its type from a 31-type taxonomy, its value (or both readings when ambiguous), page, box, evidence, source and confidence.
+- Pipeline: ingest and render at 200 DPI, PDF text layer or Tesseract with measured preprocessing, rule candidates, per-page Claude labelling (Anthropic API, Bedrock or Vertex) with verified AI-only dates, deterministic consistency flags, SQLite store with append-only review history and reprocessing runs. Offline mode uses the rules and Tesseract only.
+- Review screen: page viewer with highlight boxes by family, dates grouped by family, flags, accept / correct / reject with reviewer and reason, keyboard control, history, CSV and JSON export. Light and dark themes.
+- Evaluation: 15 public documents with 123 hand-labelled dates (offline detection precision 1.00, recall 0.85, 0 hallucinations, 0 silent resolutions) and a 300-page synthetic degraded-scan set (precision 0.99, recall 0.89).
+- Packaging: Dockerfile and `docker compose up`, a Makefile (`dev`, `test`, `eval`, `up`), CI with ruff, pytest, Vitest, build, gitleaks and a Playwright smoke test in offline mode. English documents only.
+
 ## 2026-11-01 - Same-document date order evidence and ledger redesign
 
 - Added `conventions.py`: numeric dates valid in only one order (`31/10/2026`) vote for their document's convention. A unanimous vote suggests a reading for ambiguous dates; any conflict or missing evidence abstains. Explicit policies are never overridden and OCR-damaged digits are not reinterpreted.

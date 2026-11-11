@@ -1,0 +1,9 @@
+[
+  {"page": 1, "raw_text": "06/14/11", "date_type": "inspection_date", "normalized": "2011-06-14"},
+  {"page": 1, "raw_text": "06/21/2011", "date_type": "issue_date", "normalized": "2011-06-21"},
+  {"page": 2, "raw_text": "4/28/2011", "date_type": "effective_date", "normalized": "2011-04-28"},
+  {"page": 2, "raw_text": "06/14/2011", "date_type": "inspection_date", "normalized": "2011-06-14"},
+  {"page": 2, "raw_text": "06/21/2011", "date_type": "issue_date", "normalized": "2011-06-21"},
+  {"page": 3, "raw_text": "06/15/2011", "date_type": "inspection_date", "normalized": "2011-06-15"},
+  {"page": 3, "raw_text": "06/21/2011", "date_type": "issue_date", "normalized": "2011-06-21"}
+]

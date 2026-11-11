@@ -1,0 +1,13 @@
+[
+  {"page": 1, "raw_text": "31 December 2035", "date_type": "certificate_valid_until", "normalized": "2035-12-31"},
+  {"page": 1, "raw_text": "03 February 2026", "date_type": "certificate_issue_date", "normalized": "2026-02-03"},
+  {"page": 9, "raw_text": "Feb 2026", "date_type": "other_date", "normalized": "2026-02"},
+  {"page": 9, "raw_text": "Feb 2026", "date_type": "other_date", "normalized": "2026-02"},
+  {"page": 9, "raw_text": "Feb 2026", "date_type": "other_date", "normalized": "2026-02"},
+  {"page": 9, "raw_text": "Feb 2026", "date_type": "other_date", "normalized": "2026-02"},
+  {"page": 9, "raw_text": "03 February 2026", "date_type": "version_date", "normalized": "2026-02-03"},
+  {"page": 9, "raw_text": "07 July 2016", "date_type": "version_date", "normalized": "2016-07-07"},
+  {"page": 9, "raw_text": "11 August 2011", "date_type": "version_date", "normalized": "2011-08-11"},
+  {"page": 9, "raw_text": "19 December 2002", "date_type": "version_date", "normalized": "2002-12-19"},
+  {"page": 9, "raw_text": "30 October 2000", "date_type": "version_date", "normalized": "2000-10-30"}
+]

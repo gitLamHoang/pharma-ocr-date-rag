@@ -1,0 +1,7 @@
+[
+  {"page": 1, "raw_text": "12 October 2026", "date_type": "issue_date", "normalized": "2026-10-12"},
+  {"page": 1, "raw_text": "12/2026", "date_type": "expiry_date", "normalized": "2026-12"},
+  {"page": 1, "raw_text": "09/01/2025", "date_type": "shipping_date", "candidates": ["2025-01-09", "2025-09-01"]},
+  {"page": 1, "raw_text": "12/2026", "date_type": "expiry_date", "normalized": "2026-12"},
+  {"page": 1, "raw_text": "25/09/2025", "date_type": "shipping_date", "normalized": "2025-09-25"}
+]

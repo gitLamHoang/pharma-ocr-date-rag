@@ -1,0 +1,17 @@
+[
+  {"page": 1, "raw_text": "November 29, 2023", "date_type": "receipt_date", "normalized": "2023-11-29"},
+  {"page": 1, "raw_text": "March 28, 2024", "date_type": "receipt_date", "normalized": "2024-03-28"},
+  {"page": 3, "raw_text": "March 28, 2024", "date_type": "other_date", "normalized": "2024-03-28"},
+  {"page": 3, "raw_text": "May 8, 2020", "date_type": "approval_date", "normalized": "2020-05-08"},
+  {"page": 3, "raw_text": "May 29, 2024", "date_type": "approval_date", "normalized": "2024-05-29"},
+  {"page": 3, "raw_text": "May 8, 2020", "date_type": "approval_date", "normalized": "2020-05-08"},
+  {"page": 3, "raw_text": "May 29, 2024", "date_type": "approval_date", "normalized": "2024-05-29"},
+  {"page": 3, "raw_text": "May 29, 2024", "date_type": "approval_date", "normalized": "2024-05-29"},
+  {"page": 4, "raw_text": "August 23, 2024", "date_type": "other_date", "normalized": "2024-08-23"},
+  {"page": 4, "raw_text": "03/2026", "date_type": "other_date", "normalized": "2026-03"},
+  {"page": 4, "raw_text": "09/2026", "date_type": "other_date", "normalized": "2026-09"},
+  {"page": 4, "raw_text": "September 26, 2024", "date_type": "other_date", "normalized": "2024-09-26"},
+  {"page": 4, "raw_text": "09/2033", "date_type": "other_date", "normalized": "2033-09"},
+  {"page": 4, "raw_text": "03/2034", "date_type": "other_date", "normalized": "2034-03"},
+  {"page": 7, "raw_text": "09/27/2024", "date_type": "signature_date", "normalized": "2024-09-27"}
+]

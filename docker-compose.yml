@@ -1,0 +1,15 @@
+name: pharma-dates
+services:
+  app:
+    build: .
+    # Loopback only: the app has no login. To reach it from other machines, put a reverse proxy
+    # with authentication in front of it rather than publishing this port on every interface.
+    ports:
+      - "127.0.0.1:8000:8000"
+    # Provider settings and keys (copy .env.example to .env). Keys are read at run time, never baked in.
+    # Optional: without .env the app runs offline (rules + OCR only).
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./data:/app/data

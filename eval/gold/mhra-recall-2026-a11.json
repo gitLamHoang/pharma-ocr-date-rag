@@ -1,0 +1,8 @@
+[
+  {"page": 1, "raw_text": "06 March 2026", "date_type": "issue_date", "normalized": "2026-03-06"},
+  {"page": 1, "raw_text": "10/2026", "date_type": "expiry_date", "normalized": "2026-10"},
+  {"page": 1, "raw_text": "06 June 2025", "date_type": "shipping_date", "normalized": "2025-06-06"},
+  {"page": 2, "raw_text": "06 June 2025", "date_type": "other_date", "normalized": "2025-06-06"},
+  {"page": 2, "raw_text": "06 March 2026", "date_type": "other_date", "normalized": "2026-03-06"},
+  {"page": 4, "raw_text": "10/2026", "date_type": "expiry_date", "normalized": "2026-10"}
+]

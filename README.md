@@ -1,292 +1,114 @@
-# Pharma Date Review
+# Pharma Date Extraction
 
-[![Tests](https://github.com/gitLamHoang/pharma-ocr-date-rag/actions/workflows/tests.yml/badge.svg)](https://github.com/gitLamHoang/pharma-ocr-date-rag/actions/workflows/tests.yml)
-[![Browser](https://github.com/gitLamHoang/pharma-ocr-date-rag/actions/workflows/pages.yml/badge.svg)](https://github.com/gitLamHoang/pharma-ocr-date-rag/actions/workflows/pages.yml)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB)](pyproject.toml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-168577)](LICENSE)
+Finds every date in a pharmaceutical document, says what each one means, shows where it is on the page and checks that the dates agree, so a reviewer on a pharmaceutical quality team can confirm them instead of hunting for them.
 
-A pharmaceutical date-review prototype with **60 real public MHRA notices**, a trained table-column classifier, original-PDF OCR measurements, and a searchable batch/date register. Every candidate links back to source evidence; uncertain values remain unresolved.
+**Live demo:** <https://gitlamhoang.github.io/pharma-ocr-date-rag/>, the same app running in your browser. It runs rules only (no AI), documents are not uploaded anywhere, and every date needs review. See [Browser demo](#browser-demo) for its limits; the full app (Claude + server) is the Docker deployment below.
 
-**English / French / German / Spanish / Vietnamese. Python + TypeScript + SQL.**
+![The review screen: a certificate of analysis with its dates boxed on the page, and the list of dates to accept, correct or reject](docs/images/review.png)
 
-### [Open the Interactive Workspace](https://gitlamhoang.github.io/pharma-ocr-date-rag/)
+## What you get
 
-No installation or API key. Search 742 candidate date-column cells from public medicine notices, inspect original batch rows, see which ambiguous dates the rest of their notice can settle, and compare model evidence. A separate workspace contains eight synthetic multilingual documents and 42 candidate dates.
+Upload a PDF (native text or scanned) or a PNG, JPG or TIFF image, up to 50 MB and 100 pages. Each date comes back with its type, original text, ISO value (or both readings when `09/10/2026` is ambiguous), page, box, evidence, source and confidence. The types:
 
-[October 2 release checklist](docs/release-checklist.md): installation checks, measured results, demo sequence and known limits.
+| Family | Types |
+|---|---|
+| Product / batch | manufacture, expiry, retest, packaging, release (incl. QP certification), sampling, test, analysis report |
+| Document control | effective, issue, version, approval, review, next review, superseded |
+| Signature | signature (with signer and meaning: author, reviewer, approver, witness, QP) |
+| Legal / regulatory | certificate issue, certificate valid until, notarization, apostille, legalization, translation certification, authorization |
+| Audit / inspection | inspection, audit, next audit, CAPA due |
+| Logistics | shipping, receipt |
+| Other | other (with a free-text qualifier), unknown |
 
-![Public MHRA notices workspace with batch search, date candidates and source evidence](docs/images/public-notices.png)
+Consistency flags catch expiry before manufacture, a legalization chain out of order, an expired certificate, a signature in the future and an unresolved ambiguous date, among others. The reviewer accepts, corrects or rejects each date with a name and a reason. Every decision is kept in an append-only history, and the result exports as CSV or JSON.
 
-## The Problem
+## Quick start
 
-A medicine notice can list many affected batches, expiry values and distribution dates. A flat OCR transcript loses the relationship between them. The public-data workflow retains that relationship and supports searching batches across notices. It is a historical research snapshot, not a live recall service or medication-safety decision tool.
+**Docker** (Tesseract included):
 
-A vendor document can contain manufacturing, expiry, inspection, audit, arrival, and report dates. Finding a date is only part of the task: a reviewer needs to know what it refers to and where it came from. A value such as `09/01/2026` adds another question: which date convention does this document use?
-
-The product hypothesis is a review workspace for supplier-quality teams: collect candidate fields, surface uncertainty, and keep every result traceable to the source. Customer demand and time savings have not yet been measured. [Product and engineering decisions](docs/design.md).
-
-## Try It
-
-The [browser workspace](https://gitlamhoang.github.io/pharma-ocr-date-rag/) opens to real Public notices. In the separate synthetic Document review view, select the French audit date, compare interpretations, record a reason, and inspect Review history. The Date register has language, date-type, status and search filters. Benchmark lab exposes the individual synthetic test cases.
-
-The public browser app uses a versioned snapshot generated by the Python extractor. Review events stay in your browser, can be exported, and are not sent to a server. It does not upload documents or run OCR in the browser. Source-page images are rendered fixtures; their highlights come from text offsets and font layout, not OCR-detected boxes.
-
-### Run locally
-
-```bash
-git clone https://github.com/gitLamHoang/pharma-ocr-date-rag.git
-cd pharma-ocr-date-rag
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev,demo]"
-streamlit run demo_app.py
+```sh
+cp .env.example .env    # optional: add a key for AI labels; without it the app runs offline
+make up                 # mkdir -p data, then docker compose up --build
 ```
 
-Streamlit is the local extraction sandbox for pasted/uploaded UTF-8 text, language settings and numeric date conventions. The Python CLI and extraction core have no third-party runtime dependencies; Streamlit is optional.
+Open http://localhost:8000. Data (database, uploads, page images) is kept in `./data`.
 
-To run the custom browser UI locally with Node 24.12+:
+The app has no login, so Compose publishes it on the loopback interface only (`127.0.0.1:8000`). To use it from other machines, put a reverse proxy with authentication in front of it; do not publish the port on every interface.
 
-```bash
-cd web
-npm ci
-npm run dev
+If you run `docker compose up --build` yourself, create `./data` first (`mkdir -p data`); otherwise Docker creates it as root on Linux and the app, which runs as uid 1000, cannot write to it.
+
+**Local development** needs Python 3.12 with [uv](https://docs.astral.sh/uv/), Node 22 and Tesseract (`brew install tesseract` or `apt install tesseract-ocr`):
+
+```sh
+make dev     # API with reload on :8000, Vite on http://localhost:5173
+make test    # backend pytest and frontend Vitest
+make eval    # fetch the public evaluation set and score it (AI=on to include Claude)
 ```
 
-[Two-minute demo walkthrough](docs/demo_walkthrough.md) · [Architecture](docs/architecture.md) · [Product decisions](docs/design.md) · [Portfolio guide](docs/portfolio-guide.md)
+The browser smoke test runs with `cd frontend && npx playwright install chromium && npm run build && npx playwright test` (the install downloads Playwright's Chromium once, into its user cache); it starts its own offline server.
 
-## What Works Today
+## Browser demo
 
-| Capability | Current implementation |
-| --- | --- |
-| Real public corpus | Bounded, cached GOV.UK API collector; 60 MHRA recall/defect notices, 371 batch rows, source hashes and OGL attribution |
-| Trained classifier | Character TF-IDF + logistic regression fitted on 36 notices; chronological document-group splits, keyword/majority baselines and abstention |
-| Public-notice register | 742 source-linked cells; separate dates, expiry cutoffs and distribution statements; value-kind filters, original rows and attributed exports |
-| Original-PDF experiment | Actual Tesseract and native-text extraction on 3 public PDFs / 6 pages, with saved transcripts and explicit coverage limits |
-| Multilingual fields | Language-specific month names and field vocabularies for English, French, German, Spanish and Vietnamese; all-language or explicit-language mode |
-| Date normalization | ISO, numeric, named-month, Vietnamese `ngày … tháng … năm …`, and month/year dates; calendar validation |
-| Ambiguity handling | Two valid numeric interpretations produce `normalized: null` plus candidates; explicit conventions can differ by document in one batch |
-| Same-document order evidence | Dates valid in only one order (`31/10/2026`) vote for their document's convention; a unanimous vote suggests a reading for ambiguous dates, any conflict abstains, and the cell stays `needs_review` |
-| Evidence | Original date text, unchanged source character offsets, line number, document text hash, parser settings and review reasons |
-| Browser workspace | Source-page highlights and zoom, field inspector, explicit date interpretations, reasoned decisions, local history, register filters and CSV/JSON exports |
-| Local extraction UI | Streamlit sandbox for sample collections, pasted/uploaded UTF-8 text, per-document numeric conventions and source highlighting |
-| Persistent review | SQLite document versions, append-only decisions and lifecycle events, document re-review, explicit source retirement/restoration, atomic writes and tested schema migration |
-| Retrieval | Bounded word chunks, exact source slices, lexical ranking with shared date-field vocabulary across languages, and no-match responses |
-| Evaluation | Per-label precision/recall/F1, multilingual exact-case checks, chunk-size experiments and automated tests |
-| Image OCR experiment | Explicit Tesseract packs, missing-dependency diagnostics and six measured synthetic image inputs in English, French and Vietnamese |
+The GitHub Pages build (`VITE_MODE=static`) is the same React app with an in-browser engine instead of the server: pdf.js renders each page at 200 DPI and reads its text layer, tesseract.js (`eng`) reads scans, and the server's own date rules, labels and consistency checks run in Python through Pyodide in a Web Worker. Documents, page images, dates and the append-only review history stay in this browser's IndexedDB (in memory only when the browser blocks storage); CSV and JSON exports are built in the page. Its limits:
 
-The language setting controls recognized vocabulary, not numeric date order. A French or English document can still have an unconfirmed numeric convention. Month-only expiry dates stay month-only; no day is invented.
+- **Rules only.** No Claude labels or transcription, so types come from the keyword rules and many dates are `unknown`.
+- **Same upload limits** as the server: PDF, PNG, JPG or TIFF, up to 50 MB and 100 pages, with the same messages for password-protected or damaged PDFs. Most browsers cannot decode TIFF; save such scans as PDF, PNG or JPG.
+- **OCR is a single Tesseract pass** (the server also tries a cleaned copy of the page and keeps the better one), so results on poor scans can differ from the server's.
+- **Your data stays in this browser.** Clearing the site's data deletes it; nothing syncs between browsers or devices.
+- **First use downloads** Pyodide with pydantic and Tesseract's English data from jsDelivr at pinned versions; nothing else is fetched from outside the site.
 
-### Example: preserve uncertainty
+Build and test it locally:
 
-```python
-from pharma_ocr_date_rag.dates import extract_dates
-
-hit = extract_dates("Date de péremption: 09/10/2026", language="fr")[0]
-assert hit.label == "expiry"
-assert hit.normalized is None
-assert hit.candidates == ("2026-09-10", "2026-10-09")
-
-resolved = extract_dates("Date de péremption: 09/10/2026", language="fr", date_order="dmy")[0]
-assert resolved.normalized == "2026-10-09"
+```sh
+cd frontend
+VITE_MODE=static npm run build                       # dist/ for /pharma-ocr-date-rag/
+npx playwright test -c playwright.static.config.ts   # runs the in-browser engine on the build
 ```
 
-![Benchmark lab with language coverage and visible Vietnamese cases](docs/images/benchmark-lab.png)
+`.github/workflows/pages.yml` builds, tests and deploys it on every push to `main`.
 
-## Command Line
+## Configuration
 
-```bash
-# Inspect multilingual fields, keeping ambiguous dates unresolved
-pharma-date-rag extract data/multilingual_docs
+Settings are environment variables, read from `.env` at the repo root (git-ignored; `.env.example` lists them with placeholders; an empty value means the default).
 
-# Export evidence with an explicitly chosen date convention
-pharma-date-rag extract data/multilingual_docs --date-order dmy --format json
+| Variable | Default | Meaning |
+|---|---|---|
+| `CLAUDE_PROVIDER` | `anthropic` | `anthropic`, `bedrock` or `vertex` |
+| `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` | empty | Credentials for the Anthropic API |
+| `AWS_REGION` | empty | Amazon Bedrock region; AWS credentials come from the usual AWS environment variables or profile |
+| `VERTEX_PROJECT_ID`, `VERTEX_REGION` | empty, `global` | Google Vertex AI project and region; credentials from Google application default credentials |
+| `AI_ENABLED` | `true` | `false` forces offline mode |
+| `CLAUDE_MODEL` | `claude-opus-5-5` | Model id |
+| `DATA_DIR` | `data` | Where the database, uploads and page images live |
 
-# Suggest readings for ambiguous dates from order-revealing dates in the same file
-pharma-date-rag extract data/mixed_conventions --suggest-order --format json
+**Offline mode.** With `AI_ENABLED=false`, or with no credentials for the chosen provider, the app uses the date rules and Tesseract only. Dates are still found and located; types come from English keyword rules, and most fall back to `unknown`. The UI shows "Rules only" and a banner on the Documents screen.
 
-# Search French date fields with an English field term
-pharma-date-rag ask data/multilingual_docs --question "expiry"
+## How it works
 
-# Original English sample demo
-python scripts/run_demo.py
-```
+1. **Ingest.** Check type and size, hash the file (an identical re-upload opens the stored result), render each page at 200 DPI.
+2. **Text and layout.** Words and boxes from the PDF text layer, or Tesseract on scans; with AI on, Claude also transcribes scanned pages.
+3. **Candidates.** Date rules find, normalize and locate every date string, keep both readings of an ambiguous date and keep month-only dates at month precision.
+4. **Classify.** One Claude call per page labels each candidate from the taxonomy and may report dates the rules missed. Those are marked AI-only and kept only if the rules parse them and they appear on the page.
+5. **Validate.** Deterministic rules over the document's dates raise error, warning and info flags.
+6. **Store and review.** SQLite holds documents, runs, dates, flags and the append-only review history. Reprocessing creates a new run and carries decisions over where the date is unchanged.
 
-CSV and JSON use the same extractor records as the demos. JSON retains nulls, candidate lists and original text. CSV prefixes formula-like text cells with an apostrophe for spreadsheet export. Source offsets are zero-based, end-exclusive Unicode character positions in decoded text.
+## Data handling
 
-### Mixed document conventions
+- **Sent to the AI provider** (only when AI is on): each page's image, its extracted text and the list of date candidates. Nothing else leaves the machine.
+- **Kept local:** uploaded files, page images, the database and logs, all under `DATA_DIR`. Logs never print keys or document text.
+- **No secrets in the repo.** Keys live only in the git-ignored `.env`; the Docker image is built without it and reads it at run time. A secret scan runs in pre-commit (detect-secrets) and in CI (gitleaks). The evaluation set uses public documents only, fetched by script.
 
-Folder commands accept `--date-order-map`, a JSON object mapping exact filenames to `auto`, `dmy` or `mdy`. A per-document entry overrides the batch `--date-order`; missing entries inherit it. An explicit `auto` keeps that file's numeric convention unconfirmed, even when the batch default is DMY or MDY. Unknown filenames and malformed maps fail before processing.
+## Accuracy and limits
 
-```bash
-pharma-date-rag extract data/mixed_conventions --date-order-map data/mixed_conventions/date_orders.json --format json
-```
+Measured offline (`--ai off`) on 15 public documents with 123 hand-labelled dates (FDA inspection reports and approval letters, NIST certificates, MHRA notices, the HCCH model apostille):
 
-In the three authored examples, `09/10/2026` becomes September 10 for one file, October 9 for another, and stays unresolved for the third. The effective setting is visible in reports and exports. The same map works with `ask` and `index`; Streamlit has document-specific controls and a **Mixed conventions** collection. [Policy contract and walkthrough](docs/date-conventions.md).
+- **Detection:** precision 1.00, recall 0.85 (105 of 123 dates found, type ignored).
+- **Hallucinations: 0.** No stored date is missing from its page. **Silent resolutions: 0.** No ambiguous date was given one reading without evidence.
+- On 300 synthetic degraded scans (blur, low DPI, rotation, JPEG, noise, stamps) offline detection is precision 0.99, recall 0.89. Details are in [docs/accuracy.md](docs/accuracy.md).
+- Offline type labels are weak (micro F1 0.19 on the public set); AI labelling is implemented but has not been scored here. Run `make eval AI=on` with credentials to measure it.
 
-### Persistent local review
+Misses include date ranges written as one string, two-digit years, badly degraded scans and dates printed only inside photographs. The app supports English documents. **Every date needs human review:** the app finds and suggests, and a reviewer decides.
 
-```bash
-pharma-date-rag index data/multilingual_docs --db work/reviews.sqlite --collection multilingual
-pharma-date-rag queue --db work/reviews.sqlite --label expiry
-# Replace 1 with a candidate ID returned by the queue
-pharma-date-rag review 1 --db work/reviews.sqlite --decision needs_review --reviewer demo --reason "Confirm source convention"
-pharma-date-rag history 1 --db work/reviews.sqlite
-```
+## License
 
-Indexing the same source and parser settings retains its candidate IDs and decisions. A source or setting change creates a separate version. An unresolved SQL candidate cannot be accepted: confirm the source convention, then reindex with `--date-order dmy` or `mdy`. The browser's local review session and the CLI's SQLite database are separate stores; there is no synchronization or authenticated multi-user service.
-
-Use `documents` to find a document version ID, then `document reopen`, `document retire` or `document restore` with a reviewer and reason. Retirement removes a source from the active queue and blocks re-indexing that collection/filename, even when content changes. Restoration marks every stored field `needs_review`; it does not restore old approvals. Missing files are not automatically retired. [Lifecycle commands and limits](docs/review-lifecycle.md).
-
-The browser's **Reopen document for review** button adds a new decision for every synthetic field after confirmation. Earlier decisions remain in history and session exports. Prior manual date selections are cleared; ambiguous fields need another explicit choice. Source retirement is local SQLite functionality, not a browser or public-notice approval feature.
-
-## Reproduce the Results
-
-### Real public-document experiment
-
-```bash
-uv sync --frozen --python 3.12 --extra dev --extra research
-uv run python scripts/train_mhra.py --check
-uv run python scripts/benchmark_mhra_pdf.py --check-report
-uv run python scripts/benchmark_cells.py --check
-uv run python scripts/benchmark_conventions.py --check
-```
-
-The first command below the install **re-trains** from the frozen corpus without network access; the PDF checker verifies saved evidence without rerunning OCR. [Dataset/model card, source licence, crawl and actual OCR commands](docs/public-data.md).
-
-| Measurement | Actual result | Important boundary |
-| --- | --- | --- |
-| Training | 182 columns from 36 notices; 12 validation / 12 test notices | Trained column classifier, not OCR fine-tuning |
-| Test column roles | Model 80/80; keyword rules also 80/80; majority 23/80 | 76/80 heading instances occur in training; no demonstrated advantage over rules |
-| Original-PDF date coverage | OCR 11/11; native text also 11/11 | Supported unique HTML-table date interpretations in 3 PDFs, not whole-document OCR accuracy |
-| Public register | 742 cells: 539 single dates, 123 ambiguous dates, 3 cutoffs, 39 source statements, 38 unsupported | All require review; not independently validated date labels |
-| Same-notice order suggestions | 118/123 ambiguous cells get a cited day-first suggestion; 5 abstain, 0 conflict. Leave-one-out over 399 order-revealing cells: 390 agree, 0 disagree, 9 abstain | One publisher, all day-first; suggestions are not confirmed dates. [Method](docs/date-conventions.md#same-document-order-evidence) |
-
-All public notices are English. Five-language claims below apply to synthetic parser tests, not real multilingual document accuracy. The simpler rule baseline is competitive here; template-diverse, independently annotated data is the next research priority.
-
-An expiry cutoff is not an exact expiry date. The UI now separates `up to and including 05/2029` from a single date and preserves source footnote warnings. `Not yet distributed` stays a source statement. Neither creates a normalized date. Six source-anchored development cases and negative tests verify this contract; see the [cell semantics and schema](docs/public-data.md#conditional-and-non-date-cells).
-
-### Synthetic regression suite
-
-```bash
-pytest
-python scripts/evaluate.py
-python scripts/benchmark_multilingual.py --check
-python scripts/benchmark_multilingual.py --json
-python scripts/benchmark_retrieval.py
-python scripts/export_evidence.py --check
-python scripts/export_web.py --check
-```
-
-Measured on the current **authored synthetic development fixtures**, not held-out vendor documents or image OCR:
-
-| Evaluation | Result | Meaning |
-| --- | --- | --- |
-| Original English set | 18/18 unique field records; precision/recall/F1 1.00 | Four text documents, explicitly MDY |
-| Multilingual + edge cases | 42/42 exact cases in all-language mode and 42/42 in explicit mode | Date, label, candidates, precision and review reasons must all match |
-| Multilingual breakdown | EN 18/18; FR, DE, ES, VI each 6/6 | English includes 12 edge cases; coverage is intentionally uneven |
-| Retrieval chunk experiment | 3/3 questions hit at 35, 60 and 90 words | A small smoke benchmark, not evidence that chunk size never matters |
-
-[Machine-readable benchmark report](docs/benchmark_results.json) includes the fixture SHA-256. The regression suite covers calendar validation, source preservation, retrieval, exports, Streamlit interactions, SQL migrations and rollback, and snapshot reproducibility. Python CI covers 3.9, 3.11 and 3.12. Browser CI runs type checking, nineteen unit tests, a production build and Playwright desktop/mobile checks before deploying. Separate CI jobs retrain the public-data classifier and verify a clean wheel installation.
-
-```bash
-cd web
-npm test
-npm run build
-npx playwright install chromium
-npm run test:browser
-```
-
-The browser test starts and stops its own production preview, checks all eight page assets, exercises review persistence and exports, and captures screenshots. See [contributing](CONTRIBUTING.md) for snapshot regeneration and dependency details.
-
-### Verify the installable package
-
-```bash
-uv build --wheel --out-dir outputs/wheel
-uv run --no-project --python 3.12 python scripts/verify_wheel.py outputs/wheel/*.whl
-```
-
-On macOS or Linux, this creates a temporary environment outside the checkout and installs only the local wheel, without an index or runtime dependencies. It checks the installed CLI, mixed date conventions, source spans, review lifecycle and v1/v2 database upgrades. Failure returns a nonzero exit code and a failed report. CI saves the wheel and its SHA-256 verification report as artifacts. Test only trusted wheels; this is installation verification, not a sandbox for untrusted code.
-
-### Separate image-OCR experiment
-
-Actual Tesseract recognition of three synthetic pages recovered **16/16 fields on clean images**, but only **8/16 after fixed downsampling, blur and rotation**, with four extra predictions. All six recognition runs completed. Some errors produced valid-looking but wrong dates, which is why calendar validation is insufficient for automatic acceptance.
-
-The experiment uses pinned English, French and Vietnamese language packs, manually specified gold, occurrence-aware scoring and saved raw OCR output. It does not establish real-scan accuracy or change the text-backed browser demo. [Protocol, failure examples and reproduction commands](docs/image-ocr.md) · [Measured JSON report](reports/image_ocr.json).
-
-```bash
-# Check saved evidence without OCR dependencies; this does not rerun recognition
-python scripts/benchmark_ocr.py --check-report
-```
-
-## Architecture
-
-```mermaid
-flowchart LR
-    N[Official MHRA APIs / public PDFs] --> O[Bounded collection + source hashes]
-    O --> P[Train-only TF-IDF column classifier]
-    P --> Q[Batch-linked dates + uncertainty]
-    Q --> L
-    O --> R[Original-PDF OCR / native-text coverage]
-    A[UTF-8 text / optional OCR] --> B[Scoped OCR repair]
-    B --> C[Multilingual date candidates]
-    C --> D[Calendar validation + date-order policy]
-    D --> E[Context label + review reasons]
-    E --> F[Source-backed register]
-    F --> G[Streamlit / CSV / JSON]
-    F --> J[Versioned SQLite review queue]
-    F --> K[Hashed public JSON + rendered fixtures]
-    K --> L[TypeScript review workspace]
-    L --> M[Local browser decisions + export]
-    A --> H[Source-preserving word chunks]
-    H --> I[Lexical field-aware retrieval]
-    I --> G
-```
-
-```text
-src/pharma_ocr_date_rag/
-  languages.py   month names and field vocabularies
-  public_data.py bounded public collection, robots checks and source tables
-  recalls.py     grouped splits, learned column roles and batch/date evidence
-  dates.py       date candidates, normalization, source offsets, review flags
-  conventions.py same-document order evidence and abstaining suggestions
-  policies.py    explicit per-document numeric conventions and validation
-  ocr.py         verified Tesseract adapter; unverified legacy PaddleOCR adapter
-  pipeline.py    shared text/document processing
-  reporting.py   evidence records and portable exports
-  rag.py         source-preserving chunks and lexical retrieval
-  evaluation.py  per-label field metrics
-  experiments.py chunk-size evaluation
-  review.py      versioned SQLite queue and decisions
-  schema.sql     constraints, indexes, view and event triggers
-  migrate_v1.sql history-preserving schema upgrade
-  cli.py         extraction, search and review commands
-
-data/
-  public_mhra/          real notice tables, explicit heading labels and protocol
-  synthetic_docs/       four original English fixtures
-  multilingual_docs/    four multilingual demo documents
-  mixed_conventions/    three adversarial convention fixtures and a policy map
-  multilingual_cases.json
-  ocr_cases.json         manual gold for three synthetic image-OCR pages
-  ocr_models.json        pinned Tesseract language packs and SHA-256 checksums
-
-web/            TypeScript/Vite app, rendered pages and browser tests
-demo_app.py     local Streamlit extraction sandbox
-scripts/
-tests/
-docs/
-```
-
-## Scope and Limitations
-
-This independent prototype combines attributed public MHRA notices with clearly marked synthetic fixtures. It contains no Pfizer-confidential documents, patient records, private vendor data, or production deployment results. It is a later public reconstruction of the document-workflow idea, not a release of an employer's system. Development and schema annotation use AI assistance; the code, tests and design notes are available for inspection. Code is MIT; source public-sector content retains its [OGL attribution and exclusions](data/public_mhra/LICENSE.md).
-
-The five-language demo starts from text. A separate Tesseract experiment has been run on three synthetic pages in English, French and Vietnamese, both clean and degraded. Original-PDF OCR has also been measured on three English MHRA notices, with limited coverage scoring. Neither validates German/Spanish OCR, mixed-language scans or unseen vendor layouts. The PaddleOCR adapter remains unverified. Optional OCR packages and system dependencies are not required for the hosted demo.
-
-Despite the historical repository name, retrieval is extractive evidence, not an LLM-generated answer. The public-data column classifier is trained and measured, but no OCR recognizer has been fine-tuned. There is no working LlamaIndex index or Mistral/Phi-2 benchmark in this public version. Those comparisons must be implemented and measured before being claimed.
-
-Multilingual text classification/retrieval use small vocabularies; public table roles use the measured classifier. Merged tables, unknown phrasing, page layout and mixed-language scans need more coverage. Rule confidence and classifier scores are not calibrated probabilities of a correct date. Reviewer names are local labels, not verified identities; neither review store is a regulatory approval or clinical decision system.
-
-## Development
-
-See the [daily roadmap](docs/roadmap.md), [public-data protocol](docs/public-data.md) and [failure-mode notes](docs/failure_modes.md). Contributions should include a minimal synthetic example or an attributed, reusable public source, expected behavior and a regression check. Report what was actually tested and keep benchmark scope explicit.
+MIT. See [LICENSE](LICENSE).

@@ -1,53 +1,57 @@
-name: Browser workspace
+# The static, in-browser build (rules only, no server) on GitHub Pages:
+# https://gitlamhoang.github.io/pharma-ocr-date-rag/
+# The full app (Claude + server) is the Docker deployment; see README.
+name: pages
 on:
   push:
     branches: [main]
-    paths: ['web/**', '.github/workflows/pages.yml']
-  pull_request:
-    paths: ['web/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
+  pages: write
+  id-token: write
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: frontend
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: 22
           cache: npm
-          cache-dependency-path: web/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
+      - uses: actions/configure-pages@v6
       - run: npm ci
-        working-directory: web
-      - run: npm run format:check
-        working-directory: web
       - run: npm test
-        working-directory: web
+      # Base path /pharma-ocr-date-rag/ (vite.config.ts), Python core bundled from backend/.
       - run: npm run build
-        working-directory: web
+        env:
+          VITE_MODE: static
       - run: npx playwright install --with-deps chromium
-        working-directory: web
-      - run: npm run test:browser
-        working-directory: web
-      - uses: actions/upload-pages-artifact@v5
-        if: github.event_name != 'pull_request'
+      # Runs the real in-browser engine (pdf.js, tesseract.js, Pyodide) on the built site.
+      - run: npx playwright test -c playwright.static.config.ts
+      - uses: actions/upload-artifact@v4
+        if: failure()
         with:
-          path: web/dist
+          name: playwright-report-static
+          path: frontend/playwright-report-static
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: frontend/dist
+
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/configure-pages@v6
       - uses: actions/deploy-pages@v5
         id: deployment
