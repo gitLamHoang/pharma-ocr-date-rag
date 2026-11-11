@@ -319,17 +319,7 @@ class Store:
     def dates_for_run(self, run_id: int) -> list[DateWithStatus]:
         """The run's dates in reading order, with status and current type/value from their reviews."""
         with self._connect() as conn:
-            rows = conn.execute(
-                "SELECT * FROM dates WHERE run_id = ? ORDER BY page, char_start, id", (run_id,)
-            ).fetchall()
-            events = defaultdict(list)
-            for e in conn.execute(
-                "SELECT e.* FROM review_events e JOIN dates d ON d.id = e.date_id WHERE d.run_id = ?"
-                " ORDER BY e.id",
-                (run_id,),
-            ):
-                events[e["date_id"]].append(e)
-        return [_date_with_status(row, events[row["id"]]) for row in rows]
+            return _dates_with_status(conn, run_id)
 
     def flags_for_run(self, run_id: int) -> list[StoredFlag]:
         with self._connect() as conn:
@@ -408,15 +398,21 @@ class Store:
     def carry_over(self, old_run_id: int, new_run_id: int) -> int:
         """Copy reviewer decisions to the new run's dates that match an old date exactly (page, raw text
         and normalized value). Repeated identical dates pair up in reading order. Returns the number of
-        decisions carried; dates without a match, or whose last event is a reopen, stay `needs_review`."""
-        old = self.dates_for_run(old_run_id)
-        new = self.dates_for_run(new_run_id)
-        if old and new and old[0].document_id != new[0].document_id:
-            raise ValueError("runs belong to different documents")
-        by_key: dict[tuple, list[DateWithStatus]] = defaultdict(list)
-        for d in old:
-            by_key[(d.page, d.raw_text, d.normalized)].append(d)
+        decisions carried; dates without a match, or whose last event is a reopen, stay `needs_review`.
+        New dates that already have a review event are left alone, so a reviewer who acted first wins
+        and a second call carries nothing. `FrozenRunError` if the new run is not the latest run."""
         with self._connect(write=True) as conn:
+            document_id = _document_of_run(conn, new_run_id)
+            if _document_of_run(conn, old_run_id) != document_id:
+                raise ValueError("runs belong to different documents")
+            latest = conn.execute(
+                "SELECT MAX(id) FROM runs WHERE document_id = ?", (document_id,)
+            ).fetchone()[0]
+            if new_run_id != latest:
+                raise FrozenRunError(f"run {new_run_id} is frozen; carry over into the latest run {latest}")
+            by_key: dict[tuple, list[DateWithStatus]] = defaultdict(list)
+            for d in _dates_with_status(conn, old_run_id):
+                by_key[(d.page, d.raw_text, d.normalized)].append(d)
             last_events = {
                 r["date_id"]: r
                 for r in conn.execute(
@@ -425,14 +421,22 @@ class Store:
                     (old_run_id,),
                 )
             }
+            reviewed = {
+                r["date_id"]
+                for r in conn.execute(
+                    "SELECT DISTINCT e.date_id FROM review_events e JOIN dates d ON d.id = e.date_id"
+                    " WHERE d.run_id = ?",
+                    (new_run_id,),
+                )
+            }
             carried = 0
-            for d in new:
+            for d in _dates_with_status(conn, new_run_id):
                 matches = by_key.get((d.page, d.raw_text, d.normalized))
                 if not matches:
                     continue
                 source = matches.pop(0)
                 last = last_events.get(source.id)
-                if last is None or last["action"] == "reopen":
+                if d.id in reviewed or last is None or last["action"] == "reopen":
                     continue
                 _insert_event(
                     conn,
@@ -482,6 +486,19 @@ def _insert_event(
         (date_id, action, new_type, new_value, reviewer, reason, _now(), carried_from_run),
     ).fetchone()
     return ReviewEvent(**row)
+
+
+def _dates_with_status(conn: sqlite3.Connection, run_id: int) -> list[DateWithStatus]:
+    rows = conn.execute(
+        "SELECT * FROM dates WHERE run_id = ? ORDER BY page, char_start, id", (run_id,)
+    ).fetchall()
+    events = defaultdict(list)
+    for e in conn.execute(
+        "SELECT e.* FROM review_events e JOIN dates d ON d.id = e.date_id WHERE d.run_id = ? ORDER BY e.id",
+        (run_id,),
+    ):
+        events[e["date_id"]].append(e)
+    return [_date_with_status(row, events[row["id"]]) for row in rows]
 
 
 def _date_with_status(row: sqlite3.Row, events: list[sqlite3.Row]) -> DateWithStatus:

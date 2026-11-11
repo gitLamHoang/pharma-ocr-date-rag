@@ -124,6 +124,8 @@ def test_carry_over_exact_match_only(store):
         dated("c2", "01/02/2026", "2026-02-01", char_start=40, date_type="manufacture_date"),
         dated("c3", "15/05/2026", "2026-05-15", char_start=80),
         dated("c4", "20/06/2026", "2026-06-20", page=2),
+        dated("c5", "30/04/2027", "2027-04-30", char_start=120),
+        dated("c6", "01/01/2028", "2028-01-01", char_start=160),
     ]
     doc, old_run = new_run(store, old_dates)
     ids = {d.candidate_id: d.id for d in store.dates_for_run(old_run)}
@@ -132,6 +134,8 @@ def test_carry_over_exact_match_only(store):
     review(store, ids["c3"], "accept")
     review(store, ids["c4"], "reject")
     review(store, ids["c4"], "reopen")
+    review(store, ids["c5"], "accept")
+    review(store, ids["c6"], "accept")
 
     new_run_id = store.create_run(doc, "1.0.1", "claude-opus-5-5", True)
     store.save_results(
@@ -142,6 +146,8 @@ def test_carry_over_exact_match_only(store):
             dated("n3", "15/05/2026", "2026-05-16", char_start=80),  # different value
             dated("n4", "20/06/2026", "2026-06-20", page=2),  # last event was a reopen
             dated("n5", "31/03/2027", "2027-03-31", page=2),  # different page
+            dated("n6", "30.04.2027", "2027-04-30", char_start=120),  # same page and value, other text
+            dated("n7", "01/01/2028", "2028-01-01", page=2, char_start=60),  # c6 has no page-1 twin
         ],
         [],
         [],
@@ -155,9 +161,9 @@ def test_carry_over_exact_match_only(store):
         "packaging_date",
         "2026-02-02",
     )
-    assert [(d.status, d.carried_from_run) for d in (new["n3"], new["n4"], new["n5"])] == [
+    assert [(d.status, d.carried_from_run) for d in (new[k] for k in ("n3", "n4", "n5", "n6", "n7"))] == [
         ("needs_review", None)
-    ] * 3
+    ] * 5
     (event,) = store.history(new["n1"].id)
     assert (event.reason, event.reviewer, event.carried_from_run) == (
         f"carried over from run {old_run}",
@@ -191,6 +197,43 @@ def test_carry_over_pairs_repeated_dates_in_reading_order(store):
     )
     assert store.carry_over(old_run, new_run_id) == 1
     assert [d.status for d in store.dates_for_run(new_run_id)] == ["needs_review", "rejected"]
+
+
+def test_carry_over_keeps_reviewer_decision(store):
+    doc, old_run = new_run(store, [dated("c1", "31/03/2027", "2027-03-31")])
+    review(store, only_date(store, old_run).id, "accept")
+    new_run_id = store.create_run(doc, "1.0.1", "claude-opus-5-5", True)
+    store.save_results(new_run_id, [dated("n1", "31/03/2027", "2027-03-31")], [], [])
+    review(store, only_date(store, new_run_id).id, "reject", reason="wrong date")
+
+    assert store.carry_over(old_run, new_run_id) == 0
+    assert store.carry_over(old_run, new_run_id) == 0
+    d = only_date(store, new_run_id)
+    assert (d.status, d.carried_from_run) == ("rejected", None)
+    assert [e.action for e in store.history(d.id)] == ["reject"]
+
+
+def test_carry_over_is_idempotent(store):
+    doc, old_run = new_run(store, [dated("c1", "31/03/2027", "2027-03-31")])
+    review(store, only_date(store, old_run).id, "accept")
+    new_run_id = store.create_run(doc, "1.0.1", "claude-opus-5-5", True)
+    store.save_results(new_run_id, [dated("n1", "31/03/2027", "2027-03-31")], [], [])
+
+    assert store.carry_over(old_run, new_run_id) == 1
+    assert store.carry_over(old_run, new_run_id) == 0
+    assert len(store.history(only_date(store, new_run_id).id)) == 1
+
+
+def test_carry_over_into_frozen_run_rejected(store):
+    doc, old_run = new_run(store, [dated("c1", "31/03/2027", "2027-03-31")])
+    review(store, only_date(store, old_run).id, "accept")
+    middle = store.create_run(doc, "1.0.1", "claude-opus-5-5", True)
+    store.save_results(middle, [dated("n1", "31/03/2027", "2027-03-31")], [], [])
+    store.create_run(doc, "1.0.2", "claude-opus-5-5", True)
+
+    with pytest.raises(FrozenRunError):
+        store.carry_over(old_run, middle)
+    assert store.history(only_date(store, middle).id) == []
 
 
 def test_reupload_same_sha_reuses_document(store):
