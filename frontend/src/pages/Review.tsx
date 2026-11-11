@@ -27,9 +27,11 @@ interface Selection {
   ids: number[];
   active: number | null;
   flag: number | null;
+  /** Counts selections, so selecting the active date again still turns the viewer to it. */
+  seq: number;
 }
 
-const NOTHING: Selection = { ids: [], active: null, flag: null };
+const NOTHING: Selection = { ids: [], active: null, flag: null, seq: 0 };
 
 function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : "";
@@ -115,13 +117,13 @@ function ReviewScreen() {
 
   function select(id: number, scroll = false) {
     scrollRow.current = scroll;
-    setSelection({ ids: [id], active: id, flag: null });
+    setSelection((s) => ({ ids: [id], active: id, flag: null, seq: s.seq + 1 }));
   }
 
   function selectFlag(flag: Flag) {
     const ids = flag.date_ids.filter((id) => ordered.some((d) => d.id === id));
     scrollRow.current = true;
-    setSelection({ ids, active: ids[0] ?? null, flag: flag.id });
+    setSelection((s) => ({ ids, active: ids[0] ?? null, flag: flag.id, seq: s.seq + 1 }));
   }
 
   function decide(date: DateRecord, action: Decision) {
@@ -314,6 +316,7 @@ function ReviewScreen() {
                 pages={pages}
                 dates={dates.data ?? []}
                 selectedId={selection.active}
+                selectionSeq={selection.seq}
                 linkedIds={selection.ids}
                 onSelect={(id) => select(id, true)}
               />

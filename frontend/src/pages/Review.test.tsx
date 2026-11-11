@@ -217,6 +217,20 @@ describe("Review screen", () => {
     expect(box(1)).not.toBeNull();
   });
 
+  it("turns back to the active date's page when it is selected again", async () => {
+    renderAt();
+    await loaded();
+    fireEvent.click(rowButton(3));
+    expect(await screen.findByRole("img", { name: "Page 2 of 2" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^Page 1, / }));
+    expect(screen.getByRole("img", { name: "Page 1 of 2" })).toBeInTheDocument();
+
+    fireEvent.click(rowButton(3));
+
+    expect(screen.getByRole("img", { name: "Page 2 of 2" })).toBeInTheDocument();
+    expect(box(3)).not.toBeNull();
+  });
+
   it("shows a frozen older run read-only", async () => {
     renderAt("/documents/1?run=3");
     await screen.findByRole("heading", { level: 1, name: "coa-lot-4471.pdf" });

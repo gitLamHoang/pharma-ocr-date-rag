@@ -8,6 +8,8 @@ interface Props {
   dates: DateRecord[];
   /** The active date: the viewer turns to its page and keeps its box in view. */
   selectedId: number | null;
+  /** Changes on every selection, so selecting the active date again turns back to its page. */
+  selectionSeq?: number;
   onSelect(id: number): void;
   /** Other dates selected with it (the rest of a clicked flag's dates). */
   linkedIds?: number[];
@@ -23,18 +25,20 @@ function reducedMotion(): boolean {
 }
 
 /** The page image with a box on every date, a thumbnail rail and zoom (100 % fits the width). */
-export function PageViewer({ runId, pages, dates, selectedId, onSelect, linkedIds = [] }: Props) {
+export function PageViewer({ runId, pages, dates, selectedId, selectionSeq = 0, onSelect, linkedIds = [] }: Props) {
   const [pageNo, setPageNo] = useState(pages[0]?.n ?? 1);
   const [zoom, setZoom] = useState(FIT);
   const [failed, setFailed] = useState<number | null>(null);
   const [attempt, setAttempt] = useState(0);
   const canvas = useRef<HTMLDivElement>(null);
 
-  // Turn to the selected date's page when the selection changes (during render, not after it).
+  // Turn to the selected date's page on every selection (during render, not after it), even of
+  // the date already active after the reviewer turned pages with the rail.
   const selected = dates.find((d) => d.id === selectedId) ?? null;
-  const [shownFor, setShownFor] = useState<number | null>(null);
-  if (selectedId !== shownFor) {
-    setShownFor(selectedId);
+  const selection = `${selectedId}:${selectionSeq}`;
+  const [shownFor, setShownFor] = useState<string | null>(null);
+  if (selection !== shownFor) {
+    setShownFor(selection);
     if (selected && selected.page !== pageNo) setPageNo(selected.page);
   }
 
@@ -52,7 +56,7 @@ export function PageViewer({ runId, pages, dates, selectedId, onSelect, linkedId
       left: area.scrollLeft + rect.left - view.left - (view.width - rect.width) / 2,
       behavior: reducedMotion() ? "auto" : "smooth",
     });
-  }, [selectedId, pageNo, zoom]);
+  }, [selectedId, selectionSeq, pageNo, zoom]);
 
   if (pages.length === 0) {
     return (
