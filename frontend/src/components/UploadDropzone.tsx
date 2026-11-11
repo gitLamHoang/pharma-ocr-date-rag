@@ -1,3 +1,4 @@
+import { STATIC_MODE } from "../api";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type DragEvent } from "react";
 
 /** The server's limits (Settings.max_upload_mb); the page limit is checked server-side. */
@@ -123,7 +124,7 @@ export const UploadDropzone = forwardRef<UploadDropzoneHandle, Props>(function U
               </>
             )}
           </p>
-          <p className="dropzone__hint">PDF, PNG, JPG or TIFF, up to {MAX_UPLOAD_MB} MB and 100 pages each</p>
+          <p className="dropzone__hint">{STATIC_MODE ? "PDF, PNG or JPG" : "PDF, PNG, JPG or TIFF"}, up to {MAX_UPLOAD_MB} MB and 100 pages each</p>
         </div>
         <p className="dropzone__status" role="status">
           {busy ? (
