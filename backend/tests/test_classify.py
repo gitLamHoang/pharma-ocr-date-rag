@@ -522,3 +522,40 @@ def test_offline_coa_header_row_labels_each_date_and_raises_no_false_flag():
     dates, _ = label_page(layout, page_candidates(layout), None)
     assert [d.date_type for d in dates] == ["manufacture_date", "retest_date", "expiry_date"]
     assert validate(dates, date(2026, 11, 11)) == []
+
+
+def _resolve_with(lines, evidence, value):
+    layout = make_layout(lines)
+    cands = page_candidates(layout)
+    target = next(c for c in cands if c.normalized is None)
+    client = FakeClient(
+        classified([label(target.id, "expiry_date", resolved_value=value, evidence=evidence)])
+    )
+    dates, discarded = label_page(layout, cands, client)
+    date = next(d for d in dates if d.id == target.id)
+    return date, discarded
+
+
+def test_evidence_that_contradicts_the_page_is_rejected():
+    lines = ["All dates in this certificate are written MM/DD/YYYY.", "Expiry date: 03/04/2027"]
+    date, discarded = _resolve_with(
+        lines, "All dates in this certificate are written DD/MM/YYYY.", "2027-04-03"
+    )
+    assert date.resolved_value is None and date.evidence is None
+    assert [d["reason"] for d in discarded] == ["evidence not found on the page"]
+
+
+def test_evidence_that_is_only_the_label_and_date_is_rejected():
+    lines = ["All dates in this certificate are written MM/DD/YYYY.", "Expiry date: 03/04/2027"]
+    date, discarded = _resolve_with(lines, "Expiry date: 03/04/2027", "2027-03-04")
+    assert date.resolved_value is None and date.evidence is None
+    assert [d["reason"] for d in discarded] == ["evidence does not show the day/month order"]
+
+
+def test_evidence_on_the_page_up_to_case_and_spacing_is_accepted():
+    lines = ["All dates in this certificate are written MM/DD/YYYY.", "Expiry date: 03/04/2027"]
+    date, discarded = _resolve_with(
+        lines, "all dates in this  certificate are written mm/dd/yyyy", "2027-03-04"
+    )
+    assert date.resolved_value == "2027-03-04"
+    assert discarded == []

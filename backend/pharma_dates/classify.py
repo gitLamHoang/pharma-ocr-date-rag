@@ -4,7 +4,8 @@ Claude only labels candidates the rules found; it never changes their text or in
 A date Claude reports that the rules did not find (a missed date, or a date found only in its
 transcription) is kept only when the rules or the loose parser below can read it AND it appears
 on the page's own text layer (pdfplumber or Tesseract) AND that printed text reads as the same
-date. A resolution of an ambiguous date needs evidence quoted from the page. Everything rejected
+date. A resolution of an ambiguous date needs evidence quoted exactly from the page that shows
+the day/month order. Everything rejected
 goes to the "discarded AI suggestions" list with a reason; it is never shown as a date.
 
 Standard library and pydantic only at import time (the static build runs this module in Pyodide).
@@ -23,7 +24,7 @@ from . import taxonomy
 from .candidates import CONTEXT_CHARS, span_box
 from .models import Candidate, LabeledDate, PageLayout
 from .rules.dates import extract_dates
-from .rules.languages import fold, month_lookup
+from .rules.languages import field_patterns, fold, month_lookup
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -240,16 +241,12 @@ class _Page:
         return None
 
     def on_page(self, quote: str) -> bool:
-        """Whether `quote` is printed on the page (partial_ratio >= 85 on the folded text).
+        """Whether `quote` is printed on the page, ignoring only case, spacing and quote marks.
 
-        A quote longer than the page text cannot be on it: partial_ratio would otherwise align
-        the page inside the quote and accept a page plus invented words."""
-        needle = _unquote(fold(quote))
-        if not needle or not self.folded.strip() or len(needle) > len(self.folded):
-            return False
-        from rapidfuzz import fuzz  # lazy: keeps this module importable without native wheels
-
-        return fuzz.partial_ratio(needle, self.folded, score_cutoff=MATCH_THRESHOLD) > 0
+        No fuzzy match: "written DD/MM/YYYY" is a few characters from a printed "written
+        MM/DD/YYYY" and means the opposite."""
+        needle = _plain(_unquote(fold(quote)))
+        return bool(needle) and needle in _plain(self.folded)
 
     def relocate(self, c: Candidate) -> Candidate | None:
         """A transcription candidate moved onto the page text, or None if it is not there."""
@@ -357,8 +354,12 @@ def _resolution(c: Candidate, item: CandidateLabel, page: _Page) -> tuple[str | 
     if evidence is None:
         page.discard("resolution", "resolved value given without evidence", payload)
         return None, None
-    if not re.sub(r"\W", "", _unquote(fold(evidence)).replace(fold(c.raw_text), "")):
+    rest = _unquote(fold(evidence)).replace(fold(c.raw_text), " ")
+    if not re.sub(r"\W", "", rest):
         page.discard("resolution", "evidence only repeats the date", payload)
+        return None, None
+    if not _shows_order(rest):
+        page.discard("resolution", "evidence does not show the day/month order", payload)
         return None, None
     if not page.on_page(evidence):
         page.discard("resolution", "evidence not found on the page", payload)
@@ -376,6 +377,30 @@ def _text_or_none(value: str | None) -> str | None:
 
 def _unquote(text: str) -> str:
     return text.strip().strip("\"'“”‘’").strip()
+
+
+_TYPOGRAPHIC = str.maketrans({"“": '"', "”": '"', "‘": "'", "’": "'", "–": "-", "—": "-"})
+
+
+def _plain(text: str) -> str:
+    """Folded text with typographic quotes and dashes made plain and spacing collapsed."""
+    return " ".join(text.translate(_TYPOGRAPHIC).split())
+
+
+_ORDER_TOKEN = re.compile(r"\b(?:dd|mm|yyyy|yy|day|month)\b")
+_DATE_WORD = re.compile(r"\bdate\b")
+
+
+def _shows_order(rest: str) -> bool:
+    """Whether folded evidence, with the date itself removed, can show which reading is meant:
+    a format such as DD/MM/YYYY, a spelled-out month, or another date that reads only one way.
+    Its field label ("Expiry date:") shows nothing."""
+    for _, pattern in field_patterns():
+        rest = pattern.sub(" ", rest)
+    rest = _DATE_WORD.sub(" ", rest)
+    if _ORDER_TOKEN.search(rest) or any(re.search(rf"\b{re.escape(m)}\b", rest) for m in month_lookup()):
+        return True
+    return any(hit.normalized is not None for hit in extract_dates(rest))
 
 
 # --- Verification helpers -------------------------------------------------------------------
