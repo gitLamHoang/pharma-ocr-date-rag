@@ -143,3 +143,20 @@ def test_prepared_pass_boxes_are_on_the_original_page(monkeypatch, tmp_path, set
     [word] = layout_page(ingest(path, settings), 1, settings).words
     assert word.text == "31/03/2027"
     assert word.bbox.x0 == pytest.approx(200, abs=1)
+
+
+def test_upscale_stays_within_the_pixel_budget(monkeypatch):
+    small = text_page(16)
+    budget = small.width * small.height * 2
+    monkeypatch.setattr("pharma_dates.preprocess.MAX_UPSCALED_PIXELS", budget)
+    prepared = prepare(small)
+    assert 1.0 < prepared.info["scale"] <= 2**0.5
+    assert prepared.width * prepared.height <= budget * 1.01
+
+
+def test_page_above_the_pixel_budget_is_not_shrunk(monkeypatch):
+    small = text_page(16)
+    monkeypatch.setattr("pharma_dates.preprocess.MAX_UPSCALED_PIXELS", small.width * small.height // 2)
+    prepared = prepare(small)
+    assert prepared.info["scale"] == 1.0
+    assert prepared.size == small.size

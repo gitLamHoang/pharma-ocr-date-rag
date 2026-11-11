@@ -38,15 +38,15 @@ uv run --project backend python eval/run_eval.py --ai off --set synth
 
 | Level | Pages | Gold dates | Precision before | Recall before | Precision after | Recall after |
 |---|---:|---:|---:|---:|---:|---:|
-| clean | 40 | 179 | 0.99 | 0.56 | 1.00 | 0.98 |
+| clean | 40 | 179 | 0.99 | 0.56 | 1.00 | 0.96 |
 | 150 DPI | 40 | 180 | 0.98 | 0.61 | 0.99 | 0.97 |
-| blur 0.6 | 40 | 174 | 0.99 | 0.50 | 0.98 | 0.96 |
-| rotate ±2° | 36 | 155 | 0.99 | 0.53 | 1.00 | 0.98 |
+| blur 0.6 | 40 | 174 | 0.99 | 0.50 | 0.98 | 0.95 |
+| rotate ±2° | 36 | 155 | 0.99 | 0.53 | 1.00 | 0.96 |
 | JPEG q40 | 36 | 159 | 0.97 | 0.56 | 1.00 | 0.99 |
-| salt noise | 36 | 160 | 0.98 | 0.55 | 0.99 | 0.95 |
+| salt noise | 36 | 160 | 0.98 | 0.55 | 0.99 | 0.94 |
 | stamp over a date | 36 | 157 | 0.87 | 0.34 | 0.98 | 0.54 |
-| mixed | 36 | 155 | 0.97 | 0.36 | 0.97 | 0.75 |
-| **all** | **300** | **1,319** | **0.971** | **0.504** | **0.989** | **0.894** |
+| mixed | 36 | 155 | 0.97 | 0.36 | 0.97 | 0.74 |
+| **all** | **300** | **1,319** | **0.971** | **0.504** | **0.990** | **0.886** |
 
 Hallucinations and silent resolutions were 0 before and after at every level.
 
@@ -61,16 +61,26 @@ and hallucinations and silent resolutions stayed at 0. Each row adds one change 
 | Date formats: roman months, spaced numerics, noisy month abbreviations and compact forms, month and year, label-adjacent `EXP`/`MFG`/`MFD`, and OCR digit repair (O, I, l, S, B) inside date-shaped tokens | 0.986 | 0.866 |
 | Second OCR pass on a cleaned image, keeping the pass with the higher mean word confidence. The cleaning is grayscale, median denoise, projection-profile deskew, upscaling when the x-height is under 20 px, and an adaptive threshold. | 0.990 | 0.873 |
 | OCR repair inside roman months (`1V`, `X11`, `Ill`) | 0.989 | 0.894 |
+| Guards against look-alikes: years limited to 1900 to 2099, a one-letter roman month (`I`, `V`, `X`) needs a dot, dash or slash on both sides (`3 X 2000 TABLETS` is a pack size), a lower-case month word with only a year is not read (`may 2000 mg`), and a two-character month such as `1l` is read as the digits 11, so it stays ambiguous, not as roman II | 0.990 | 0.886 |
 
-With the final rules and no second pass, the result is precision 0.987 and recall 0.888. The
-second pass therefore adds 0.6 points of recall overall. It helps most on salt noise (+7.5 points)
+The last row is a correction, not a recognition change. It gives up 0.8 points of synthetic
+recall so that pack sizes, lower-case words and misread numeric months are no longer read as wrong
+dates, so the recall rule above does not apply to it. Most of the loss is space-separated roman
+dates with a one-letter month, which the public set does not contain.
+
+With the rules as of the roman-repair row and no second pass, the result is precision 0.987 and
+recall 0.888, against 0.989 and 0.894 with it. The second pass therefore adds 0.6 points of recall
+overall. It helps most on salt noise (+7.5 points)
 and mixed pages (+5.8). It costs recall on stamped pages (−5.8) and doubles OCR time on scanned
 pages.
 
 ## Known gaps
 
 - A stamp over a date is still the hardest case. Recall there is 0.54.
-- Roman-month dates are the weakest format, with recall from 0.76 to 0.80. Tesseract reads `I` as
-  `1`, `l` or `|`. A lone `l` month is left unread on purpose, because it could be `I` or `1`.
+- Roman-month dates are the weakest format, with recall from 0.58 to 0.80. Tesseract reads `I` as
+  `1`, `l` or `|`. A lone `l` month is left unread on purpose, because it could be `I` or `1`, and
+  a two-character `1l` is read as 11. Space-separated dates with a one-letter month (`5 X 2024`)
+  are not read at all, because they look the same as quantities such as `3 X 2000 TABLETS`; recall
+  for space-separated roman dates is 0.58.
 - These pages are synthetic. They use one typeface and draw stamps in flat ink, so they show the
   direction of a change more reliably than real-world accuracy.

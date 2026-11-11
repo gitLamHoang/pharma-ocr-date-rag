@@ -230,3 +230,43 @@ def test_digit_months_are_not_read_as_roman(text):
 
 def test_a_lone_l_month_is_left_unread():
     assert extract_dates("Due 10.l.2022") == []  # roman I or digit 1: the page does not say
+
+
+@pytest.mark.parametrize("text", ["Due 10.1l.2022", "Due 10.l1.2022", "Due 10-1I-2022"])
+def test_two_character_l_months_read_as_digits_and_stay_ambiguous(text):
+    # "1l" is far more often a misread 11 than a misread II; read as 11 it stays ambiguous.
+    hit = one(text)
+    assert hit.normalized is None
+    assert hit.candidates == ("2022-10-11", "2022-11-10")
+    assert {"ambiguous_numeric_date", "ocr_repaired"} <= set(hit.review_reasons)
+
+
+@pytest.mark.parametrize(
+    ("text", "raw", "value"),
+    [("Signed 5.X.2024", "5.X.2024", "2024-10-05"), ("Signed 05-V-2024", "05-V-2024", "2024-05-05")],
+)
+def test_one_letter_roman_months_need_a_punctuated_separator(text, raw, value):
+    hit = one(text)
+    assert (hit.raw_text, hit.normalized) == (raw, value)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Pack: 10 X 1000 mL",  # pack size, not 10.X.1000
+        "Pack 3 X 2000 TABLETS",  # "X" read as a multiplication sign
+        "Rev 2 V 2020",
+        "Patients may 1200 mg daily",
+        "Dose of 5 mg may 1500 units",
+        "Patients may 2000 mg daily",  # lower-case "may" is the verb
+        "Pack 10/1000",
+        "Ref 12.III.1500",
+    ],
+)
+def test_quantities_and_implausible_years_are_not_dates(text):
+    assert extract_dates(text) == []
+
+
+def test_title_case_month_and_year_is_still_read():
+    hit = one("Valid until May 2026")
+    assert (hit.raw_text, hit.normalized, hit.precision) == ("May 2026", "2026-05", "month")

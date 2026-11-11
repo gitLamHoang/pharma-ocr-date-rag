@@ -20,8 +20,10 @@ OCR_WORD_REPAIRS = {
 # "Oct" stays a month name.
 OCR_DIGITS = str.maketrans({"O": "0", "I": "1", "l": "1", "S": "5", "B": "8"})
 _DIGITISH_RUN = re.compile(r"[0-9OIlSB]+")
-# The reverse inside a roman month ("1V", "X11", "II|", "Ill"): a month of at least two characters,
-# not all digits, that reads as I..XII once 1, l, | and L are read as I.
+# The reverse inside a roman month ("1V", "X11", "II|", "Ill"): a month that is not all digits and
+# reads as I..XII once 1, l, | and L are read as I. It must hold a V or an X, or have three or more
+# characters: a two-character "1l" or "1I" is far more often a misread 11 than a misread II, so it
+# is left to the digit repair, which keeps it an ambiguous numeric date.
 OCR_ROMAN = str.maketrans({"1": "I", "l": "I", "|": "I", "L": "I"})
 _ROMAN_NUMERALS = frozenset("I II III IV V VI VII VIII IX X XI XII".split())
 _C = "[0-9OIlSB]"  # a digit, or a letter OCR reads in place of one
@@ -33,7 +35,7 @@ _END = r"(?![\w/-]|\.\d)"
 _SEP = r" ?[-/.] ?"  # "12.03.2026", "12 . 03 . 2026", "12. 03. 2026"
 _NOISE = r"(?: ?[-/.,:;] ?| {1,2}|)"  # around a month name: "25.Mar.2026", "4 Sep:2025", "25MAR2026"
 _ROMAN_SEP = r"(?: ?[-/.] ?| )"
-_YEAR = r"(?P<year>[12]\d{3})"
+_YEAR = r"(?P<year>(?:19|20)\d{2})"  # a plausible year; "10 X 1000 mL" is a pack size
 
 
 def _repair_digits(token: str) -> str:
@@ -100,6 +102,8 @@ def _repair_roman(match: re.Match[str]) -> str:
     repaired = month.translate(OCR_ROMAN)
     if month.isdigit() or repaired not in _ROMAN_NUMERALS:
         return match.group()
+    if len(month) < 3 and not {"V", "X"} & set(month):
+        return match.group()
     return _repair_digits(day) + repaired + _repair_digits(year)
 
 
@@ -119,16 +123,22 @@ def repair_ocr_noise(text: str) -> str:
 @cache
 def _patterns() -> tuple[re.Pattern[str], ...]:
     month = "|".join(re.escape(name) for name in sorted(month_lookup(), key=lambda s: (-len(s), s)))
-    roman = "|".join(sorted(roman_month_lookup(), key=lambda s: (-len(s), s)))
+    romans = sorted(roman_month_lookup(), key=lambda s: (-len(s), s))
+    roman = "|".join(romans)
+    # A one-letter month (I, V, X) between spaces reads as a quantity ("3 X 2000 TABLETS",
+    # "Rev 2 V 2020"), so it needs a punctuated separator on both sides.
+    roman_long = "|".join(numeral for numeral in romans if len(numeral) > 1)
     bodies = [
         rf"{_YEAR}{_SEP}(?P<month>\d{{1,2}}){_SEP}(?P<day>\d{{1,2}})",
         rf"(?P<first>\d{{1,2}}){_SEP}(?P<second>\d{{1,2}}){_SEP}{_YEAR}",
-        rf"(?P<day>\d{{1,2}}){_ROMAN_SEP}(?P<roman>{roman}){_ROMAN_SEP}{_YEAR}",
+        rf"(?P<day>\d{{1,2}}){_SEP}(?P<roman>{roman}){_SEP}{_YEAR}",
+        rf"(?P<day>\d{{1,2}}){_ROMAN_SEP}(?P<roman>{roman_long}){_ROMAN_SEP}{_YEAR}",
         rf"(?P<day>\d{{1,2}})(?:st|nd|rd|th)?(?: of)?\.?{_NOISE}(?P<month>{month})\.?{_NOISE}{_YEAR}",
         rf"(?P<month>{month})\.?\s+(?P<day>\d{{1,2}})(?:st|nd|rd|th)?,?\s+{_YEAR}",
         rf"(?P<month>\d{{1,2}})[-/]{_YEAR}",
         # Month and year only, with a space or dot between ("MAR 2027", "Feb. 2026"); not after
-        # "of", where a spelled-out day may precede the month.
+        # "of", where a spelled-out day may precede the month, and not in lower case (see
+        # `extract_dates`).
         rf"(?<!of )(?P<month>{month})(?:\. ?| {{1,2}}){_YEAR}",
     ]
     return tuple(re.compile(_START + body + _END) for body in bodies)
@@ -207,8 +217,13 @@ def extract_dates(
                 continue
             # Reserve invalid spans too, so a suffix cannot become a month/year.
             seen.append((start, end))
-            if match.groupdict().get("roman") and not repaired[slice(*match.span("roman"))].isupper():
+            groups = match.groupdict()
+            if groups.get("roman") and not repaired[slice(*match.span("roman"))].isupper():
                 continue
+            # A lower-case month word with only a year is a verb ("patients may 2000 mg").
+            if "day" not in groups and "first" not in groups:
+                if repaired[slice(*match.span("month"))].islower():
+                    continue
             candidates = _normalize(match, date_order)
             if not candidates:
                 continue

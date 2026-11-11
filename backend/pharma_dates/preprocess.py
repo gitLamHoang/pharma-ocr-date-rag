@@ -2,7 +2,7 @@
 
 `prepare` makes a black-on-white image: grayscale, light denoise (3x3 median), deskew (the angle
 whose horizontal projection profile is sharpest), upscale when the estimated x-height is under
-20 px, and an adaptive threshold (ink is darker than its neighbourhood). The rotation and scale
+20 px (up to 3x and 40 MP), and an adaptive threshold (ink is darker than its neighbourhood). The rotation and scale
 it applied are kept in the image's `info`, so `to_original` can map word boxes back onto the
 original page. Pillow only.
 """
@@ -21,6 +21,7 @@ SKEW_WIDTH = 1000  # the skew search runs on a copy this wide
 MIN_X_HEIGHT = 20
 TARGET_X_HEIGHT = 30
 MAX_SCALE = 3.0
+MAX_UPSCALED_PIXELS = 40_000_000  # the upscale never makes a page larger than this
 THRESHOLD_RADIUS = 15  # px, the neighbourhood of the adaptive threshold
 THRESHOLD_OFFSET = 12  # grey levels below the neighbourhood mean that count as ink
 ALWAYS_INK = 60  # grey levels at or below this are ink whatever the neighbourhood
@@ -34,6 +35,7 @@ def prepare(img: Image.Image) -> Image.Image:
         gray = gray.rotate(angle, resample=Image.Resampling.BICUBIC, fillcolor=255)
     x_height = estimate_x_height(gray)
     scale = min(MAX_SCALE, TARGET_X_HEIGHT / x_height) if x_height and x_height < MIN_X_HEIGHT else 1.0
+    scale = max(1.0, min(scale, math.sqrt(MAX_UPSCALED_PIXELS / (gray.width * gray.height))))
     if scale > 1:
         gray = gray.resize((round(gray.width * scale), round(gray.height * scale)), Image.Resampling.LANCZOS)
     out = _threshold(gray)
