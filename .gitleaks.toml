@@ -1,0 +1,14 @@
+# gitleaks config for CI (full-history scan). Keeps every default rule and mirrors the local
+# detect-secrets exceptions in .pre-commit-config.yaml, so both scanners agree.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Test-only fake credentials and public document hashes"
+regexTarget = "line"
+regexes = [
+  # Test fakes marked for detect-secrets, e.g. FAKE_KEY in backend/tests/test_api.py.
+  '''# pragma: allowlist secret''',
+  # Pinned SHA-256 hashes of public documents in eval/sources.json.
+  '''^\+?\s*"sha256": "[0-9a-f]{64}",?$''',
+]

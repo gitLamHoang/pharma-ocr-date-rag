@@ -21,7 +21,7 @@
 - Tesseract packs: `eng+fra+deu+spa+vie+ara+rus+chi_sim+jpn` (use those installed; report missing ones in `/api/health`).
 - Month-only dates: stored/displayed as `YYYY-MM`, compared as last day of month.
 - Never: show a date not on the page; resolve an ambiguous numeric date without quoted evidence; invent a day for month-only dates; update/delete a review event.
-- Palette (60/30/10): Midnight Navy `#1B2447`, Powder Blue `#C5D0EE`, Sunflower `#FFC93C` (accent only; never body text on light bg). No client branding. No AI-slop visuals (purple gradients, glass soup, emoji icons, filler copy).
+- Palette (60/30/10): Midnight Navy `#1B2447`, Powder Blue `#C5D0EE`, Sunflower `#FFC93C` (accent only; never body text on light bg). No company branding. No AI-slop visuals (purple gradients, glass soup, emoji icons, filler copy).
 - Design skills: art direction + final look pass with `taste-skill:design-taste-frontend` (app-screens run); build/critique/polish/harden with `impeccable:impeccable`.
 
 ## Review Focus

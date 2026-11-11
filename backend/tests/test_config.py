@@ -83,3 +83,13 @@ def test_unknown_provider_is_rejected(monkeypatch):
 
 def test_get_settings_is_cached():
     assert get_settings() is get_settings()
+
+
+def test_empty_values_from_a_copied_env_example_keep_the_defaults(tmp_path):
+    env_file = tmp_path / ".env"
+    env_file.write_text((Path(__file__).resolve().parents[2] / ".env.example").read_text())
+    settings = Settings(_env_file=env_file)
+    assert settings.vertex_region == "global"
+    assert settings.aws_region is None
+    assert settings.vertex_project_id is None
+    assert settings.anthropic_api_key is None

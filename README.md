@@ -26,10 +26,12 @@ Consistency flags catch expiry before manufacture, a legalization chain out of o
 
 ```sh
 cp .env.example .env    # optional: add a key for AI labels; without it the app runs offline
-make up                 # docker compose up --build
+make up                 # mkdir -p data, then docker compose up --build
 ```
 
 Open http://localhost:8000. Data (database, uploads, page images) is kept in `./data`.
+
+If you run `docker compose up --build` yourself, create `./data` first (`mkdir -p data`); otherwise Docker creates it as root on Linux and the app, which runs as uid 1000, cannot write to it.
 
 **Local development** needs Python 3.12 with [uv](https://docs.astral.sh/uv/), Node 22 and Tesseract (`brew install tesseract` or `apt install tesseract-ocr`):
 
@@ -43,7 +45,7 @@ The browser smoke test runs with `cd frontend && npm run build && npx playwright
 
 ## Configuration
 
-Settings are environment variables, read from `.env` at the repo root (git-ignored; `.env.example` lists them with empty values).
+Settings are environment variables, read from `.env` at the repo root (git-ignored; `.env.example` lists them with placeholders; an empty value means the default).
 
 | Variable | Default | Meaning |
 |---|---|---|

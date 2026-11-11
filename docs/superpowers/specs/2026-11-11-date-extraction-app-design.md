@@ -34,8 +34,8 @@ The rebuild replaces the current portfolio prototype in this repo.
 
 ## 3. Constraints
 
-- Cloud AI is allowed. Provider must be configurable: Anthropic API (default), Amazon Bedrock, or Google Vertex AI — the deploying organization's IT decides which channel is approved.
-- No real production documents available yet; build and evaluate on public documents.
+- Cloud AI is allowed. Provider must be configurable: Anthropic API (default), Amazon Bedrock, or Google Vertex AI — the deploying company's IT decides which channel is approved.
+- No real company documents available yet; build and evaluate on public documents.
 - Must run on macOS (developer) and Linux (Docker).
 - Languages: English, French, German, Spanish, Vietnamese already supported by the rules; legalization pages may contain other scripts — the AI layer handles those, rules mark them unknown.
 
@@ -127,7 +127,7 @@ Look: professional, clean, dense tool UI — no generic "AI-made" look (no purpl
 - **Midnight Navy** (~`#1B2447`, main, 60%) — app background in dark theme, text and chrome in light theme.
 - **Powder Blue** (~`#C5D0EE`, second, 30%) — surfaces, panels, secondary text, light-theme background tint.
 - **Sunflower** `#FFC93C` (accent, 10%) — primary action, selected date, focus ring, "needs review" count. Never for body text on light backgrounds.
-Bold condensed display type for headings, a clean grotesk for UI text, a mono for dates/IDs. Family highlight colors are derived to sit inside this palette and pass contrast checks. Light and dark themes, readable at 1280px and usable on a tablet. No client branding in v1.
+Bold condensed display type for headings, a clean grotesk for UI text, a mono for dates/IDs. Family highlight colors are derived to sit inside this palette and pass contrast checks. Light and dark themes, readable at 1280px and usable on a tablet. No company branding in v1.
 
 Design process: art direction and a quality pass with the `taste-skill:design-taste-frontend` skill (app-screens run), and UI build/critique/polish/hardening with `impeccable:impeccable`; motion kept minimal (Emil's `animate` / `review-animations` only where it aids state changes like upload progress and selection).
 
