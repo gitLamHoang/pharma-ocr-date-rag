@@ -231,6 +231,25 @@ describe("Review screen", () => {
     expect(box(3)).not.toBeNull();
   });
 
+  it("moves keyboard focus with the active row on ↑/↓, but not on a click in the viewer", async () => {
+    renderAt();
+    await loaded();
+    rowButton(1).focus();
+    key("ArrowDown");
+    const active = () => document.querySelector<HTMLElement>("[data-active] .date-row__select");
+    await waitFor(() => expect(document.activeElement).toBe(active()));
+    const first = active();
+    key("ArrowDown");
+    await waitFor(() => expect(active()).not.toBe(first));
+    expect(document.activeElement).toBe(active());
+
+    const canvas = document.querySelector<HTMLElement>(".viewer__canvas")!;
+    canvas.focus();
+    fireEvent.click(box(1)!);
+    await waitFor(() => expect(row(1)).toHaveAttribute("data-active"));
+    expect(document.activeElement).toBe(canvas);
+  });
+
   it("shows a frozen older run read-only", async () => {
     renderAt("/documents/1?run=3");
     await screen.findByRole("heading", { level: 1, name: "coa-lot-4471.pdf" });

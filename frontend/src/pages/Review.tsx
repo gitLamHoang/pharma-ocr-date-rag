@@ -104,6 +104,9 @@ function ReviewScreen() {
   const [selection, setSelection] = useState<Selection>(NOTHING);
   const [dialog, setDialog] = useState<{ date: DateRecord; action: Decision } | null>(null);
   const scrollRow = useRef(false);
+  // Set only by ↑/↓: focus follows the active row (a roving focus screen readers announce). A click
+  // in the viewer or on a flag scrolls the row into view but leaves focus where it is.
+  const focusRow = useRef(false);
 
   const ordered = useMemo(() => groupByFamily(dates.data ?? []).flatMap((g) => g.dates), [dates.data]);
   const active = ordered.find((d) => d.id === selection.active) ?? null;
@@ -133,7 +136,12 @@ function ReviewScreen() {
   useEffect(() => {
     if (!scrollRow.current || selection.active === null) return;
     scrollRow.current = false;
-    document.querySelector(`[data-date-id="${selection.active}"]`)?.scrollIntoView({ block: "nearest" });
+    const row = document.querySelector(`[data-date-id="${selection.active}"]`);
+    if (focusRow.current) {
+      focusRow.current = false;
+      row?.querySelector<HTMLElement>(".date-row__select")?.focus({ preventScroll: true });
+    }
+    row?.scrollIntoView({ block: "nearest" });
   }, [selection]);
 
   useEffect(() => {
@@ -145,6 +153,7 @@ function ReviewScreen() {
         if (scrolling(event.target)) return;
         event.preventDefault();
         const next = event.key === "ArrowDown" ? Math.min(at + 1, ordered.length - 1) : Math.max(at - 1, 0);
+        focusRow.current = true;
         select(ordered[next]!.id, true);
       } else if (active && (event.key === "a" || event.key === "A")) {
         event.preventDefault();
