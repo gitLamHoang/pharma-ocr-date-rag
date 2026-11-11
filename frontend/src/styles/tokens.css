@@ -63,7 +63,6 @@
   --accent: var(--sun-400);
   --accent-hover: var(--sun-300);
   --accent-ink: var(--navy-900);
-  --accent-tint: light-dark(var(--sun-100), #3b3a3c);
   --focus: var(--sun-400);
   --focus-edge: light-dark(var(--navy-900), var(--sun-400));
 

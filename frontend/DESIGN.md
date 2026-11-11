@@ -101,7 +101,7 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
 - Radii: sheet 16, card/panel 8, control 6, chip 4. Nothing else.
 - Table headers: 12 px muted, sentence case, no fill band, no rule under them. Row rules 1 px
   `--rule`. No zebra.
-- **Documents** (sheet, 1232 px usable at 1280): title row (h1, then upload as the one primary
+- **Documents** (sheet content 1214 px at 1280: 1280 − 2×8 inset − 2×1 edge − 2×24 padding): title row (h1, then `.title-row__actions` with upload as the one primary
   button on the right), drop zone as a 1 px dashed `--control` band 96 px tall across the full
   width, then the table. Columns: name (widest, truncates with ellipsis), pages, status, dates,
   flags, needs review, uploaded at; counts right-aligned; needs review as `.pill--review` when
@@ -109,7 +109,7 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
   `--info`, done plain, failed `--danger` with the error as its subline).
 - **Review** (sheet): title row (breadcrumb "Documents /" then the filename as h1; export and
   reprocess on the right). Below it a two-column split: page viewer `minmax(0, 1fr)` and date
-  panel `400px`, 16 px apart (1232 = 816 + 16 + 400). The viewer sits on `--surface-2` with an
+  panel `400px`, 16 px apart (1214 = 798 + 16 + 400 at 1280). The viewer sits on `--surface-2` with an
   80 px thumbnail rail on its left and zoom controls in its header; the date panel is the sheet
   itself, flags first, then dates grouped by family (`h2` per family with its count).
 - **Tablet (834 px):** Documents keeps the table and moves uploaded-at under the name as a subline.

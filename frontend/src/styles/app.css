@@ -295,7 +295,11 @@ textarea {
   min-height: 36px;
 }
 
-.title-row > :last-child:not(h1) {
+/* The title row's actions sit on its right edge. */
+.title-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   margin-left: auto;
 }
 
