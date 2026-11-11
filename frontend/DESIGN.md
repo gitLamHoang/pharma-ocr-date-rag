@@ -70,7 +70,7 @@ Seven hues, spaced around the wheel, none of them sunflower (reserved for select
 - **Highlight box:** 2 px stroke in the family colour, fill at 12 % of it (`color-mix`), 2 px
   radius, drawn just outside the word box so the date stays readable.
 - **Selected box:** 3 px sunflower stroke, 30 % sunflower fill, a 1 px navy ring outside it so it
-  holds on white paper. Only one at a time.
+  holds on white paper. One date at a time, or every date of the flag the reviewer clicked.
 - In lists, the family shows as an 8 px dot plus the family's label in `--fam-*-ui`; the row's text
   stays in ink. Never a coloured row background, never a coloured left border.
 
@@ -113,13 +113,26 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
 - **Review** (sheet): title row (breadcrumb "Documents /" then the filename as h1; export and
   reprocess on the right). Below it a two-column split: page viewer `minmax(0, 1fr)` and date
   panel `400px`, 16 px apart (1214 = 798 + 16 + 400 at 1280). The viewer sits on `--surface-2` with an
-  80 px thumbnail rail on its left and zoom controls in its header; the date panel is the sheet
-  itself, flags first, then dates grouped by family (`h2` per family with its count).
+  80 px thumbnail rail on its left and zoom controls in its header (50–300 %, 100 % fits the page
+  to the width); the date panel is the sheet itself, flags first (errors first, five shown, then
+  "Show all N flags"), then dates grouped by family (`h2` per family with its count). From 961 px
+  the sheet fills the window under the top bar: the viewer takes the full height and the date panel
+  scrolls on its own. The title row's right side carries the needs-review count (`.pill--review`)
+  and the date count.
+- **Date row:** value first (mono, 600; a month-only date as `2027-03` plus `Mar 2027` in muted; an
+  ambiguous one as both readings joined by "or", never one value), its status pill on the right;
+  the type label; then the raw text in mono, page, source and confidence in 13 px muted; then the
+  page's words around the date, the date itself in ink. The selected row takes `--selected-bg` and
+  the active one a 1 px sunflower ring; only the active row shows its actions (Accept `A`,
+  Edit `E`, Reject, History). ↑/↓ move, A accepts, E edits; shortcuts are off while typing.
+- **Read-only runs:** an older run (`?run=N`) or a run a review found replaced (HTTP 409) shows a
+  `.notice` with the way back ("Open the latest run", or "This run was replaced — reload" with a
+  Reload button in `--danger` tint) and no decision controls.
 - **Tablet (834 px):** Documents keeps the table and moves uploaded-at under the name as a subline
   (from 960 px down). Below 640 px it keeps name, status and needs review as columns and moves
   pages, dates and flags to a subline ("3 pages · 12 dates · 2 flags").
-  Review stacks the viewer (60 vh) above the date panel; the thumbnail rail becomes a horizontal
-  strip.
+  Review stacks the viewer (50 vh, sticky at the top of the window) above the date panel, which
+  scrolls under it; the thumbnail rail becomes a horizontal strip.
 
 ## Components
 
@@ -130,10 +143,12 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
   invalid state is a `--danger` edge plus the message in words.
 - **Segmented** (`.segmented`): native radios, as wide as its options.
 - **Pills** (`.pill--*`): 20 px, 12 px text, ink on its own tint, never squeezed (`flex: none`).
-- **Source badge:** "Rules" is a plain pill; "AI-only" is `.pill--info` with the words
-  "AI-only, verify". Confidence is a number (`0.92`), never a bar.
+- **Source:** "Rules" or "Rules + AI" as plain text; an AI-only date is `.pill--info` with the
+  words "AI-only · verify". Confidence is a labelled number ("Confidence 0.92"), never a bar.
 - **Dialogs** (review: accept/correct/reject) are the one place a shadow appears
-  (`--shadow-float`); use `<dialog>` for focus trapping.
+  (`--shadow-float`, over `--scrim`); use `<dialog>` for focus trapping. Reviewer (remembered in
+  this browser) and reason are required; a correction offers the type picker grouped by family,
+  and for a date with two readings only those readings as radios, never a free value.
 - **Focus:** a 2 px `--focus-edge` outline plus a sunflower halo, on every interactive element.
 
 ## States

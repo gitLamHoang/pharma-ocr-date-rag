@@ -65,6 +65,8 @@
   --accent-ink: var(--navy-900);
   --focus: var(--sun-400);
   --focus-edge: light-dark(var(--navy-900), var(--sun-400));
+  /* The selected date's row (its box on the page is drawn in --accent). */
+  --selected-bg: light-dark(var(--sun-50), #2c3358);
 
   /* Status: ink on its own pale tint. */
   --danger: light-dark(#b3261e, #ff9a8f);
@@ -139,6 +141,10 @@
 
   /* Only what floats (menus, dialogs) casts a shadow. */
   --shadow-float: 0 8px 24px rgb(17 23 47 / 0.16), 0 1px 3px rgb(17 23 47 / 0.12);
+  --scrim: rgb(17 23 47 / 0.45);
+
+  /* Page images are paper in both themes. */
+  --paper: #ffffff;
 }
 
 :root[data-theme="light"] {

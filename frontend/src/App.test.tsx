@@ -1,9 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
 import { api } from "./api";
+import { documentDetail } from "./test-fixtures";
 
 function renderAt(path: string) {
   const queries = new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -35,11 +36,17 @@ describe("App routes", () => {
     expect(screen.getByRole("link", { name: "Documents" })).toHaveAttribute("aria-current", "page");
   });
 
-  it("shows the Review screen for /documents/:id", () => {
-    renderAt("/documents/3");
+  it("shows the Review screen for /documents/:id", async () => {
+    vi.spyOn(api, "getDocument").mockResolvedValue(documentDetail());
+    vi.spyOn(api, "getDates").mockResolvedValue([]);
+    vi.spyOn(api, "getFlags").mockResolvedValue([]);
+    vi.spyOn(api, "getTaxonomy").mockResolvedValue([]);
+    renderAt("/documents/1");
 
-    expect(screen.getByRole("heading", { level: 1, name: "Document 3" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Documents" })).not.toHaveAttribute("aria-current");
+    expect(await screen.findByRole("heading", { level: 1, name: "coa-lot-4471.pdf" })).toBeInTheDocument();
+    expect(api.getDocument).toHaveBeenCalledWith(1);
+    const nav = screen.getByRole("navigation", { name: "Main" });
+    expect(within(nav).getByRole("link", { name: "Documents" })).not.toHaveAttribute("aria-current");
   });
 
   it("answers an unknown path with a way back", () => {

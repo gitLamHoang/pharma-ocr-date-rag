@@ -87,6 +87,11 @@ describe.each(THEMES)("%s theme", (theme) => {
     expect(contrast(c(role), c(`${role}-bg`))).toBeGreaterThanOrEqual(4.5);
   });
 
+  it("keeps text, muted text and decisions readable on a selected row", () => {
+    expect(contrast(c("--text"), c("--selected-bg"))).toBeGreaterThanOrEqual(7);
+    expect(contrast(c("--muted"), c("--selected-bg"))).toBeGreaterThanOrEqual(4.5);
+  });
+
   it("puts readable ink on the sunflower accent", () => {
     expect(contrast(c("--accent-ink"), c("--accent"))).toBeGreaterThanOrEqual(7);
     expect(contrast(c("--accent-ink"), c("--accent-hover"))).toBeGreaterThanOrEqual(7);

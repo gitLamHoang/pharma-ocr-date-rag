@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { DocumentSummary } from "../api";
+import { formatTimestamp } from "../dateDisplay";
 import { StatusBadge } from "./StatusBadge";
 
 interface Props {
@@ -12,14 +13,6 @@ interface Props {
 
 const COLUMNS = 7;
 const SKELETON_ROWS = 3;
-
-/** `2026-11-11 09:05` in the reader's local time. */
-function formatUploaded(iso: string): string {
-  const at = new Date(iso);
-  if (Number.isNaN(at.getTime())) return iso;
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())} ${pad(at.getHours())}:${pad(at.getMinutes())}`;
-}
 
 function Missing() {
   return (
@@ -91,7 +84,7 @@ export function DocumentTable({ documents, notice }: Props) {
 
 function Row({ doc }: { doc: DocumentSummary }) {
   const done = doc.status === "done";
-  const uploaded = formatUploaded(doc.created_at);
+  const uploaded = formatTimestamp(doc.created_at);
   return (
     <tr>
       <td className="doc-table__name">
