@@ -1,0 +1,14 @@
+[
+  {"page": 1, "raw_text": "04/22/2025", "date_type": "inspection_date", "normalized": "2025-04-22"},
+  {"page": 1, "raw_text": "04/25/2025", "date_type": "inspection_date", "normalized": "2025-04-25"},
+  {"page": 1, "raw_text": "04/28/2025", "date_type": "inspection_date", "normalized": "2025-04-28"},
+  {"page": 1, "raw_text": "04 Jan 2024", "date_type": "effective_date", "normalized": "2024-01-04"},
+  {"page": 1, "raw_text": "25 Jul 2024", "date_type": "effective_date", "normalized": "2024-07-25"},
+  {"page": 1, "raw_text": "04/28/2025", "date_type": "issue_date", "normalized": "2025-04-28"},
+  {"page": 2, "raw_text": "04/22/2025", "date_type": "inspection_date", "normalized": "2025-04-22"},
+  {"page": 2, "raw_text": "04/25/2025", "date_type": "inspection_date", "normalized": "2025-04-25"},
+  {"page": 2, "raw_text": "04/28/2025", "date_type": "inspection_date", "normalized": "2025-04-28"},
+  {"page": 2, "raw_text": "08 May 2023", "date_type": "effective_date", "normalized": "2023-05-08"},
+  {"page": 2, "raw_text": "22 April 2025", "date_type": "inspection_date", "normalized": "2025-04-22"},
+  {"page": 2, "raw_text": "04/28/2025", "date_type": "issue_date", "normalized": "2025-04-28"}
+]

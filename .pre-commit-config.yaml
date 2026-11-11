@@ -6,6 +6,8 @@ repos:
     hooks:
       - id: detect-secrets
         exclude: (^|/)(uv\.lock|package-lock\.json)$
+        # Public documents' pinned SHA-256 hashes in eval/sources.json are not secrets.
+        args: ["--exclude-lines", '^\s*"sha256": "[0-9a-f]{64}",?$']
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.17.4
     hooks:

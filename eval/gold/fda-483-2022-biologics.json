@@ -1,0 +1,15 @@
+[
+  {"page": 1, "raw_text": "27Sep2021", "date_type": "other_date", "normalized": "2021-09-27"},
+  {"page": 1, "raw_text": "12Nov2021", "date_type": "other_date", "normalized": "2021-11-12"},
+  {"page": 1, "raw_text": "07March2022", "date_type": "other_date", "normalized": "2022-03-07"},
+  {"page": 1, "raw_text": "01Aug2022", "date_type": "other_date", "normalized": "2022-08-01"},
+  {"page": 1, "raw_text": "11/18/2022", "date_type": "issue_date", "normalized": "2022-11-18"},
+  {"page": 2, "raw_text": "17Oct2022", "date_type": "other_date", "normalized": "2022-10-17"},
+  {"page": 2, "raw_text": "07Jul2021", "date_type": "other_date", "normalized": "2021-07-07"},
+  {"page": 2, "raw_text": "18Nov2020", "date_type": "other_date", "normalized": "2020-11-18"},
+  {"page": 2, "raw_text": "19Nov2020", "date_type": "other_date", "normalized": "2020-11-19"},
+  {"page": 2, "raw_text": "17Nov2021", "date_type": "other_date", "normalized": "2021-11-17"},
+  {"page": 2, "raw_text": "24Feb2022", "date_type": "other_date", "normalized": "2022-02-24"},
+  {"page": 2, "raw_text": "29Jul2021", "date_type": "other_date", "normalized": "2021-07-29"},
+  {"page": 2, "raw_text": "11/18/2022", "date_type": "issue_date", "normalized": "2022-11-18"}
+]

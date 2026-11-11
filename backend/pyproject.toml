@@ -36,7 +36,7 @@ packages = ["pharma_dates"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["tests"]
+pythonpath = ["tests", "../eval"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 

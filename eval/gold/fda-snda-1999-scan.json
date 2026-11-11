@@ -1,0 +1,8 @@
+[
+  {"page": 1, "raw_text": "DEC 2 1999", "date_type": "approval_date", "normalized": "1999-12-02"},
+  {"page": 1, "raw_text": "March 3, 1999", "date_type": "other_date", "normalized": "1999-03-03"},
+  {"page": 1, "raw_text": "March 4, 1999", "date_type": "receipt_date", "normalized": "1999-03-04"},
+  {"page": 1, "raw_text": "November 23, 1999", "date_type": "other_date", "normalized": "1999-11-23"},
+  {"page": 2, "raw_text": "April 1, 1999", "date_type": "effective_date", "normalized": "1999-04-01"},
+  {"page": 2, "raw_text": "June 30, 2001", "date_type": "other_date", "normalized": "2001-06-30"}
+]

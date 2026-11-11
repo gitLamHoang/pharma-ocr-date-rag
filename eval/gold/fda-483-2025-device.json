@@ -1,0 +1,12 @@
+[
+  {"page": 1, "raw_text": "2/25/2025", "date_type": "inspection_date", "normalized": "2025-02-25"},
+  {"page": 1, "raw_text": "2/27/2025", "date_type": "inspection_date", "normalized": "2025-02-27"},
+  {"page": 1, "raw_text": "01/28/2025", "date_type": "approval_date", "normalized": "2025-01-28"},
+  {"page": 1, "raw_text": "02-27-2025", "date_type": "signature_date", "normalized": "2025-02-27"},
+  {"page": 1, "raw_text": "2/27/2025", "date_type": "issue_date", "normalized": "2025-02-27"},
+  {"page": 1, "raw_text": "02-27-2025", "date_type": "signature_date", "normalized": "2025-02-27"},
+  {"page": 2, "raw_text": "2/25/2025", "date_type": "inspection_date", "normalized": "2025-02-25"},
+  {"page": 2, "raw_text": "2/27/2025", "date_type": "inspection_date", "normalized": "2025-02-27"},
+  {"page": 2, "raw_text": "2/27/2025", "date_type": "issue_date", "normalized": "2025-02-27"},
+  {"page": 2, "raw_text": "02-27-2025", "date_type": "signature_date", "normalized": "2025-02-27"}
+]

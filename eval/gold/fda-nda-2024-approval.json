@@ -1,0 +1,6 @@
+[
+  {"page": 1, "raw_text": "August 29, 2023", "date_type": "other_date", "normalized": "2023-08-29"},
+  {"page": 1, "raw_text": "August 29, 2023", "date_type": "receipt_date", "normalized": "2023-08-29"},
+  {"page": 2, "raw_text": "June 3, 2024", "date_type": "other_date", "normalized": "2024-06-03"},
+  {"page": 4, "raw_text": "06/25/2024", "date_type": "signature_date", "normalized": "2024-06-25"}
+]
