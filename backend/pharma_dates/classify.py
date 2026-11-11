@@ -301,7 +301,7 @@ class _Page:
             "char_start": start,
             "char_end": end,
             "bbox": span_box(self.layout.words, start, end),
-            "line_boxes": line_boxes(self.layout.words, start, end),
+            "line_boxes": line_boxes(self.layout.words, text, start, end),
             "context": text[max(0, start - CONTEXT_CHARS) : end + CONTEXT_CHARS],
         }
 
