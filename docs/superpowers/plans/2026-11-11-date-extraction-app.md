@@ -238,3 +238,19 @@ docker-compose.yml  Dockerfile  Makefile  .env.example  .gitignore
 - [ ] **Step 3:** README (short, articulate): one-line purpose; screenshot; what you get (date types table in one line per family); quick start (Docker; local `make dev`); configuration (env vars from `.env.example`, provider choice, offline mode); how it works (6 steps, one line each); data handling (what is sent to the AI provider, what stays local, no secrets in repo); accuracy & limits (eval numbers from Task 14, human review required); licence.
 - [ ] **Step 4:** Final `taste-skill:design-taste-frontend` look-and-fix pass on screenshots of both screens (light + dark); fix findings; take README screenshot from the sample document.
 - [ ] **Step 5:** `pre-commit run --all-files` and `gitleaks detect` → clean. Commit `docs: README, packaging and CI for v2`.
+
+### Task 16: Core recognition upgrade (OCR + date engine), measured (runs after Task 14, before Task 15)
+
+**Files:** Create `eval/synth.py`, `eval/synth/` (git-ignored output), `backend/pharma_dates/preprocess.py`, `backend/tests/test_preprocess.py`; Modify `backend/pharma_dates/layout.py`, `backend/pharma_dates/rules/dates.py`, `backend/pharma_dates/rules/languages.py`, `backend/pharma_dates/classify.py` (prompt only); tests under `backend/tests/rules/`.
+
+**Interfaces:**
+- `eval/synth.py generate --n 300 --seed 7 --out eval/synth` → pages (PNG + PDF) of pharma-like documents (CoA, CPP with notarization/apostille/legalization stamps, SOP signature blocks, batch labels) in en/fr/de/es/vi plus ru/zh/ar month forms, each with `gold.json` written by the generator (never by the extractor). Degradation levels: clean, 150 DPI, blur 0.6, rotation ±2°, JPEG q40, salt noise, stamp overlay over a date, mixed.
+- `preprocess.prepare(img: Image) -> Image` (grayscale, deskew via projection profile, upscale when estimated x-height < 20 px, adaptive threshold, light denoise); `layout_page` runs Tesseract on original and prepared image and keeps the one with higher mean word confidence; `Word` gains `confidence: float | None`.
+- Date rules additions: roman-numeral months (`12.III.2026`), spaced/dotted variants (`12 . 03 . 2026`), `年月日`, Russian/German/Spanish/French/Vietnamese month abbreviations with OCR-noisy dots, Eastern-Arabic digits, `EXP`/`MFG`/`MFD`/`LOT` adjacent forms; digit-context OCR confusion repair (O→0, l/I→1, S→5, B→8) only inside a date-shaped token, recorded in `review_reasons` as `ocr_repaired`.
+- `eval/run_eval.py --set synth|public|all` reports per-degradation recall/precision.
+
+- [ ] **Step 1:** Generate the synthetic set; run baseline eval (`--ai off`) on synth + public; save `eval/baseline.json` (git-ignored) and record the numbers in the report.
+- [ ] **Step 2:** Failing tests for every new format and repair rule (one test per format, plus negatives: `LOT 12031` is not a date; `ISO 9001:2015` is not a date; a phone number is not a date).
+- [ ] **Step 3:** Implement rules → PASS. Implement preprocessing with tests (`test_deskew_recovers_2deg`, `test_upscale_small_text`, `test_confidence_selects_better_pass`).
+- [ ] **Step 4:** Re-run eval. Keep each change only if synth recall improves and precision does not drop more than 1 point, and hallucinations and silent resolutions stay 0; otherwise revert that change. Write the before/after table to `docs/accuracy.md` (committed; synthetic numbers only, no document text).
+- [ ] **Step 5:** Commit `feat(core): measured OCR preprocessing and date-format coverage`.
