@@ -413,7 +413,9 @@ def test_carry_over_skips_accept_of_an_unread_date_that_is_now_resolved(store):
     review(store, only_date(store, old_run).id, "accept")
     assert only_date(store, old_run).current_value is None
     new_run_id = store.create_run(doc, "1.0.1", "claude-opus-5-5", True)
-    resolved = dated("n1", "03/04/2026", None, resolved_value="2026-04-03", evidence="DD/MM/YYYY", **ambiguous)
+    resolved = dated(
+        "n1", "03/04/2026", None, resolved_value="2026-04-03", evidence="DD/MM/YYYY", **ambiguous
+    )
     store.save_results(new_run_id, [resolved], [], [])
 
     assert store.carry_over(old_run, new_run_id) == 0

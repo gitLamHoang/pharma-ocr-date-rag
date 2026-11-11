@@ -302,3 +302,45 @@ def test_reprocess_unknown_document_raises(store, settings):
             queue.reprocess(999)
     finally:
         queue.shutdown()
+
+
+def test_resubmit_after_failed_run_carries_from_last_done_run(
+    native_pdf, tmp_path, store, settings, monkeypatch
+):
+    queue = JobQueue(store, settings, None)
+    try:
+        document_id, first = queue.submit(native_pdf, "native.pdf")
+        queue.wait()
+        old_date = store.dates_for_run(first)[0]
+        store.add_review(old_date.id, "accept", "QA Reviewer", "matches the label")
+        with monkeypatch.context() as m:
+            m.setattr(pipeline, "validate", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("down")))
+            failed = queue.reprocess(document_id)
+            queue.wait()
+        assert store.get_run(failed).status == "failed"
+
+        copy = tmp_path / "again.pdf"
+        shutil.copyfile(native_pdf, copy)
+        again_doc, third = queue.submit(copy, "again.pdf")
+        queue.wait()
+    finally:
+        queue.shutdown()
+    assert again_doc == document_id and third not in (first, failed)
+    (new_date,) = store.dates_for_run(third)
+    assert new_date.status == "accepted" and new_date.carried_from_run == first
+
+
+def test_runs_left_unfinished_by_a_restart_are_marked_failed(store, settings):
+    document_id = store.upsert_document("b" * 64, "stuck.pdf", 1)
+    done = store.create_run(document_id, PIPELINE_VERSION, None, False)
+    store.set_run_status(done, "done")
+    stuck = store.create_run(document_id, PIPELINE_VERSION, None, False)
+    store.set_run_status(stuck, "reading")
+
+    queue = JobQueue(store, settings, None)
+    queue.shutdown()
+
+    run = store.get_run(stuck)
+    assert run.status == "failed" and run.error == pipeline.INTERRUPTED
+    assert store.get_run(done).status == "done"
+    assert store.get_document(document_id).status == "failed"

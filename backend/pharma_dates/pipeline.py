@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 PIPELINE_VERSION = "1.0.0"
 MAX_PARALLEL_DOCUMENTS = 2
 PROCESSING_ERROR = "Processing error"
+INTERRUPTED = "Processing was interrupted. Reprocess the document."
 
 # PDFium is not thread-safe, and two documents can be ingested at once.
 _PDFIUM_LOCK = threading.Lock()
@@ -159,7 +160,11 @@ class JobQueue:
     """Runs documents in background threads, at most `MAX_PARALLEL_DOCUMENTS` at once."""
 
     def __init__(self, store: Store, settings: Settings, client: ClaudeClient | None):
+        """Runs a previous process left unfinished (crash, kill, stop timeout) are marked failed,
+        so their documents can be reprocessed. Assumes one queue per database (one worker)."""
         self.store, self.settings, self.client = store, settings, client
+        if interrupted := store.fail_unfinished_runs(INTERRUPTED):
+            logger.warning("%d unfinished run(s) from an earlier start marked failed", interrupted)
         self._pool = ThreadPoolExecutor(max_workers=MAX_PARALLEL_DOCUMENTS, thread_name_prefix="pipeline")
         self._lock = threading.Lock()
         self._jobs: dict[int, Future] = {}  # run id -> unfinished job
@@ -167,16 +172,17 @@ class JobQueue:
     def submit(self, path: Path, filename: str) -> tuple[int, int]:
         """Queue an uploaded file; returns (document id, run id) at once. The file must stay in
         place until the run has read it. An identical file whose latest run is done or still
-        running here returns that run; otherwise (failed, or left unfinished by a restart) a
-        new run starts."""
+        running here returns that run; otherwise (the latest run failed) a new run starts,
+        carrying reviewer decisions over from the newest `done` run as `reprocess` does."""
         sha256 = sha256_of(Path(path))
         with self._lock:
             document_id = self.store.upsert_document(sha256, filename, 0)
             latest = self.store.latest_run(document_id)
             if latest is not None and (latest.status == "done" or latest.id in self._jobs):
                 return document_id, latest.id
+            carry_from = self.store.latest_done_run(document_id)
             run_id = _new_run(self.store, document_id, self.client)
-            self._start(run_id, Path(path), filename, None)
+            self._start(run_id, Path(path), filename, carry_from.id if carry_from else None)
         return document_id, run_id
 
     def reprocess(self, document_id: int) -> int:

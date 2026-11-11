@@ -372,6 +372,24 @@ async def test_reprocess_carries_decisions(http, app, native_pdf):
     assert carried["carried_from_run"] == body["run_id"]
 
 
+async def test_run_left_unfinished_by_a_restart_fails_and_can_be_reprocessed(http, app, make_app, native_pdf):
+    body = await upload(http, app, native_pdf)
+    stuck = app.state.store.create_run(body["document_id"], "1.0.0", None, False)
+    app.state.store.set_run_status(stuck, "reading")  # the process was killed mid-run
+
+    restarted = make_app()
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=restarted), base_url="http://test"
+    ) as again:
+        detail = (await again.get(f"/api/documents/{body['document_id']}")).json()
+        assert detail["run"]["id"] == stuck and detail["run"]["status"] == "failed"
+        assert "interrupted" in detail["run"]["error"]
+        response = await again.post(f"/api/documents/{body['document_id']}/reprocess")
+        assert response.status_code == 202
+        restarted.state.queue.wait()
+        assert restarted.state.store.get_run(response.json()["run_id"]).status == "done"
+
+
 async def test_reprocess_unknown_document_404(http):
     response = await http.post("/api/documents/999/reprocess")
     assert response.status_code == 404

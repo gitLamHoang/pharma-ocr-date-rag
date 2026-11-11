@@ -182,6 +182,23 @@ class Store:
                 (status, run_id, run_id),
             )
 
+    def fail_unfinished_runs(self, error: str) -> int:
+        """Mark every run that is neither done nor failed as failed (they cannot be running after a
+        restart: the job queue is in-process); the document status follows. Returns the count."""
+        with self._connect(write=True) as conn:
+            failed = conn.execute(
+                "UPDATE runs SET status = 'failed', error = ?, finished_at = ?"
+                " WHERE status NOT IN ('done', 'failed') RETURNING id, document_id",
+                (error, _now()),
+            ).fetchall()
+            for run in failed:
+                conn.execute(
+                    "UPDATE documents SET status = 'failed' WHERE id = ?"
+                    " AND ? = (SELECT MAX(id) FROM runs WHERE document_id = documents.id)",
+                    (run["document_id"], run["id"]),
+                )
+        return len(failed)
+
     def get_run(self, run_id: int) -> Run | None:
         with self._connect() as conn:
             row = conn.execute("SELECT * FROM runs WHERE id = ?", (run_id,)).fetchone()
