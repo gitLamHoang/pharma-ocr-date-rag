@@ -1,0 +1,13 @@
+name: pharma-dates
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    # Provider settings and keys (copy .env.example to .env). Keys are read at run time, never baked in.
+    # Optional: without .env the app runs offline (rules + OCR only).
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./data:/app/data

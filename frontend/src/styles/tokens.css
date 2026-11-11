@@ -87,14 +87,14 @@
   --fam-product: #0f766e;
   --fam-document: #1f5fbf;
   --fam-signature: #b4235a;
-  --fam-legal: #7e2e9a;
+  --fam-legal: #8f2b86;
   --fam-audit: #a34a07;
   --fam-logistics: #4b6f12;
   --fam-other: #5b6478;
   --fam-product-ui: light-dark(var(--fam-product), #5cc8ba);
   --fam-document-ui: light-dark(var(--fam-document), #93b6f2);
   --fam-signature-ui: light-dark(var(--fam-signature), #f394b8);
-  --fam-legal-ui: light-dark(var(--fam-legal), #d6a2ea);
+  --fam-legal-ui: light-dark(var(--fam-legal), #e39bdf);
   --fam-audit-ui: light-dark(var(--fam-audit), #f2a868);
   --fam-logistics-ui: light-dark(var(--fam-logistics), #b0d16e);
   --fam-other-ui: light-dark(var(--fam-other), #b5bccd);

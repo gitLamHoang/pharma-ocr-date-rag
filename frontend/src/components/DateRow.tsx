@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import type { DateRecord, DateStatus, ReviewAction } from "../api";
 import { isAmbiguous, monthLabel, snippet, type Labels } from "../dateDisplay";
 import { HistoryDrawer } from "./HistoryDrawer";
@@ -28,11 +28,12 @@ const STATUS: Record<DateStatus, { label: string; tone: string }> = {
 export function DateValue({ date }: { date: DateRecord }) {
   let body;
   if (isAmbiguous(date)) {
+    // "or" is its own flex item, so the gap spaces it evenly on both sides.
     body = date.candidates.map((reading, i) => (
-      <span key={reading}>
+      <Fragment key={reading}>
         {i > 0 ? <span className="muted"> or </span> : null}
         <span className="mono">{reading}</span>
-      </span>
+      </Fragment>
     ));
   } else if (date.current_value === null) {
     body = (

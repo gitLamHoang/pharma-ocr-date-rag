@@ -127,7 +127,26 @@ describe("family highlight colours on page images", () => {
     expect(new Set(hexes).size).toBe(7);
     expect(hexes).not.toContain(colour("--sun-400", "light"));
   });
+
+  it.each(THEMES)("keeps every family hue out of violet and indigo (244-295 degrees) in %s", (theme) => {
+    for (const family of FAMILIES) {
+      for (const name of [`--fam-${family}`, `--fam-${family}-ui`]) {
+        const h = hue(colour(name, theme));
+        expect(h >= 244 && h <= 295, `${name} hue ${Math.round(h)}`).toBe(false);
+      }
+    }
+  });
 });
+
+/** HSL hue in degrees. */
+function hue(hex: string): number {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number];
+  const max = Math.max(r, g, b);
+  const d = max - Math.min(r, g, b);
+  if (d === 0) return 0;
+  const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return (h * 60 + 360) % 360;
+}
 
 describe("type", () => {
   it("names a condensed display face, a grotesk UI face and a mono for dates", () => {

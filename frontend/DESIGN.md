@@ -53,14 +53,15 @@ Dealt from the taste-skill app library (`framed-sheet`, seed 1329022108), brand 
 
 ### Date families
 
-Seven hues, spaced around the wheel, none of them sunflower (reserved for selection):
+Seven hues, spaced around the wheel, none of them sunflower (reserved for selection) and none
+violet or indigo (hue 244-295°, `tokens.test.ts` checks this):
 
 | Family | On page images `--fam-*` | UI dots/labels `--fam-*-ui` (dark) |
 |---|---|---|
 | Product / batch | teal `#0F766E` | `#5CC8BA` |
 | Document control | blue `#1F5FBF` | `#93B6F2` |
 | Signature | rose `#B4235A` | `#F394B8` |
-| Legal / regulatory | plum `#7E2E9A` | `#D6A2EA` |
+| Legal / regulatory | stamp magenta `#8F2B86` | `#E39BDF` |
 | Audit / inspection | rust `#A34A07` | `#F2A868` |
 | Logistics | olive `#4B6F12` | `#B0D16E` |
 | Other | slate `#5B6478` | `#B5BCCD` |
