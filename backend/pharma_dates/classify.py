@@ -4,9 +4,9 @@ Claude only labels candidates the rules found; it never changes their text or in
 A date Claude reports that the rules did not find (a missed date, or a date found only in its
 transcription) is kept only when the rules or the loose parser below can read it AND it appears
 on the page's own text layer (pdfplumber or Tesseract) AND that printed text reads as the same
-date. A resolution of an ambiguous date needs evidence quoted exactly from the page that shows
-the day/month order. Everything rejected
-goes to the "discarded AI suggestions" list with a reason; it is never shown as a date.
+date; it keeps that printed text as its raw text. A resolution of an ambiguous date needs
+evidence quoted exactly from the page that shows the day/month order. Everything rejected goes
+to the "discarded AI suggestions" list with a reason; it is never shown as a date.
 
 Standard library and pydantic only at import time (the static build runs this module in Pyodide).
 """
@@ -255,7 +255,10 @@ class _Page:
         if span is None:
             return None
         self.claim(*span, c.id)
-        return c.model_copy(update=self._placement(*span))
+        # The printed text, not the transcription's: carry-over matches dates by raw text.
+        return c.model_copy(
+            update={"raw_text": self.layout.text[span[0] : span[1]], **self._placement(*span)}
+        )
 
     def verify_missed(self, m: MissedDate) -> LabeledDate | None:
         payload = m.model_dump()
@@ -276,7 +279,7 @@ class _Page:
         return LabeledDate(
             id=id_,
             page=self.layout.n,
-            raw_text=m.verbatim_text,
+            raw_text=self.layout.text[span[0] : span[1]],  # as printed, not Claude's wording
             normalized=normalized,
             candidates=candidates,
             precision=precision,

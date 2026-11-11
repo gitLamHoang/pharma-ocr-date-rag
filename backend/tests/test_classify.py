@@ -559,3 +559,12 @@ def test_evidence_on_the_page_up_to_case_and_spacing_is_accepted():
     )
     assert date.resolved_value == "2027-03-04"
     assert discarded == []
+
+
+@pytest.mark.parametrize("verbatim", ["the twelfth day of March 2026", "twelfth day of march, 2026"])
+def test_ai_only_date_stores_the_printed_text_not_claudes_wording(verbatim):
+    layout = make_layout(["Sworn before me on the twelfth day of March, 2026 at Riga"])
+    client = FakeClient(classified(missed_dates=[missed(verbatim, "notarization_date")]))
+    [date], _ = label_page(layout, page_candidates(layout), client)
+    assert date.raw_text == layout.text[date.char_start : date.char_end]
+    assert date.raw_text in ("the twelfth day of March, 2026", "twelfth day of March, 2026")
