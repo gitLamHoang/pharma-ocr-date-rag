@@ -60,7 +60,7 @@ export function ExportMenu({ runId }: Props) {
         <ul id={menuId} className="export-menu__list">
           {FORMATS.map(({ format, label, hint }) => (
             <li key={format}>
-              <a className="export-menu__item" href={api.exportUrl(runId, format)} download onClick={() => setOpen(false)}>
+              <a className="export-menu__item" href={api.exportUrl(runId, format)} download={api.exportFilename?.(runId, format) ?? ""} onClick={() => setOpen(false)}>
                 <span className="export-menu__label">{label}</span>
                 <span className="export-menu__hint">{hint}</span>
               </a>

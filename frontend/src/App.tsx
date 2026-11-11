@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, NavLink, Outlet, Route, Routes } from "react-router-dom";
-import { api } from "./api";
+import { STATIC_MODE, api } from "./api";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { Documents } from "./pages/Documents";
 import { Review } from "./pages/Review";
@@ -20,7 +20,7 @@ export function App() {
 
 function Shell() {
   return (
-    <div className="app">
+    <div className={STATIC_MODE ? "app app--static" : "app"}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -39,10 +39,32 @@ function Shell() {
           <ThemeToggle />
         </div>
       </header>
+      {STATIC_MODE ? <StaticModeBanner /> : null}
       <main className="sheet" id="main" tabIndex={-1}>
         <Outlet />
       </main>
     </div>
+  );
+}
+
+const STATIC_FACTS = [
+  "Runs in your browser",
+  "rules only (no AI)",
+  "documents are not uploaded anywhere",
+  "every date needs review",
+];
+
+/** The GitHub Pages build: what this copy of the app does with a document, said once on every screen. */
+function StaticModeBanner() {
+  return (
+    <p className="mode-banner" role="note">
+      {STATIC_FACTS.map((fact, i) => (
+        <span key={fact} className="mode-banner__fact">
+          {fact}
+          {i < STATIC_FACTS.length - 1 ? <span className="mode-banner__sep"> · </span> : null}
+        </span>
+      ))}
+    </p>
   );
 }
 

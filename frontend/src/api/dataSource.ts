@@ -37,4 +37,6 @@ export interface DataSource {
   reprocess(id: number): Promise<ReprocessResult>;
   /** A URL that downloads the run's export as an attachment. */
   exportUrl(runId: number, fmt: ExportFormat): string;
+  /** The download's file name, when `exportUrl` cannot carry one (a blob URL); the server names it itself. */
+  exportFilename?(runId: number, fmt: ExportFormat): string;
 }

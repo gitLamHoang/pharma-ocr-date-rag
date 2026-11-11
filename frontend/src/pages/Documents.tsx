@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { api, type DocumentSummary } from "../api";
+import { STATIC_MODE, api, type DocumentSummary } from "../api";
 import { DocumentTable } from "../components/DocumentTable";
 import { UploadDropzone, type UploadDropzoneHandle } from "../components/UploadDropzone";
 
@@ -61,7 +61,8 @@ export function Documents() {
         </div>
       </header>
 
-      {health.data && !health.data.ai_enabled ? (
+      {/* The static build's banner already says rules only. */}
+      {health.data && !health.data.ai_enabled && !STATIC_MODE ? (
         <p className="notice">AI classification off — rules only</p>
       ) : null}
 

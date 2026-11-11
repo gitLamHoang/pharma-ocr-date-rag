@@ -142,6 +142,37 @@ textarea {
   min-height: 100dvh;
 }
 
+/* The static (GitHub Pages) build: one line in the frame under the top bar, on every screen. */
+.app--static {
+  --banner-height: 28px;
+  grid-template-rows: var(--topbar-height) auto 1fr;
+}
+
+.mode-banner {
+  min-height: var(--banner-height);
+  margin: 0;
+  padding: 0 calc(var(--sheet-inset) + var(--space-4)) var(--space-2);
+  color: var(--muted);
+  font-size: var(--fs-13);
+  line-height: 20px;
+}
+
+.mode-banner__fact {
+  white-space: nowrap;
+}
+
+.mode-banner__fact:first-child {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* The break between two facts falls after the dot. */
+.mode-banner__sep {
+  white-space: normal;
+  color: var(--muted);
+  font-weight: 400;
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -843,6 +874,10 @@ select.input {
     display: none;
   }
 
+  .mode-banner {
+    padding: 0 var(--space-4) var(--space-2);
+  }
+
   .dropzone {
     padding: var(--space-4);
   }
@@ -1074,7 +1109,7 @@ select.input {
 @media (min-width: 961px) {
   .sheet:has(> .review-screen) {
     display: flex;
-    height: calc(100dvh - var(--topbar-height) - var(--sheet-inset));
+    height: calc(100dvh - var(--topbar-height) - var(--banner-height, 0px) - var(--sheet-inset));
     min-height: 560px;
   }
 
