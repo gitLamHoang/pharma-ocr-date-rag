@@ -7,6 +7,8 @@ data/
 *.log
 eval/cache/
 eval/results-*.json
+eval/synth/
+eval/baseline.json
 
 # Tooling.
 .venv/

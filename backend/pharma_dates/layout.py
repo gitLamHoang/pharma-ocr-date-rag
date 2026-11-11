@@ -1,8 +1,9 @@
 """Step 2: words, boxes and text for one page.
 
 Native PDF pages use the pdfplumber text layer; scans (and PDF pages with almost no text layer) use
-Tesseract. Boxes are in page-image pixels. `PageLayout.text` joins words with spaces and lines with
-newlines, and each word's `char_start/char_end` index into it.
+Tesseract, run on the page image and on a cleaned copy (`preprocess.prepare`); the pass with the
+higher mean word confidence is kept. Boxes are in page-image pixels. `PageLayout.text` joins words
+with spaces and lines with newlines, and each word's `char_start/char_end` index into it.
 """
 
 import logging
@@ -11,6 +12,7 @@ import pdfplumber
 import pytesseract
 from PIL import Image
 
+from . import preprocess
 from .config import Settings
 from .ingest import IngestedFile, IngestError
 from .models import BBox, PageLayout, Word
@@ -20,7 +22,7 @@ logger = logging.getLogger(__name__)
 MIN_TEXT_LAYER_CHARS = 20
 TESSERACT_CONFIG = "--oem 1 --psm 3"
 
-Line = list[tuple[str, BBox]]
+Line = list[tuple[str, BBox, float | None]]  # text, box, OCR confidence 0-1
 
 
 def layout_page(ingested: IngestedFile, n: int, settings: Settings) -> PageLayout:
@@ -32,7 +34,7 @@ def layout_page(ingested: IngestedFile, n: int, settings: Settings) -> PageLayou
     lines = _pdf_lines(ingested, n, settings) if ingested.kind == "pdf" else None
     source = "pdf"
     if lines is None:
-        lines = _ocr_lines(img, settings)
+        lines = _best_ocr_lines(img, settings)
         source = "ocr"
     text, words = _join(lines, img.width, img.height)
     return PageLayout(n=n, width=img.width, height=img.height, text=text, text_source=source, words=words)
@@ -72,7 +74,7 @@ def _pdf_lines(ingested: IngestedFile, n: int, settings: Settings) -> list[Line]
         if line_bottom is None or middle > line_bottom:
             lines.append([])
             line_bottom = w["bottom"]
-        lines[-1].append((w["text"], box))
+        lines[-1].append((w["text"], box, None))
     return [sorted(line, key=lambda item: item[1].x0) for line in lines]
 
 
@@ -104,6 +106,22 @@ def _visible_area(page: pdfplumber.page.Page) -> tuple[float, float, float, floa
     return (min(xs), min(tops), max(xs), max(tops))
 
 
+def _best_ocr_lines(img: Image.Image, settings: Settings) -> list[Line]:
+    """Tesseract on the page and on its cleaned copy; the original wins a tie."""
+    original = _ocr_lines(img, settings)
+    prepared_img = preprocess.prepare(img)
+    prepared = [
+        [(text, preprocess.to_original(box, prepared_img), conf) for text, box, conf in line]
+        for line in _ocr_lines(prepared_img, settings)
+    ]
+    return prepared if _mean_confidence(prepared) > _mean_confidence(original) else original
+
+
+def _mean_confidence(lines: list[Line]) -> float:
+    confidences = [conf for line in lines for _, _, conf in line if conf is not None]
+    return sum(confidences) / len(confidences) if confidences else 0.0
+
+
 def _ocr_lines(img: Image.Image, settings: Settings) -> list[Line]:
     try:
         data = pytesseract.image_to_data(
@@ -119,7 +137,8 @@ def _ocr_lines(img: Image.Image, settings: Settings) -> list[Line]:
         left, top = data["left"][i], data["top"][i]
         box = BBox(x0=left, y0=top, x1=left + data["width"][i], y1=top + data["height"][i])
         key = (data["block_num"][i], data["par_num"][i], data["line_num"][i])
-        lines.setdefault(key, []).append((text, box))
+        conf = float(data["conf"][i])
+        lines.setdefault(key, []).append((text, box, conf / 100 if conf >= 0 else None))
     return list(lines.values())
 
 
@@ -131,7 +150,7 @@ def _join(lines: list[Line], width: int, height: int) -> tuple[str, list[Word]]:
         if li:
             parts.append("\n")
             pos += 1
-        for wi, (text, box) in enumerate(line):
+        for wi, (text, box, conf) in enumerate(line):
             if wi:
                 parts.append(" ")
                 pos += 1
@@ -141,7 +160,9 @@ def _join(lines: list[Line], width: int, height: int) -> tuple[str, list[Word]]:
                 x1=min(max(box.x1, 0), width),
                 y1=min(max(box.y1, 0), height),
             )
-            words.append(Word(text=text, bbox=clamped, char_start=pos, char_end=pos + len(text)))
+            words.append(
+                Word(text=text, bbox=clamped, char_start=pos, char_end=pos + len(text), confidence=conf)
+            )
             parts.append(text)
             pos += len(text)
     return "".join(parts), words

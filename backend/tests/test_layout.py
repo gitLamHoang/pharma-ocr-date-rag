@@ -165,3 +165,11 @@ def test_word_boxes_match_rendered_ink_on_rotated_cropped_pages(tmp_path, settin
     )
     # Word boxes span the font's line height, so they reach a few pixels past the glyph ink.
     assert words == pytest.approx(ink, abs=10)
+
+
+@needs_tesseract
+def test_ocr_words_carry_confidence_and_pdf_words_do_not(scanned_png, native_pdf, settings):
+    scan = layout_page(ingest(scanned_png, settings), 1, settings)
+    assert scan.words and all(0 <= w.confidence <= 1 for w in scan.words)
+    native = layout_page(ingest(native_pdf, settings), 1, settings)
+    assert all(w.confidence is None for w in native.words)

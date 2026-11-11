@@ -153,6 +153,28 @@ def test_unambiguous_gold_is_never_a_silent_resolution():
     assert score(preds, GOLD, PAGES).silent_resolutions == 0
 
 
+def test_matching_by_value_pairs_dates_whose_printed_text_differs():
+    # OCR printed "12 . 03 . 2026"-style gold text differently; the synthetic set matches by value.
+    preds = perfect()
+    preds[0] = predicted("12  Mar 2026", "issue_date", "2026-03-12")
+    preds[2] = predicted("09 /10 /2026", "signature_date", candidates=AMBIGUOUS)
+    result = score(preds, GOLD, PAGES | {1: PAGES[1] + "\n12  Mar 2026 09 /10 /2026"}, by="value")
+    assert (result.micro.tp, result.micro.fp, result.micro.fn) == (4, 0, 0)
+
+
+def test_matching_by_value_needs_the_same_readings():
+    preds = perfect()
+    preds[2] = predicted("09/10/2026", "signature_date", "2026-09-10")  # one reading only
+    result = score(preds, GOLD, PAGES, by="value")
+    assert (result.detected.tp, result.detected.fp, result.detected.fn) == (3, 1, 1)
+
+
+def test_text_matching_ignores_whitespace_inside_the_date():
+    preds = perfect()
+    preds[1] = predicted("03 /2027", "expiry_date", "2027-03")
+    assert score(preds, GOLD, PAGES | {1: PAGES[1] + " 03 /2027"}).micro.tp == 4
+
+
 def test_every_source_has_valid_gold_labels_and_a_pinned_hash():
     sources = load_sources()
     ids = [s["id"] for s in sources]

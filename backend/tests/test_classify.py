@@ -138,24 +138,24 @@ def test_resolution_ignored_on_unambiguous_date():
 
 
 def test_ai_only_verified_against_page_text():
-    layout = make_layout(["Legalized by the Ministry of Foreign Affairs", "Seal dated 12.III.2026 Riga"])
+    layout = make_layout(["Legalized by the Ministry of Foreign Affairs", "Seal dated 2026.III.12 Riga"])
     cands = page_candidates(layout)
     assert cands == []
     client = FakeClient(
-        classified(missed_dates=[missed("12.III.2026", qualifier="Ministry of Foreign Affairs")])
+        classified(missed_dates=[missed("2026.III.12", qualifier="Ministry of Foreign Affairs")])
     )
     [date], discarded = label_page(layout, cands, client)
     assert discarded == []
     assert date.source == "ai_only"
-    assert date.raw_text == "12.III.2026"
+    assert date.raw_text == "2026.III.12"
     assert date.normalized == "2026-03-12"
     assert date.candidates == ["2026-03-12"]
     assert date.precision == "day"
     assert date.date_type == "legalization_date"
     assert date.family == "legal"
     assert date.qualifier == "Ministry of Foreign Affairs"
-    assert layout.text[date.char_start : date.char_end] == "12.III.2026"
-    # The word "12.III.2026" sits on line 2 from column 11.
+    assert layout.text[date.char_start : date.char_end] == "2026.III.12"
+    # The word "2026.III.12" (year first: the rules parser reads only day-first roman dates) sits on line 2 from column 11.
     assert date.bbox == BBox(x0=110, y0=20, x1=220, y1=35)
     assert date.id == "p1-a1"
 
@@ -334,8 +334,9 @@ def test_same_missed_date_printed_twice_kept_twice():
 
 
 def test_transcription_candidate_verified_and_located():
-    # OCR read the roman month as digits; Claude's transcription has the printed form.
-    layout = make_layout(["Expiry 31/03/2027", "Signed 14 Mar 2O26"], transcription="Signed 14 Mar 2026")
+    # OCR misread a digit in a month-first date, where the rules do not repair digits;
+    # Claude's transcription has the printed form.
+    layout = make_layout(["Expiry 31/03/2027", "Signed Mar 14, 2O26"], transcription="Signed Mar 14, 2026")
     rules = page_candidates(layout)
     extra = transcription_candidates(layout, rules)
     cands = rules + extra
@@ -346,7 +347,7 @@ def test_transcription_candidate_verified_and_located():
     [t] = extra
     assert by_id[t.id].source == "ai_only"
     assert by_id[t.id].date_type == "signature_date"
-    assert layout.text[by_id[t.id].char_start : by_id[t.id].char_end] == "14 Mar 2O26"
+    assert layout.text[by_id[t.id].char_start : by_id[t.id].char_end] == "Mar 14, 2O26"
     assert by_id[t.id].bbox is not None
     assert by_id[rules[0].id].source == "rules"  # not labeled by Claude: rule label kept
 

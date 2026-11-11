@@ -19,6 +19,7 @@ class Word(BaseModel):
     bbox: BBox
     char_start: int
     char_end: int
+    confidence: float | None = None  # Tesseract word confidence 0-1; None for a PDF text layer
 
 
 class PageLayout(BaseModel):

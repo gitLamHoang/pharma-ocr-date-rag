@@ -90,7 +90,9 @@ leave both null. Never resolve by habit, locale or likelihood.
 Copy `verbatim_text` exactly as printed, character for character, including roman-numeral \
 months and spelled-out numbers. Report each printed occurrence once.
 5. Never compute, complete or guess a date. Do not add a day to a month-only date. Do not report \
-a date that is not printed on the page.
+a date that is not printed on the page. A lot or batch number, a standard or reference number \
+(for example ISO 9001:2015), a phone number or a version number is not a date, even when it \
+looks like one.
 6. `confidence` is between 0 and 1. `rationale` is one short sentence naming the words on the \
 page that support the label.
 

@@ -1,4 +1,4 @@
-"""Small, inspectable English vocabularies for date fields and month names."""
+"""Small, inspectable English vocabularies for date fields and month names (including roman)."""
 
 from __future__ import annotations
 
@@ -7,10 +7,11 @@ import unicodedata
 from functools import cache
 
 MONTH_NAMES = "January February March April May June July August September October November December".split()
+ROMAN_MONTHS = "I II III IV V VI VII VIII IX X XI XII".split()
 
 FIELD_WORDS = {
     "expiry": ["expiry", "expiration", "expires", "exp", "use before", "valid until", "shelf life"],
-    "manufacture": ["manufacture", "manufactured", "mfg", "production", "packed"],
+    "manufacture": ["manufacture", "manufactured", "mfg", "mfd", "production", "packed"],
     "qa_check": ["qa", "qc", "quality", "check", "inspection", "reviewed", "verified", "released"],
     "audit": ["audit", "supplier visit", "vendor review"],
     "received": ["received", "arrival", "delivered"],
@@ -25,13 +26,15 @@ def fold(text: str) -> str:
 
 @cache
 def field_patterns() -> tuple[tuple[str, re.Pattern[str]], ...]:
+    """One pattern per field label. A field word may touch a digit ("EXP03/2027", "LOT12031EXP"),
+    not another letter."""
     return tuple(
         (
             label,
             re.compile(
-                r"(?<!\w)(?:"
+                r"(?<![^\W\d_])(?:"
                 + "|".join(re.escape(fold(word)) for word in sorted(synonyms, key=lambda s: (-len(s), s)))
-                + r")(?!\w)"
+                + r")(?![^\W\d_])"
             ),
         )
         for label, synonyms in FIELD_WORDS.items()
@@ -51,3 +54,9 @@ def month_lookup() -> dict[str, int]:
         months[fold(name[:3])] = number
     months["sept"] = 9
     return months
+
+
+@cache
+def roman_month_lookup() -> dict[str, int]:
+    """Folded (lower-case) roman numerals I..XII; callers check the printed text is upper case."""
+    return {fold(numeral): number for number, numeral in enumerate(ROMAN_MONTHS, start=1)}
