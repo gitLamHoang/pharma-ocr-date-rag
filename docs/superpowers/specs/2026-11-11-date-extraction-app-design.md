@@ -37,7 +37,7 @@ The rebuild replaces the current portfolio prototype in this repo.
 - Cloud AI is allowed. Provider must be configurable: Anthropic API (default), Amazon Bedrock, or Google Vertex AI — the deploying company's IT decides which channel is approved.
 - No real company documents available yet; build and evaluate on public documents.
 - Must run on macOS (developer) and Linux (Docker).
-- Languages: English, French, German, Spanish, Vietnamese already supported by the rules; legalization pages may contain other scripts — the AI layer handles those, rules mark them unknown.
+- Language: English only (owner ruling, 2026-11-11). Rules, OCR and tests cover English documents; text in other languages is out of scope.
 
 - **No secrets or sensitive data in the repo, ever:** API keys and cloud credentials only in a git-ignored `.env` (an `.env.example` with placeholders is committed); uploads, page images, SQLite files and logs are git-ignored; logs never print keys or document text; a pre-commit secret scan (gitleaks) runs locally and in CI; eval set uses public documents only.
 
@@ -63,7 +63,7 @@ upload → 1 ingest → 2 text+layout → 3 candidates (rules) → 4 classify (C
 
 ### 5.2 Text and layout per page
 - **Native-text PDF page** (has a text layer with enough characters): words + boxes from pdfplumber.
-- **Scanned page / image:** Tesseract `image_to_data` for words + boxes (language packs eng+fra+deu+spa+vie). If Claude is available, also ask Claude for a faithful transcription of the page (used in step 4).
+- **Scanned page / image:** Tesseract `image_to_data` for words + boxes (English pack `eng` only). If Claude is available, also ask Claude for a faithful transcription of the page (used in step 4).
 - Output per page: `text`, list of `words(text, x0, y0, x1, y1, char_start, char_end)`.
 
 ### 5.3 Candidates (rules)
@@ -160,7 +160,7 @@ README: short — what it does, a screenshot, quick start (Docker and local), co
 ## 11. Decisions settled after review (my calls — check these)
 
 1. **Dates found only in Claude's transcription are AI-only.** A candidate counts as `rules` only if it is found in the pdfplumber/Tesseract text layer. A candidate found only in Claude's transcription is `ai_only` and must pass the §5.4 verification, otherwise it is discarded. Hallucination in the eval = any stored date with no gold match whose text is not on the page.
-2. **Non-Latin scripts.** Tesseract also loads `ara`, `rus`, `chi_sim`, `jpn` packs so AI-only dates on those pages can still be verified. Dates that still fail verification are discarded (logged, shown in a per-document "discarded AI suggestions" debug list, never as dates).
+2. **Unverifiable AI suggestions.** Superseded by the English-only ruling: Tesseract loads `eng` only. Dates that still fail verification are discarded (logged, shown in a per-document "discarded AI suggestions" debug list, never as dates).
 3. **Reprocessing.** v1 supports "Reprocess" (new pipeline/model version, or first run was offline). Each run is stored in a `runs` table; dates belong to a run; old runs are frozen, never deleted. A reviewer decision carries over to the new run when page + raw text + normalized value match exactly; it's marked "carried over from run N". Everything else starts as `needs_review`. Re-uploading an identical file opens the latest run.
 4. **Providers.** One client adapter. Anthropic API is the primary target and gets all features. On Bedrock/Vertex the same request is sent; if structured output is unsupported there, fall back to a strict tool definition with `tool_choice: auto` plus schema validation and one retry; refusal fallback uses the SDK's client-side middleware. Feature parity is not a hard requirement.
 5. **Month-only dates** compare as the last day of that month (standard pharma reading of `EXP 03/2027`), but are still displayed and stored as month precision (`2027-03`). Flags on them say "month precision".

@@ -89,7 +89,7 @@ docker-compose.yml  Dockerfile  Makefile  .env.example  .gitignore
 **Interfaces:**
 - Produces: `FAMILIES: dict[str, list[str]]` exactly the types in spec §6 (family keys: `product`, `document`, `signature`, `legal`, `audit`, `logistics`, `other`); `family_of(date_type: str) -> str` (raises `KeyError` on unknown); `ALL_TYPES: frozenset[str]`; `offline_label(rule_label: str, context: str) -> str` implementing spec §11.6; `as_json() -> list[dict]` (`{family, label, types:[{id,label}]}`) for the API.
 
-- [ ] **Step 1: Failing tests** — `test_every_spec_type_present` (assert set of 35 ids incl. `apostille_date`, `certificate_valid_until`, `signature_date`, `retest_date`, `unknown`); `test_family_of("notarization_date") == "legal"`; `test_offline_label("expiry", "...") == "expiry_date"`; `test_offline_label("document", "Signed by J. Doe on") == "signature_date"`; `test_offline_label("document", "Apostille ... date") == "apostille_date"`; `test_offline_label("qa_check", "") == "unknown"`.
+- [ ] **Step 1: Failing tests** — `test_every_spec_type_present` (assert set of 31 ids incl. `apostille_date`, `certificate_valid_until`, `signature_date`, `retest_date`, `unknown`); `test_family_of("notarization_date") == "legal"`; `test_offline_label("expiry", "...") == "expiry_date"`; `test_offline_label("document", "Signed by J. Doe on") == "signature_date"`; `test_offline_label("document", "Apostille ... date") == "apostille_date"`; `test_offline_label("qa_check", "") == "unknown"`.
 - [ ] **Step 2:** Run → FAIL. **Step 3:** Implement (English keyword regexes for the §11.6 list). **Step 4:** Run → PASS. **Step 5:** Commit `feat(taxonomy): date types and offline labels`.
 
 ### Task 3: Ingest and layout
@@ -254,3 +254,23 @@ docker-compose.yml  Dockerfile  Makefile  .env.example  .gitignore
 - [ ] **Step 3:** Implement rules → PASS. Implement preprocessing with tests (`test_deskew_recovers_2deg`, `test_upscale_small_text`, `test_confidence_selects_better_pass`).
 - [ ] **Step 4:** Re-run eval. Keep each change only if synth recall improves and precision does not drop more than 1 point, and hallucinations and silent resolutions stay 0; otherwise revert that change. Write the before/after table to `docs/accuracy.md` (committed; synthetic numbers only, no document text).
 - [ ] **Step 5:** Commit `feat(core): measured OCR preprocessing and date-format coverage`.
+
+### Task 17: GitHub Pages static build (in-browser, rules-only)
+
+**Goal:** `https://gitlamhoang.github.io/pharma-ocr-date-rag/` serves the same React app in `VITE_MODE=static`: the visitor uploads a PDF/image and gets labeled, located, validated dates computed entirely in the browser. No server, no API key, documents never leave the browser. A banner states: "Runs in your browser · rules only (no AI) · documents are not uploaded anywhere · every date needs review". The full app (Claude + server) remains the Docker deployment.
+
+**Files:**
+- Create: `frontend/src/api/static/` (StaticDataSource implementing the `DataSource` interface from Task 10), `frontend/src/engine/{pdf.ts,ocr.ts,pyodide.ts,worker.ts}`, `scripts/build_wheel_for_pages.sh` (or a vite plugin step) that bundles the pure Python core (`taxonomy, models, rules/*, candidates, validate`, verification helpers) into the static build, `.github/workflows/pages.yml` (new: build with `VITE_MODE=static`, base path `/pharma-ocr-date-rag/`, deploy with actions/deploy-pages on push to `main`), tests.
+- Modify: `frontend/vite.config.ts` (base path per mode), README (a "Live demo" line + the limits above).
+
+**Interfaces:**
+- Consumes: `DataSource` (Task 10), Python `page_candidates`, `offline_label`, `apply_document_order`, `validate`, `taxonomy.as_json` (Tasks 2, 4, 6), `PageLayout`/`Word` shapes (Task 1).
+- Engine: pdf.js (`pdfjs-dist`) renders pages to canvas at 200 DPI-equivalent and extracts text items with positions → `PageLayout` (text_source "pdf") when the page has ≥ 20 non-space chars; otherwise tesseract.js `eng` (worker, lang data loaded from jsDelivr pinned version) → words with bboxes → `PageLayout` (text_source "ocr"). Pyodide (pinned version from jsDelivr) loads micropip + pydantic and the bundled core, runs in a Web Worker; JS↔Python exchange is JSON.
+- Storage: documents, page images (as object URLs / IndexedDB blobs), runs, dates, flags and append-only review events in IndexedDB (wrap every access in try/catch; app still works in memory if storage is blocked). Export CSV/JSON in-browser. Reprocess = rerun locally with carry-over (same exact-match rule as the server).
+- Same limits as the server: 50 MB, 100 pages; same error messages for encrypted/corrupt PDFs.
+
+- [ ] Step 1: failing tests (Vitest): StaticDataSource implements every DataSource method; layout builder converts pdf.js text items into words with correct char offsets and bboxes; IndexedDB unavailable → in-memory fallback; review events cannot be edited/deleted through the API.
+- [ ] Step 2: implement; `npm test` PASS; `VITE_MODE=static npm run build` PASS.
+- [ ] Step 3: Playwright smoke against `vite preview` of the static build: upload the generated native PDF fixture → dates appear with highlight boxes → accept one → export CSV contains `accepted`; upload a scanned PNG → OCR path produces ≥1 date. Look at screenshots (desktop + tablet, light + dark) with the Read tool; fix layout issues.
+- [ ] Step 4: Commit `feat(pages): in-browser static build for GitHub Pages`.
+- [ ] Step 5: (controller) merge to main and push; verify the Pages workflow run succeeds and the live URL loads.
