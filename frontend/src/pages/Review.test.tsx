@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { Link, MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError, api } from "../api";
 import { TAXONOMY, ambiguousDate, dateRecord, documentDetail, flag, monthDate, reviewEvent } from "../test-fixtures";
@@ -18,7 +18,16 @@ function renderAt(path = "/documents/1") {
     <QueryClientProvider client={queries}>
       <MemoryRouter initialEntries={[path]}>
         <Routes>
-          <Route path="/documents/:id" element={<Review />} />
+          <Route
+            path="/documents/:id"
+            element={
+              <>
+                <Link to="/documents/1">First document</Link>
+                <Link to="/documents/2">Next document</Link>
+                <Review />
+              </>
+            }
+          />
           <Route path="/" element={<p>Documents screen</p>} />
         </Routes>
       </MemoryRouter>
@@ -198,6 +207,9 @@ describe("Review screen", () => {
 
     expect(api.getDates).toHaveBeenCalledWith(3);
     expect(screen.getByText(/Run 3 is frozen/)).toBeInTheDocument();
+    // Nothing here can be reviewed, so the count is not the sunflower call to action.
+    expect(document.querySelector(".review__summary .pill--review")).toBeNull();
+    expect(screen.getByText(/need review in this run/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open the latest run" })).toHaveAttribute("href", "/documents/1");
 
     fireEvent.click(rowButton(1));
@@ -205,6 +217,77 @@ describe("Review screen", () => {
     key("a");
     key("e");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("ignores a pinned run newer than the latest one", async () => {
+    renderAt("/documents/1?run=9");
+    await loaded();
+
+    expect(api.getDates).toHaveBeenCalledWith(4);
+    expect(api.getDates).not.toHaveBeenCalledWith(9);
+    expect(screen.queryByText(/frozen/)).not.toBeInTheDocument();
+    fireEvent.click(rowButton(1));
+    expect(within(row(1)).getByRole("button", { name: /^Accept/ })).toBeInTheDocument();
+  });
+
+  it("refuses a pinned run that belongs to another document", async () => {
+    vi.mocked(api.getDates).mockResolvedValue([dateRecord({ id: 21, run_id: 2, document_id: 7 })]);
+    renderAt("/documents/1?run=2");
+
+    expect(await screen.findByText("Run 2 is not a run of this document.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open the latest run" })).toHaveAttribute("href", "/documents/1");
+    expect(row(21)).toBeNull();
+    expect(box(21)).toBeNull();
+    expect(screen.queryByText(/frozen/)).not.toBeInTheDocument();
+  });
+
+  it("refuses a pinned run that does not exist", async () => {
+    vi.mocked(api.getDates).mockRejectedValue(new ApiError(404, "Run 2 not found."));
+    vi.mocked(api.getFlags).mockRejectedValue(new ApiError(404, "Run 2 not found."));
+    renderAt("/documents/1?run=2");
+
+    expect(await screen.findByText("Run 2 is not a run of this document.")).toBeInTheDocument();
+    expect(screen.queryByText(/Could not load the dates/)).not.toBeInTheDocument();
+  });
+
+  it("starts fresh when another document opens on the same screen", async () => {
+    const second = documentDetail({
+      document: { ...documentDetail().document, id: 2, filename: "batch-record.pdf" },
+      run: { id: 6, status: "done", error: null, ai_used: false, ai_model: null },
+    });
+    vi.mocked(api.getDocument).mockImplementation(async (id) => (id === 2 ? second : documentDetail()));
+    vi.mocked(api.getDates).mockImplementation(async (run) =>
+      run === 6 ? [dateRecord({ id: 31, run_id: 6, document_id: 2 })] : DATES,
+    );
+    renderAt("/documents/2");
+    await screen.findByRole("heading", { level: 1, name: "batch-record.pdf" });
+    fireEvent.click(screen.getByRole("link", { name: "First document" }));
+    await loaded();
+    fireEvent.click(rowButton(3));
+    fireEvent.click(screen.getByRole("button", { name: "Zoom in" }));
+    expect(screen.getByRole("img", { name: "Page 2 of 2" })).toBeInTheDocument();
+
+    // The second document is cached now, so it renders at once: nothing of the first may carry over.
+    fireEvent.click(screen.getByRole("link", { name: "Next document" }));
+
+    await screen.findByRole("heading", { level: 1, name: "batch-record.pdf" });
+    expect(screen.getByRole("img", { name: "Page 1 of 2" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Zoom 100%/ })).toBeInTheDocument();
+  });
+
+  it("leaves the arrow keys to the page canvas and the thumbnail rail", async () => {
+    renderAt();
+    await loaded();
+    key("ArrowDown");
+    const canvas = document.querySelector<HTMLElement>(".viewer__canvas")!;
+    const thumb = screen.getByRole("button", { name: /^Page 2,/ });
+
+    expect(fireEvent.keyDown(canvas, { key: "ArrowDown" })).toBe(true);
+    expect(fireEvent.keyDown(thumb, { key: "ArrowUp" })).toBe(true);
+    expect(rowButton(1)).toHaveAttribute("aria-current", "true");
+
+    fireEvent.keyDown(box(1)!, { key: "ArrowDown" });
+    expect(rowButton(2)).toHaveAttribute("aria-current", "true");
   });
 
   it("says what the pipeline is doing while the run is in progress", async () => {

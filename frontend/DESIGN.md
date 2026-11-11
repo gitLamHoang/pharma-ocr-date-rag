@@ -124,10 +124,14 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
   the type label; then the raw text in mono, page, source and confidence in 13 px muted; then the
   page's words around the date, the date itself in ink. The selected row takes `--selected-bg` and
   the active one a 1 px sunflower ring; only the active row shows its actions (Accept `A`,
-  Edit `E`, Reject, History). ↑/↓ move, A accepts, E edits; shortcuts are off while typing.
+  Edit `E`, Reject, History). ↑/↓ move, A accepts, E edits; shortcuts are off while typing, and ↑/↓ are left to the
+  page canvas (focusable, to scroll a zoomed page) and the thumbnail rail when they have focus.
 - **Read-only runs:** an older run (`?run=N`) or a run a review found replaced (HTTP 409) shows a
   `.notice` with the way back ("Open the latest run", or "This run was replaced — reload" with a
-  Reload button in `--danger` tint) and no decision controls.
+  Reload button in `--danger` tint) and no decision controls; the title's needs-review count drops
+  its sunflower and reads "need review in this run". A `?run=` that is not an older run of this
+  document is ignored when newer than the latest, and refused ("Run N is not a run of this
+  document.") when the server does not know it or its dates name another document.
 - **Tablet (834 px):** Documents keeps the table and moves uploaded-at under the name as a subline
   (from 960 px down). Below 640 px it keeps name, status and needs review as columns and moves
   pages, dates and flags to a subline ("3 pages · 12 dates · 2 flags").
@@ -148,8 +152,11 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
 - **Dialogs** (review: accept/correct/reject) are the one place a shadow appears
   (`--shadow-float`, over `--scrim`); use `<dialog>` for focus trapping. Reviewer (remembered in
   this browser) and reason are required; a correction offers the type picker grouped by family,
-  and for a date with two readings only those readings as radios, never a free value.
+  and for a date with two readings only those readings as radios, never a free value. A
+  month-only date takes only `YYYY-MM`: the dialog (and the server) refuse a day.
 - **Focus:** a 2 px `--focus-edge` outline plus a sunflower halo, on every interactive element.
+  On the page canvas the ring is an inset layer over the canvas, since the scrolled page would
+  cover an outline.
 
 ## States
 

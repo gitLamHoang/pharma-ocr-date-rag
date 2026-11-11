@@ -41,12 +41,23 @@ function typing(target: EventTarget | null): boolean {
   return target instanceof Element && target.closest("input, textarea, select, [contenteditable='true'], dialog") !== null;
 }
 
+/** True when the arrow keys scroll something: the focused page canvas (zoomed) or the thumbnail rail. */
+function scrolling(target: EventTarget | null): boolean {
+  return target instanceof Element && (target.matches(".viewer__canvas") || target.closest(".viewer__rail") !== null);
+}
+
 /** One document's dates next to its pages: confirm, correct or reject each. */
 export function Review() {
+  const { id } = useParams();
+  // Selection, page, zoom and a replaced run belong to one document: another document starts fresh.
+  return <ReviewScreen key={id} />;
+}
+
+function ReviewScreen() {
   const params = useParams();
   const documentId = Number(params.id);
   const [search, setSearch] = useSearchParams();
-  const pinned = Number(search.get("run")) || null;
+  const asked = Number(search.get("run")) || null;
   const queryClient = useQueryClient();
 
   const detail = useQuery({
@@ -56,6 +67,8 @@ export function Review() {
     refetchInterval: (query) => (moving(query.state.data?.run) ? POLL_MS : false),
   });
   const latest = detail.data?.run ?? null;
+  // Only an older run can be frozen. A higher number is a stale or mistyped link: show the latest run.
+  const pinned = asked !== null && latest !== null && asked < latest.id ? asked : null;
   const runId = pinned ?? latest?.id ?? null;
   const showsLatest = latest !== null && runId === latest.id;
   const ready = runId !== null && detail.data !== undefined && (!showsLatest || latest.status === "done");
@@ -66,7 +79,12 @@ export function Review() {
   const labels = useMemo(() => makeLabels(taxonomy.data), [taxonomy.data]);
 
   const [replaced, setReplaced] = useState<number | null>(null);
-  const frozen = runId !== null && latest !== null && !showsLatest;
+  // A pinned run the server does not know, or one whose dates name another document, is not shown.
+  const missing = (error: unknown) => error instanceof ApiError && error.status === 404;
+  const foreign =
+    pinned !== null &&
+    (missing(dates.error) || missing(flags.error) || (dates.data?.some((d) => d.document_id !== documentId) ?? false));
+  const frozen = runId !== null && latest !== null && !showsLatest && !foreign;
   const readOnly = frozen || replaced === runId;
 
   const [selection, setSelection] = useState<Selection>(NOTHING);
@@ -107,9 +125,10 @@ export function Review() {
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if (dialog || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || typing(event.target)) return;
-      if (ordered.length === 0) return;
+      if (ordered.length === 0 || foreign) return;
       const at = active ? ordered.indexOf(active) : -1;
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        if (scrolling(event.target)) return;
         event.preventDefault();
         const next = event.key === "ArrowDown" ? Math.min(at + 1, ordered.length - 1) : Math.max(at - 1, 0);
         select(ordered[next]!.id, true);
@@ -185,10 +204,11 @@ export function Review() {
   return (
     <div className="screen review-screen">
       <TitleRow name={doc?.document.filename ?? null}>
-        {dates.data ? (
+        {dates.data && !foreign ? (
           <p className="review__summary">
-            <span className={needReview ? "pill pill--review" : "pill"}>{needReview}</span>
-            <span>need review</span>
+            {/* Sunflower only where the dates can be reviewed; a read-only run just reports its count. */}
+            <span className={needReview && !readOnly ? "pill pill--review" : "pill"}>{needReview}</span>
+            <span>{readOnly ? "need review in this run" : "need review"}</span>
             <span className="muted">
               · {dates.data.length} {dates.data.length === 1 ? "date" : "dates"}
             </span>
@@ -196,7 +216,14 @@ export function Review() {
         ) : null}
       </TitleRow>
 
-      {replaced !== null && replaced === runId ? (
+      {foreign ? (
+        <p className="notice notice--alert" role="alert">
+          <span>Run {pinned} is not a run of this document.</span>
+          <Link className="button" to={`/documents/${documentId}`}>
+            Open the latest run
+          </Link>
+        </p>
+      ) : replaced !== null && replaced === runId ? (
         <p className="notice notice--alert" role="alert">
           <span>This run was replaced — reload to review the latest run. Nothing was saved.</span>
           <button type="button" className="button" onClick={reload}>
@@ -214,7 +241,7 @@ export function Review() {
         </p>
       ) : null}
 
-      {doc === undefined ? (
+      {foreign ? null : doc === undefined ? (
         <ReviewSkeleton />
       ) : latest === null ? (
         <p className="review__message">This document has not been processed yet.</p>

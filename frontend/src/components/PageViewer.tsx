@@ -136,7 +136,8 @@ export function PageViewer({ documentId, pages, dates, selectedId, onSelect, lin
           })}
         </nav>
 
-        <div className="viewer__canvas" ref={canvas}>
+        {/* Focusable so the keyboard can scroll a zoomed page; Review leaves ↑/↓ to it. */}
+        <div className="viewer__canvas" ref={canvas} tabIndex={0} role="region" aria-label={`Page ${page.n}, scrollable`}>
           <div className="viewer__page" style={{ width: `${zoom}%`, aspectRatio: `${page.width} / ${page.height}` }}>
             {failed === page.n ? (
               <p className="viewer__failed">

@@ -81,6 +81,9 @@ export function ReviewDialog({ date, action, taxonomy, labels, onSubmit, onClose
       body.new_value = newValue !== date.current_value ? newValue : null;
       if (!readings && body.new_value !== null && !isDateValue(body.new_value)) {
         found.value = "Write the date as YYYY-MM-DD, or YYYY-MM for a month-only date.";
+      } else if (!readings && body.new_value !== null && date.precision === "month" && body.new_value.length !== 7) {
+        // Never invent a day for a month-only date.
+        found.value = "The page gives a month only. Write YYYY-MM, without a day.";
       } else if (body.new_type === null && body.new_value === null) {
         found.form = "Change the type or the value, or cancel.";
       }

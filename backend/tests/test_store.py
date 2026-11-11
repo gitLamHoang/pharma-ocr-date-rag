@@ -282,6 +282,14 @@ def test_month_value_accepted_in_correction(store):
     assert only_date(store, run).current_value == "2027-04"
 
 
+def test_month_only_date_cannot_gain_a_day(store):
+    _, run = new_run(store, [dated("c1", "03/2027", "2027-03", precision="month")])
+    date_id = only_date(store, run).id
+    with pytest.raises(ValueError, match="month only"):
+        review(store, date_id, "correct", new_value="2027-03-31")
+    assert store.history(date_id) == []
+
+
 def test_review_unknown_date_raises_lookup(store):
     with pytest.raises(LookupError):
         review(store, 999, "accept")

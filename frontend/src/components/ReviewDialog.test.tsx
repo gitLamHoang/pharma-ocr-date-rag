@@ -147,6 +147,21 @@ describe("ReviewDialog", () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
+  it("never lets a month-only date gain a day", async () => {
+    const { onSubmit } = renderDialog(monthDate(), "correct");
+    type("Reviewer", "J. Doe");
+    type("Reason", "Label says April");
+
+    type(/^Value/, "2027-04-30");
+    fireEvent.click(screen.getByRole("button", { name: "Save correction" }));
+    expect(await screen.findByText("The page gives a month only. Write YYYY-MM, without a day.")).toBeInTheDocument();
+    expect(onSubmit).not.toHaveBeenCalled();
+
+    type(/^Value/, "2027-04");
+    fireEvent.click(screen.getByRole("button", { name: "Save correction" }));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ new_value: "2027-04" })));
+  });
+
   it("shows the server's refusal and stays open", async () => {
     const onSubmit = vi.fn().mockRejectedValue(new Error("a reason is required"));
     const { onClose } = renderDialog(dateRecord(), "accept", onSubmit);

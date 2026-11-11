@@ -384,7 +384,8 @@ class Store:
 
         with self._connect(write=True) as conn:
             row = conn.execute(
-                "SELECT d.run_id, (SELECT MAX(id) FROM runs WHERE document_id = d.document_id) AS latest"
+                "SELECT d.run_id, d.precision,"
+                " (SELECT MAX(id) FROM runs WHERE document_id = d.document_id) AS latest"
                 " FROM dates d WHERE d.id = ?",
                 (date_id,),
             ).fetchone()
@@ -394,6 +395,8 @@ class Store:
                 raise FrozenRunError(
                     f"run {row['run_id']} is frozen; review the document's latest run {row['latest']}"
                 )
+            if new_value is not None and row["precision"] == "month" and len(new_value) != 7:
+                raise ValueError("the page gives a month only; write the value as YYYY-MM, never with a day")
             return _insert_event(conn, date_id, action, new_type, new_value, reviewer, reason, None)
 
     def history(self, date_id: int) -> list[ReviewEvent]:

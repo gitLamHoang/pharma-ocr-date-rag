@@ -1149,10 +1149,32 @@ textarea.input {
 }
 
 .viewer__canvas {
+  /* Placed, not auto-placed, so the focus layer below can share its cell. */
+  grid-column: 2;
+  grid-row: 1;
   min-width: 0;
   min-height: 0;
   padding: var(--space-4);
   overflow: auto;
+}
+
+/* Focusable so the keyboard can scroll a zoomed page. The scrolled page paints over any ring on
+   the canvas itself, so the ring is a layer laid over the canvas's grid cell. */
+.viewer__canvas:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.viewer__body:has(> .viewer__canvas:focus-visible)::after {
+  content: "";
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 2px var(--focus-edge),
+    inset 0 0 0 5px var(--focus);
 }
 
 .viewer__page {
@@ -1625,6 +1647,12 @@ kbd {
   .viewer__body {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .viewer__canvas,
+  .viewer__body:has(> .viewer__canvas:focus-visible)::after {
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .viewer__rail {
