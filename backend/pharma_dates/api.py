@@ -13,10 +13,12 @@ import uuid
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
+from urllib.parse import urlsplit
 
 import pytesseract
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi import Path as PathParam
 from fastapi.concurrency import run_in_threadpool
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse, Response
@@ -38,6 +40,9 @@ _FROM_SETTINGS = object()
 _FORMULA_START = ("=", "+", "-", "@", "\t", "\r")
 _UNSAFE_NAME = re.compile(r"[^A-Za-z0-9._-]+")
 _CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+# A database id: SQLite integers are 64-bit, so a larger path id is refused (422), not a crash.
+Id = Annotated[int, PathParam(ge=1, le=2**63 - 1)]
+CROSS_SITE = "Cross-site requests are not allowed."
 
 CSV_COLUMNS = [
     "document",
@@ -98,6 +103,10 @@ def create_app(
     app = FastAPI(title="Pharma dates", lifespan=lifespan)
     app.state.store, app.state.queue = store, queue
 
+    @app.exception_handler(Exception)
+    async def unexpected_error(_: Request, exc: Exception) -> JSONResponse:
+        return JSONResponse(status_code=500, content={"detail": "Internal error."})  # logged by the server
+
     @app.exception_handler(RequestValidationError)
     async def invalid_request(_: Request, exc: RequestValidationError) -> JSONResponse:
         detail = "; ".join(f"{e['loc'][-1]}: {e['msg']}" if e["loc"] else e["msg"] for e in exc.errors())
@@ -128,14 +137,16 @@ def create_app(
     def get_taxonomy():
         return taxonomy.as_json()
 
-    @app.post("/api/documents", status_code=202)
+    @app.post("/api/documents", status_code=202, dependencies=[Depends(_same_origin)])
     async def upload(request: Request):
         limit = settings.max_upload_mb * 1024 * 1024
         too_large = HTTPException(413, f"This file is larger than {settings.max_upload_mb} MB.")
         length = request.headers.get("content-length", "")
         if length.isdigit() and int(length) > limit + _FORM_OVERHEAD:
             raise too_large
-        async with request.form(max_files=1, max_fields=10) as form:
+        async with _capped(request, limit + _FORM_OVERHEAD, too_large).form(
+            max_files=1, max_fields=10
+        ) as form:
             file = form.get("file")
             if not isinstance(file, UploadFile):
                 raise HTTPException(422, "file: send the document as the multipart field 'file'")
@@ -149,7 +160,7 @@ def create_app(
         return store.list_documents()
 
     @app.get("/api/documents/{document_id}")
-    def document_detail(document_id: int):
+    def document_detail(document_id: Id):
         document = get_document(document_id)
         run = store.latest_run(document_id)
         pages = store.pages_for_run(run.id) if run else []
@@ -161,7 +172,7 @@ def create_app(
         }
 
     @app.get("/api/documents/{document_id}/pages/{n}.png")
-    def page_image(document_id: int, n: int):
+    def page_image(document_id: Id, n: Id):
         get_document(document_id)
         run = store.latest_run(document_id)
         page = next((p for p in store.pages_for_run(run.id) if p.n == n), None) if run else None
@@ -169,30 +180,30 @@ def create_app(
             raise HTTPException(404, f"Page {n} not found.")
         return FileResponse(page.image_path, media_type="image/png")
 
-    @app.post("/api/documents/{document_id}/reprocess", status_code=202)
-    def reprocess(document_id: int):
+    @app.post("/api/documents/{document_id}/reprocess", status_code=202, dependencies=[Depends(_same_origin)])
+    def reprocess(document_id: Id):
         try:
             return {"run_id": queue.reprocess(document_id)}
         except LookupError:
             raise HTTPException(404, f"Document {document_id} not found.") from None
 
     @app.get("/api/runs/{run_id}/dates")
-    def run_dates(run_id: int):
+    def run_dates(run_id: Id):
         get_run(run_id)
         return store.dates_for_run(run_id)
 
     @app.get("/api/runs/{run_id}/flags")
-    def run_flags(run_id: int):
+    def run_flags(run_id: Id):
         get_run(run_id)
         return store.flags_for_run(run_id)
 
     @app.get("/api/runs/{run_id}/discarded")
-    def run_discarded(run_id: int):
+    def run_discarded(run_id: Id):
         get_run(run_id)
         return store.discarded_for_run(run_id)
 
-    @app.post("/api/dates/{date_id}/review", status_code=201)
-    def review(date_id: int, body: ReviewIn):
+    @app.post("/api/dates/{date_id}/review", status_code=201, dependencies=[Depends(_same_origin)])
+    def review(date_id: Id, body: ReviewIn):
         try:
             return store.add_review(date_id, **body.model_dump())
         except FrozenRunError as exc:
@@ -203,11 +214,11 @@ def create_app(
             raise HTTPException(422, str(exc)) from None
 
     @app.get("/api/dates/{date_id}/history")
-    def history(date_id: int):
+    def history(date_id: Id):
         return store.history(date_id)
 
     @app.get("/api/runs/{run_id}/export")
-    def export(run_id: int, format: Literal["csv", "json"] = Query()):
+    def export(run_id: Id, format: Literal["csv", "json"] = Query()):
         run = get_run(run_id)
         document = store.get_document(run.document_id)
         dates = store.dates_for_run(run_id)
@@ -301,6 +312,41 @@ def _missing_langs(langs: str) -> list[str]:
     return [lang for lang in wanted if lang not in installed]
 
 
+def _same_origin(request: Request) -> None:
+    """Refuse a state-changing request a page on another site made the browser send.
+
+    An upload or a reprocess is a CORS-simple request, so a page elsewhere could otherwise start
+    paid AI runs or freeze the run a reviewer is working in. Browsers say where a request came
+    from (`Sec-Fetch-Site`, `Origin`); clients that send neither (curl, scripts) are let through."""
+    if request.headers.get("sec-fetch-site") in ("cross-site", "same-site"):
+        raise HTTPException(403, CROSS_SITE)
+    origin = request.headers.get("origin")
+    if origin is None:
+        return
+    hosts = {request.headers.get("host"), request.headers.get("x-forwarded-host")} - {None}
+    if urlsplit(origin).netloc not in hosts:
+        raise HTTPException(403, CROSS_SITE)
+
+
+def _capped(request: Request, cap: int, too_large: HTTPException) -> Request:
+    """The request with its body counted as it arrives: past `cap` bytes, `too_large` is raised.
+
+    A chunked upload has no Content-Length to check first, and the form parser would otherwise
+    spool the whole file part to a temporary file before `_save_upload` sees it."""
+    received = 0
+
+    async def receive():
+        nonlocal received
+        message = await request.receive()
+        if message["type"] == "http.request":
+            received += len(message.get("body", b""))
+            if received > cap:
+                raise too_large
+        return message
+
+    return Request(request.scope, receive)
+
+
 def _display_name(filename: str | None) -> str:
     """The uploaded file's base name without control characters, as shown in the documents list."""
     name = _CONTROL.sub("", Path((filename or "").replace("\\", "/")).name).strip()
@@ -309,7 +355,8 @@ def _display_name(filename: str | None) -> str:
 
 async def _save_upload(file: UploadFile, data_dir: Path, limit: int, too_large: HTTPException) -> Path:
     """Stream the upload to `<data_dir>/uploads/<sha256>/original<suffix>` (where ingest keeps it),
-    checking its type from the first bytes and its size as it arrives; nothing is kept on refusal."""
+    checking its type from the first bytes and its size; nothing is kept on refusal. The request
+    body is already capped as it arrives (`_capped`)."""
     incoming = data_dir / "incoming"
     incoming.mkdir(parents=True, exist_ok=True)
     temp = incoming / uuid.uuid4().hex

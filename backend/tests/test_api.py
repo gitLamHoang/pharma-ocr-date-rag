@@ -204,6 +204,31 @@ async def test_upload_oversize_by_content_length_413(make_app):
     assert response.status_code == 413
 
 
+async def test_chunked_upload_over_the_limit_stops_reading_413(make_app, tmp_path):
+    app = make_app(max_upload_mb=1)
+    sent = 0
+
+    async def body():  # no Content-Length: the request is sent chunked
+        nonlocal sent
+        head = b'--b\r\nContent-Disposition: form-data; name="file"; filename="big.pdf"\r\n\r\n%PDF-1.7\n'
+        sent += len(head)
+        yield head
+        for _ in range(20):
+            chunk = b"0" * (1024 * 1024)
+            sent += len(chunk)
+            yield chunk
+        yield b"\r\n--b--\r\n"
+
+    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as http:
+        response = await http.post(
+            "/api/documents", content=body(), headers={"content-type": "multipart/form-data; boundary=b"}
+        )
+    assert response.status_code == 413
+    assert "1 MB" in response.json()["detail"]
+    assert sent < 3 * 1024 * 1024  # the server stopped reading soon after the limit
+    assert stored_files(tmp_path / "data") == []
+
+
 async def test_upload_without_file_422(http):
     response = await http.post("/api/documents", data={"other": "1"})
     assert response.status_code == 422
@@ -488,3 +513,71 @@ async def test_serves_frontend_dist(make_app, tmp_path):
 
 async def test_no_frontend_dist(http):
     assert (await http.get("/")).status_code == 404
+
+
+# Request hardening
+
+
+@pytest.mark.parametrize(
+    "headers",
+    [
+        {"origin": "http://evil.example", "sec-fetch-site": "cross-site"},
+        {"origin": "http://evil.example"},
+        {"sec-fetch-site": "same-site"},
+        {"origin": "null"},
+    ],
+)
+async def test_cross_site_state_changes_are_refused(http, app, native_pdf, headers):
+    body = await upload(http, app, native_pdf)
+    response = await http.post(f"/api/documents/{body['document_id']}/reprocess", headers=headers)
+    assert response.status_code == 403
+    assert response.json() == {"detail": "Cross-site requests are not allowed."}
+    response = await http.post(
+        "/api/documents",
+        files={"file": ("x.pdf", native_pdf.read_bytes(), "application/pdf")},
+        headers=headers,
+    )
+    assert response.status_code == 403
+    assert app.state.store.latest_run(body["document_id"]).id == body["run_id"]
+
+
+async def test_same_origin_state_changes_are_allowed(http, app, native_pdf):
+    body = await upload(http, app, native_pdf)
+    headers = {"origin": "http://test", "sec-fetch-site": "same-origin"}
+    response = await http.post(f"/api/documents/{body['document_id']}/reprocess", headers=headers)
+    assert response.status_code == 202
+
+
+@pytest.mark.parametrize(
+    ("method", "path"),
+    [
+        ("GET", "/api/runs/99999999999999999999/dates"),
+        ("GET", "/api/documents/99999999999999999999"),
+        ("GET", "/api/dates/99999999999999999999/history"),
+        ("POST", "/api/documents/99999999999999999999/reprocess"),
+        ("GET", "/api/documents/1/pages/99999999999999999999.png"),
+        ("GET", "/api/runs/0/flags"),
+    ],
+)
+async def test_out_of_range_ids_are_a_json_422(http, method, path):
+    response = await http.request(method, path)
+    assert response.status_code == 422
+    assert isinstance(response.json()["detail"], str)
+
+
+async def test_out_of_range_review_id_is_a_json_422(http):
+    response = await review(http, 99999999999999999999, action="accept")
+    assert response.status_code == 422
+    assert isinstance(response.json()["detail"], str)
+
+
+async def test_unexpected_error_is_a_json_500(app, monkeypatch):
+    def boom():
+        raise RuntimeError("database file is locked: /secret/path")
+
+    monkeypatch.setattr(app.state.store, "list_documents", boom)
+    transport = httpx.ASGITransport(app=app, raise_app_exceptions=False)
+    async with httpx.AsyncClient(transport=transport, base_url="http://test") as http:
+        response = await http.get("/api/documents")
+    assert response.status_code == 500
+    assert response.json() == {"detail": "Internal error."}
