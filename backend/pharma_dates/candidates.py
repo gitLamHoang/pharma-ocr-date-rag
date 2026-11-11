@@ -4,9 +4,12 @@ Only dates found in the page's own text layer (pdfplumber or Tesseract) are `rul
 Dates found only in Claude's transcription are `ai_only` and must pass verification later.
 """
 
+from collections.abc import Iterable
+
 from .models import BBox, Candidate, PageLayout, Word
 from .rules.conventions import infer_order, interpret
-from .rules.dates import DateHit, extract_dates
+from .rules.dates import DateHit, extract_dates, repair_ocr_noise
+from .rules.languages import fold
 
 CONTEXT_CHARS = 200
 EVIDENCE_QUOTES = 3
@@ -21,16 +24,24 @@ def page_candidates(layout: PageLayout, date_order: str = "auto") -> list[Candid
 
 
 def transcription_candidates(layout: PageLayout, existing: list[Candidate]) -> list[Candidate]:
-    """Dates in Claude's transcription that the text layer did not yield (same raw text and value).
+    """Dates in Claude's transcription that the text layer did not yield.
 
-    Their offsets and context refer to the transcription; they have no box until verified.
+    A transcription hit is the same date as a text-layer candidate when their raw texts match
+    after OCR-digit repair, case folding and whitespace collapsing, and their possible values
+    overlap (so the comparison does not depend on the `date_order` policy). Each text-layer
+    candidate absorbs at most one transcription hit, so a date printed twice stays twice.
+    Offsets and context refer to the transcription; the extras have no box until verified.
     """
     if not layout.transcription:
         return []
-    known = {(_squash(c.raw_text), c.normalized) for c in existing}
-    hits = [
-        h for h in extract_dates(layout.transcription) if (_squash(h.raw_text), h.normalized) not in known
-    ]
+    unmatched = list(existing)
+    hits = []
+    for hit in extract_dates(layout.transcription):
+        match = next((c for c in unmatched if _same_date(c, hit)), None)
+        if match is None:
+            hits.append(hit)
+        else:
+            unmatched.remove(match)
     return [
         _candidate(hit, layout.transcription, f"p{layout.n}-t{i}", layout.n, None, "ai_only")
         for i, hit in enumerate(hits, start=1)
@@ -93,5 +104,16 @@ def _box(words: list[Word], hit: DateHit) -> BBox | None:
     )
 
 
-def _squash(text: str) -> str:
-    return " ".join(text.split())
+def _same_date(cand: Candidate, hit: DateHit) -> bool:
+    return _print_key(cand.raw_text) == _print_key(hit.raw_text) and bool(
+        _values(cand.normalized, cand.candidates) & _values(hit.normalized, hit.candidates)
+    )
+
+
+def _print_key(raw_text: str) -> str:
+    """The printed form with OCR digit noise, case and spacing differences removed."""
+    return " ".join(fold(repair_ocr_noise(raw_text)).split())
+
+
+def _values(normalized: str | None, candidates: Iterable[str]) -> set[str]:
+    return set(candidates) | ({normalized} if normalized else set())

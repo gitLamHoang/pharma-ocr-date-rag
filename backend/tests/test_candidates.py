@@ -160,3 +160,43 @@ def test_document_order_keeps_existing_resolution():
 def test_document_order_never_sets_normalized_on_plain_candidates():
     cands = page_candidates(make_layout(["Signed 09/10/2026", "Released 31/10/2026"]))
     assert apply_document_order(cands) == cands
+
+
+def test_transcription_ocr_digit_noise_is_same_date():
+    # Tesseract misreads digits as O/I/l; Claude transcribes the clean form of the same print.
+    for page_line, transcription in [
+        ("Expiry O1/03/2027", "Expiry 01/03/2027"),
+        ("Exp 31/03/2O27", "Exp 31/03/2027"),
+        ("Mfg 1l/O3/2026", "Mfg 11/03/2026"),
+        ("Mfg I1/03/2026", "Mfg 11/03/2026"),
+    ]:
+        layout = make_layout([page_line], transcription=transcription)
+        existing = page_candidates(layout)
+        assert len(existing) == 1, page_line
+        assert transcription_candidates(layout, existing) == [], page_line
+
+
+def test_transcription_case_difference_is_same_date():
+    layout = make_layout(["EXPIRY MARCH 31, 2027"], transcription="Expiry March 31, 2027")
+    assert transcription_candidates(layout, page_candidates(layout)) == []
+
+
+def test_transcription_dedupe_independent_of_date_order():
+    layout = make_layout(["Signed 09/10/2026"], transcription="Signed 09/10/2026")
+    existing = page_candidates(layout, date_order="dmy")
+    assert existing[0].normalized == "2026-10-09"
+    assert transcription_candidates(layout, existing) == []
+
+
+def test_transcription_second_identical_signature_kept():
+    # The text layer found one of two signature dates; the transcription has both.
+    layout = make_layout(
+        ["Reviewed by: A. Smith 12/03/2026", "Approved by: B. Jones ...smudged..."],
+        transcription="Reviewed by: A. Smith 12/03/2026\nApproved by: B. Jones 12/03/2026",
+    )
+    existing = page_candidates(layout)
+    assert len(existing) == 1
+    [extra] = transcription_candidates(layout, existing)
+    assert extra.raw_text == "12/03/2026"
+    assert extra.source == "ai_only"
+    assert layout.transcription.index("Approved") < extra.char_start
