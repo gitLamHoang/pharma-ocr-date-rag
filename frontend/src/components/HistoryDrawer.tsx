@@ -29,6 +29,28 @@ function Changes({ event, labels }: { event: ReviewEvent; labels: Labels }) {
   );
 }
 
+function HistoryEvent({ event, labels }: { event: ReviewEvent; labels: Labels }) {
+  const carried = event.carried_from_run !== null ? `Carried over from run ${event.carried_from_run}` : null;
+  // A carried decision's stored reason is usually just that sentence: say it once.
+  const reason = carried && event.reason.trim().toLowerCase() === carried.toLowerCase() ? null : event.reason;
+  return (
+    <li className="history__event">
+      <p>
+        <span className="history__action">
+          {DONE[event.action]} by {event.reviewer}
+        </span>
+        <span className="muted">
+          {" · "}
+          <time dateTime={event.at}>{formatTimestamp(event.at)}</time>
+        </span>
+      </p>
+      <Changes event={event} labels={labels} />
+      {reason ? <p className="muted">{reason}</p> : null}
+      {carried ? <p className="muted">{carried}</p> : null}
+    </li>
+  );
+}
+
 /** A date's review decisions, newest first. Append-only: nothing here can be edited. */
 export function HistoryDrawer({ dateId, labels }: Props) {
   const history = useQuery({ queryKey: ["history", dateId], queryFn: () => api.getHistory(dateId) });
@@ -54,21 +76,12 @@ export function HistoryDrawer({ dateId, labels }: Props) {
   } else {
     body = (
       <ol className="history__list">
-        {[...history.data].reverse().map((event) => (
-          <li key={event.id} className="history__event">
-            <p>
-              <span className="history__action">
-                {DONE[event.action]} by {event.reviewer}
-              </span>
-              <span className="muted"> · {formatTimestamp(event.at)}</span>
-            </p>
-            <Changes event={event} labels={labels} />
-            <p className="muted">{event.reason}</p>
-            {event.carried_from_run !== null ? (
-              <p className="muted">Carried over from run {event.carried_from_run}</p>
-            ) : null}
-          </li>
-        ))}
+        {/* Events are append-only, so a higher id is always a later decision. */}
+        {[...history.data]
+          .sort((a, b) => b.id - a.id)
+          .map((event) => (
+            <HistoryEvent key={event.id} event={event} labels={labels} />
+          ))}
       </ol>
     );
   }

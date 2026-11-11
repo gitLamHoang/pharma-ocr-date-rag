@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { Link, MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError, api } from "../api";
+import type { DocumentDetail } from "../api";
 import { TAXONOMY, ambiguousDate, dateRecord, documentDetail, flag, monthDate, reviewEvent } from "../test-fixtures";
 import { Review } from "./Review";
 
@@ -63,6 +64,7 @@ beforeEach(() => {
   vi.spyOn(api, "getTaxonomy").mockResolvedValue(TAXONOMY);
   vi.spyOn(api, "getHistory").mockResolvedValue([]);
   vi.spyOn(api, "reviewDate").mockResolvedValue(reviewEvent());
+  vi.spyOn(api, "getDiscarded").mockResolvedValue([]);
   localStorage.setItem("pharma-dates:reviewer", "J. Doe");
 });
 
@@ -324,5 +326,103 @@ describe("Review screen", () => {
     expect(await screen.findByText(/Could not load the dates\. Database is locked\./)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Retry" }));
     await waitFor(() => expect(row(1)).not.toBeNull());
+  });
+});
+
+describe("Review screen: export, reprocess and discarded suggestions", () => {
+  it("exports the run on screen as CSV or JSON", async () => {
+    renderAt();
+    await loaded();
+
+    fireEvent.click(screen.getByRole("button", { name: "Export" }));
+
+    expect(screen.getByRole("link", { name: /Export CSV/ })).toHaveAttribute("href", api.exportUrl(4, "csv"));
+    expect(screen.getByRole("link", { name: /Export JSON/ })).toHaveAttribute("href", api.exportUrl(4, "json"));
+  });
+
+  it("exports a frozen run's own dates", async () => {
+    renderAt("/documents/1?run=3");
+    await waitFor(() => expect(row(1)).not.toBeNull());
+
+    fireEvent.click(screen.getByRole("button", { name: "Export" }));
+
+    expect(screen.getByRole("link", { name: /Export CSV/ })).toHaveAttribute("href", api.exportUrl(3, "csv"));
+  });
+
+  it("reprocesses after confirmation, switches to the new run and says how many decisions carried over", async () => {
+    let current: DocumentDetail = documentDetail();
+    vi.mocked(api.getDocument).mockImplementation(async () => current);
+    vi.mocked(api.getDates).mockImplementation(async (run) =>
+      run === 5
+        ? [
+            dateRecord({ id: 11, run_id: 5, status: "accepted", carried_from_run: 4 }),
+            monthDate({ id: 12, run_id: 5, status: "rejected", carried_from_run: 4 }),
+            ambiguousDate({ id: 13, run_id: 5 }),
+          ]
+        : DATES,
+    );
+    const reprocess = vi.spyOn(api, "reprocess").mockImplementation(async () => {
+      current = documentDetail({ run: { id: 5, status: "done", error: null, ai_used: false, ai_model: null } });
+      return { run_id: 5 };
+    });
+    renderAt("/documents/1?run=3");
+    await waitFor(() => expect(row(1)).not.toBeNull());
+
+    fireEvent.click(screen.getByRole("button", { name: "Reprocess" }));
+    const dialog = screen.getByRole("dialog");
+    expect(reprocess).not.toHaveBeenCalled();
+    fireEvent.click(within(dialog).getByRole("button", { name: "Reprocess document" }));
+
+    expect(await screen.findByText(/2 decisions carried over/)).toBeInTheDocument();
+    expect(reprocess).toHaveBeenCalledWith(1);
+    expect(api.getDates).toHaveBeenCalledWith(5);
+    expect(row(11)).not.toBeNull();
+    expect(row(1)).toBeNull();
+    expect(screen.getByText(/Run 5 replaced run 4/)).toBeInTheDocument();
+    expect(screen.queryByText(/frozen/)).not.toBeInTheDocument();
+  });
+
+  it("follows a reprocessed run while it is in progress", async () => {
+    let current: DocumentDetail = documentDetail();
+    vi.mocked(api.getDocument).mockImplementation(async () => current);
+    vi.spyOn(api, "reprocess").mockImplementation(async () => {
+      current = documentDetail({ run: { id: 5, status: "reading", error: null, ai_used: false, ai_model: null } });
+      return { run_id: 5 };
+    });
+    renderAt();
+    await loaded();
+
+    fireEvent.click(screen.getByRole("button", { name: "Reprocess" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Reprocess document" }));
+
+    expect(await screen.findByText(/Reading the pages/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reprocess" })).toBeDisabled();
+  });
+
+  it("offers reprocessing when the run failed", async () => {
+    vi.mocked(api.getDocument).mockResolvedValue(
+      documentDetail({ run: { id: 4, status: "failed", error: "The PDF is encrypted.", ai_used: false, ai_model: null } }),
+    );
+    renderAt();
+
+    await screen.findByText("The PDF is encrypted.");
+    expect(screen.getByRole("button", { name: "Reprocess" })).toBeEnabled();
+    expect(screen.queryByRole("button", { name: "Export" })).not.toBeInTheDocument();
+  });
+
+  it("lists discarded AI suggestions apart from the dates, collapsed", async () => {
+    vi.mocked(api.getDiscarded).mockResolvedValue([
+      { page: 1, kind: "transcription", reason: "not found in the page text", candidate_id: "p1-t0", verbatim_text: "31 Feb 2027" },
+    ]);
+    renderAt();
+    await loaded();
+
+    const summary = await screen.findByText("Discarded AI suggestions");
+    expect(summary.closest("details")).not.toHaveAttribute("open");
+    expect(api.getDiscarded).toHaveBeenCalledWith(4);
+    expect(document.querySelector(".date-list")).not.toHaveTextContent("31 Feb 2027");
+    expect(document.querySelectorAll("[data-date-id]")).toHaveLength(DATES.length);
+    expect(document.querySelectorAll("[data-box-id]")).toHaveLength(2);
+    expect(screen.getByText(/· 3 dates/)).toBeInTheDocument();
   });
 });

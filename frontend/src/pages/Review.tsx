@@ -4,8 +4,11 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ApiError, api, type DateRecord, type Flag, type ReviewBody, type RunStatus, type RunSummary } from "../api";
 import { DateList } from "../components/DateList";
 import type { Decision } from "../components/DateRow";
+import { DiscardedSuggestions } from "../components/DiscardedSuggestions";
+import { ExportMenu } from "../components/ExportMenu";
 import { FlagsPanel } from "../components/FlagsPanel";
 import { PageViewer } from "../components/PageViewer";
+import { ReprocessButton } from "../components/ReprocessButton";
 import { ReviewDialog } from "../components/ReviewDialog";
 import { StatusBadge } from "../components/StatusBadge";
 import { groupByFamily, makeLabels } from "../dateDisplay";
@@ -79,6 +82,8 @@ function ReviewScreen() {
   const labels = useMemo(() => makeLabels(taxonomy.data), [taxonomy.data]);
 
   const [replaced, setReplaced] = useState<number | null>(null);
+  // The run a reprocess started here, and the run it replaced: once done, the screen says what carried over.
+  const [reprocessed, setReprocessed] = useState<{ run: number; from: number } | null>(null);
   // A pinned run the server does not know, or one whose dates name another document, is not shown.
   const missing = (error: unknown) => error instanceof ApiError && error.status === 404;
   const foreign =
@@ -166,6 +171,16 @@ function ReviewScreen() {
     ]);
   }
 
+  async function startedRun(run: number) {
+    if (latest !== null && run !== latest.id) setReprocessed({ run, from: latest.id });
+    setReplaced(null);
+    setSearch({}, { replace: true });
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["document", documentId] }),
+      queryClient.invalidateQueries({ queryKey: ["documents"] }),
+    ]);
+  }
+
   function reload() {
     setReplaced(null);
     setSearch({}, { replace: true });
@@ -200,6 +215,10 @@ function ReviewScreen() {
 
   const doc = detail.data;
   const needReview = dates.data?.filter((d) => d.status === "needs_review").length;
+  const carried =
+    reprocessed !== null && runId === reprocessed.run && dates.data
+      ? dates.data.filter((d) => d.carried_from_run !== null).length
+      : null;
 
   return (
     <div className="screen review-screen">
@@ -213,6 +232,16 @@ function ReviewScreen() {
               · {dates.data.length} {dates.data.length === 1 ? "date" : "dates"}
             </span>
           </p>
+        ) : null}
+        {dates.data && !foreign && runId !== null ? <ExportMenu runId={runId} /> : null}
+        {doc && latest !== null && !foreign ? (
+          <ReprocessButton
+            documentId={documentId}
+            latestRunId={latest.id}
+            pages={doc.pages.length || doc.document.pages}
+            busy={moving(latest)}
+            onStarted={startedRun}
+          />
         ) : null}
       </TitleRow>
 
@@ -238,6 +267,13 @@ function ReviewScreen() {
           <Link className="button" to={`/documents/${documentId}`}>
             Open the latest run
           </Link>
+        </p>
+      ) : carried !== null ? (
+        <p className="notice" role="status">
+          <span>
+            Run {reprocessed!.run} replaced run {reprocessed!.from}. {carried} {carried === 1 ? "decision" : "decisions"}{" "}
+            carried over.
+          </span>
         </p>
       ) : null}
 
@@ -298,6 +334,7 @@ function ReviewScreen() {
                   onSelect={(id) => select(id)}
                   onAction={decide}
                 />
+                <DiscardedSuggestions runId={runId!} labels={labels} />
               </>
             ) : (
               <PanelSkeleton />

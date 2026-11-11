@@ -32,6 +32,42 @@ describe("HistoryDrawer", () => {
     expect(items[1]).toHaveTextContent("Accepted by A. First");
   });
 
+  it("says when each decision was made, newest first even when the server sends them out of order", async () => {
+    vi.spyOn(api, "getHistory").mockResolvedValue([
+      reviewEvent({ id: 3, action: "reject", reviewer: "C. Third", reason: "Not a date", at: "2026-11-11T11:30:00" }),
+      reviewEvent({ id: 1, action: "accept", reviewer: "A. First", reason: "Looks right", at: "2026-11-10T08:15:00" }),
+      reviewEvent({ id: 2, action: "reopen", reviewer: "B. Second", reason: "Check again", at: "2026-11-11T09:05:00" }),
+    ]);
+    renderDrawer();
+
+    const items = await screen.findAllByRole("listitem");
+    expect(items.map((item) => item.querySelector(".history__action")?.textContent)).toEqual([
+      "Rejected by C. Third",
+      "Reopened by B. Second",
+      "Accepted by A. First",
+    ]);
+    const time = items[0]!.querySelector("time");
+    expect(time).toHaveAttribute("datetime", "2026-11-11T11:30:00");
+    expect(time).toHaveTextContent("2026-11-11 11:30");
+    expect(items[2]).toHaveTextContent("2026-11-10 08:15");
+  });
+
+  it("marks a decision carried over from an earlier run", async () => {
+    vi.spyOn(api, "getHistory").mockResolvedValue([reviewEvent({ id: 5, carried_from_run: 3 })]);
+    renderDrawer();
+
+    expect(await screen.findByText("Carried over from run 3")).toBeInTheDocument();
+    expect(screen.getByText("Matches the page")).toBeInTheDocument();
+  });
+
+  it("says a carried decision came from the earlier run once, even when its reason says so too", async () => {
+    vi.spyOn(api, "getHistory").mockResolvedValue([reviewEvent({ id: 5, carried_from_run: 3, reason: "carried over from run 3" })]);
+    renderDrawer();
+
+    await screen.findByRole("listitem");
+    expect(screen.getAllByText(/carried over from run 3/i)).toHaveLength(1);
+  });
+
   it("says when there are no decisions yet", async () => {
     vi.spyOn(api, "getHistory").mockResolvedValue([]);
     renderDrawer();

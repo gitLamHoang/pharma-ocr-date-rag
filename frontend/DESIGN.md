@@ -132,11 +132,30 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
   its sunflower and reads "need review in this run". A `?run=` that is not an older run of this
   document is ignored when newer than the latest, and refused ("Run N is not a run of this
   document.") when the server does not know it or its dates name another document.
+- **Export and reprocess** sit after the count in the title row, both secondary buttons (Review
+  has no sunflower button: its sunflower is the selected date). **Export** opens a menu of two
+  download links, "Export CSV" and "Export JSON", each with a one-line hint; it exports the run on
+  screen (a frozen run exports its own dates) and shows only once that run's dates are loaded.
+  Escape or a click elsewhere closes it. **Reprocess** asks first in a dialog ("Reprocess this
+  document?": what the new run reads, the exact-match carry-over rule, that the old run stays as a
+  read-only record), then switches the screen to the new run, follows it while it moves, and once
+  it is done says "Run N replaced run M. K decisions carried over." in a `.notice`. It is disabled
+  (with the reason for screen readers) while a run is moving, and offered on a failed run as the
+  way to retry.
+- **History** (under the active row, History button): decisions newest first, each "Accepted by
+  name · time" (`<time>`, local `YYYY-MM-DD HH:MM`), what changed, the reason, and "Carried over
+  from run N" once for a carried decision.
+- **Discarded AI suggestions:** a collapsed `<details>` at the foot of the date panel, after a
+  1 px `--rule`, titled with its count; absent when the run discarded nothing. Each item shows the
+  AI's own words (verbatim text in mono, evidence in quotes), the page, what kind of suggestion it
+  was and the reason it was discarded. Never a date: no ISO value, no box on the page, no actions,
+  not exported.
 - **Tablet (834 px):** Documents keeps the table and moves uploaded-at under the name as a subline
   (from 960 px down). Below 640 px it keeps name, status and needs review as columns and moves
   pages, dates and flags to a subline ("3 pages · 12 dates · 2 flags").
   Review stacks the viewer (50 vh, sticky at the top of the window) above the date panel, which
-  scrolls under it; the thumbnail rail becomes a horizontal strip.
+  scrolls under it; the thumbnail rail becomes a horizontal strip. Below 640 px the Review title
+  row puts the count on its own line with export and reprocess together under it.
 
 ## Components
 
@@ -149,8 +168,9 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
 - **Pills** (`.pill--*`): 20 px, 12 px text, ink on its own tint, never squeezed (`flex: none`).
 - **Source:** "Rules" or "Rules + AI" as plain text; an AI-only date is `.pill--info` with the
   words "AI-only · verify". Confidence is a labelled number ("Confidence 0.92"), never a bar.
-- **Dialogs** (review: accept/correct/reject) are the one place a shadow appears
-  (`--shadow-float`, over `--scrim`); use `<dialog>` for focus trapping. Reviewer (remembered in
+- **Dialogs** (review: accept/correct/reject; reprocess) and the export menu are the only things
+  that float, so the only places a shadow appears (`--shadow-float`; dialogs over `--scrim`); use
+  `<dialog>` for focus trapping. Reviewer (remembered in
   this browser) and reason are required; a correction offers the type picker grouped by family,
   and for a date with two readings only those readings as radios, never a free value. A
   month-only date takes only `YYYY-MM`: the dialog (and the server) refuse a day.

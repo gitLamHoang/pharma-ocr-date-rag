@@ -960,6 +960,77 @@ textarea.input {
   font-weight: 500;
 }
 
+/* Export: a disclosure of two download links under the title row's button. */
+.export-menu {
+  position: relative;
+}
+
+.export-menu__chevron {
+  width: 16px;
+  height: 16px;
+  margin-right: -4px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.export-menu > [aria-expanded="true"] .export-menu__chevron {
+  transform: rotate(180deg);
+}
+
+.export-menu__list {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 2px;
+  width: 280px;
+  margin: 0;
+  padding: var(--space-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+  list-style: none;
+}
+
+.export-menu__item {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-control);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.export-menu__item:hover {
+  background: var(--surface-2);
+}
+
+.export-menu__item:focus-visible {
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 4px var(--focus);
+}
+
+.export-menu__label {
+  font-weight: 600;
+}
+
+.export-menu__hint {
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.reprocess__body {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 60ch;
+}
+
 /* Review: split ---------------------------------------------------------------- */
 
 .review {
@@ -1531,6 +1602,97 @@ kbd {
   color: inherit;
 }
 
+/* Discarded AI suggestions: a collapsed debug list under the dates, never styled as a date. */
+.discarded {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-13);
+}
+
+.discarded__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-2);
+  margin: 0 calc(-1 * var(--space-2));
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.discarded__summary::-webkit-details-marker {
+  display: none;
+}
+
+.discarded__summary:hover {
+  background: var(--surface-2);
+}
+
+.discarded__summary::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin: 0 3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.discarded[open] > .discarded__summary::before {
+  transform: rotate(45deg);
+}
+
+.discarded__title {
+  font-size: var(--fs-14);
+  font-weight: 600;
+}
+
+.discarded__intro {
+  margin: var(--space-1) 0 var(--space-3);
+  max-width: 60ch;
+}
+
+.discarded__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.discarded__item {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) 0;
+}
+
+.discarded__item + .discarded__item {
+  border-top: 1px solid var(--rule);
+}
+
+.discarded__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+
+.discarded__quote {
+  overflow-wrap: anywhere;
+}
+
+.discarded__failure {
+  color: var(--danger);
+  font-size: var(--fs-13);
+}
+
+.discarded__failure .text-button {
+  color: inherit;
+}
+
 .panel-skeleton {
   display: grid;
   gap: var(--space-4);
@@ -1679,8 +1841,21 @@ kbd {
     flex-wrap: wrap;
   }
 
+  /* The count takes its own line; export and reprocess sit together under it. */
   .review-title .title-row__actions {
+    flex: 1 1 100%;
+    align-items: center;
     margin-left: 0;
+  }
+
+  .review__summary {
+    flex: 1 1 100%;
+  }
+
+  /* Export now starts the line, so its menu opens to the right, inside the screen. */
+  .export-menu__list {
+    right: auto;
+    left: 0;
   }
 }
 
