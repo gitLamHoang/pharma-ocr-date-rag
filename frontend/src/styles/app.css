@@ -393,6 +393,20 @@ textarea.input {
   resize: vertical;
 }
 
+/* The native chevron sits against the border and keeps the UA's grey in dark mode: draw our own. */
+select.input {
+  appearance: none;
+  padding-right: 32px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) 50%,
+    calc(100% - 12px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
 .input::placeholder {
   color: var(--muted);
 }
@@ -440,8 +454,9 @@ textarea.input {
   color: var(--text);
 }
 
+/* The chosen option is raised above the track in both themes (white on tint, lighter navy on navy). */
 .segmented__option input:checked + span {
-  background: var(--surface);
+  background: light-dark(var(--surface), var(--navy-600));
   color: var(--text);
 }
 
@@ -1419,8 +1434,9 @@ textarea.input {
   transition: background-color var(--dur-fast) var(--ease-out);
 }
 
+/* One step above --surface-2, so the neutral "Needs review" pill keeps its chip on hover (as flags do). */
 .date-row:not([data-selected]) .date-row__select:hover {
-  background: var(--surface-2);
+  background: var(--active);
 }
 
 .date-row__select:focus-visible {
@@ -1578,9 +1594,10 @@ kbd {
 }
 
 /* History, under the active row. */
+/* Padding, not a bottom margin: the margin would collapse through the row and touch its ring. */
 .history {
-  margin: 0 var(--space-3) var(--space-3);
-  padding-top: var(--space-2);
+  margin: 0 var(--space-3);
+  padding: var(--space-2) 0 var(--space-3);
   border-top: 1px solid var(--rule);
   font-size: var(--fs-13);
 }
@@ -1758,11 +1775,34 @@ kbd {
   cursor: pointer;
 }
 
+/* Drawn radios: the UA's dark-mode disc is a flat grey that belongs to no palette. */
 .review-dialog__reading input {
+  flex: none;
   width: 16px;
   height: 16px;
   margin: 0;
-  accent-color: var(--text);
+  border: 1px solid var(--control);
+  border-radius: 50%;
+  background: var(--surface);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.review-dialog__reading input:checked {
+  border-color: var(--text);
+  background: var(--text);
+  box-shadow: inset 0 0 0 3px var(--surface);
+}
+
+.review-dialog__reading input:focus-visible {
+  border-radius: 50%;
+}
+
+.review-dialog__reading input:checked:focus-visible {
+  box-shadow:
+    inset 0 0 0 3px var(--surface),
+    0 0 0 5px var(--focus);
 }
 
 .field__error {
