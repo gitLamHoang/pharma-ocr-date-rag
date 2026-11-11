@@ -56,10 +56,10 @@ def ingest(path: Path, settings: Settings) -> IngestedFile:
 
     if size > settings.max_upload_mb * 1024 * 1024:
         raise IngestError(f"This file is larger than {settings.max_upload_mb} MB.")
-    match = next((s for s in _SIGNATURES if head.startswith(s[0])), None)
+    match = file_kind(head)
     if match is None:
         raise IngestError(UNSUPPORTED)
-    _, kind, suffix = match
+    kind, suffix = match
 
     sha256 = sha256_of(path)
     out_dir = settings.data_dir / "uploads" / sha256
@@ -72,6 +72,12 @@ def ingest(path: Path, settings: Settings) -> IngestedFile:
     if path.resolve() != source.resolve():
         shutil.copyfile(path, source)
     return IngestedFile(sha256=sha256, kind=kind, page_images=pages, page_count=len(pages), source=source)
+
+
+def file_kind(head: bytes) -> tuple[Literal["pdf", "image"], str] | None:
+    """(kind, stored file suffix) from a file's first bytes, or None for an unsupported type."""
+    match = next((s for s in _SIGNATURES if head.startswith(s[0])), None)
+    return (match[1], match[2]) if match else None
 
 
 def sha256_of(path: Path) -> str:
