@@ -24,6 +24,7 @@ beforeEach(() => {
     model: null,
     tesseract_langs_missing: [],
   });
+  vi.spyOn(api, "listDocuments").mockResolvedValue([]);
 });
 
 describe("App routes", () => {

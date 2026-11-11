@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, NavLink, Outlet, Route, Routes, useParams } from "react-router-dom";
 import { api } from "./api";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { Documents } from "./pages/Documents";
 
 /** The routes: `/` Documents, `/documents/:id` Review. Screens fill the sheet inside the shell. */
 export function App() {
   return (
     <Routes>
       <Route element={<Shell />}>
-        <Route index element={<DocumentsScreen />} />
+        <Route index element={<Documents />} />
         <Route path="documents/:id" element={<ReviewScreen />} />
         <Route path="*" element={<NotFound />} />
       </Route>
@@ -75,17 +76,7 @@ function HealthStatus() {
   );
 }
 
-// The two screens below are placeholders until their own tasks build them.
-
-function DocumentsScreen() {
-  return (
-    <div className="screen">
-      <header className="title-row">
-        <h1>Documents</h1>
-      </header>
-    </div>
-  );
-}
+// A placeholder until its own task builds it.
 
 function ReviewScreen() {
   const { id } = useParams();

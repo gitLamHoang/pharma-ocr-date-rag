@@ -491,6 +491,330 @@ textarea.input {
   color: var(--accent-ink);
 }
 
+/* A text-only action inside a sentence (Retry, choose files). */
+.text-button {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.text-button:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Inside a sentence the full halo would cover the next word. */
+.text-button:focus-visible {
+  outline-offset: 1px;
+  box-shadow: 0 0 0 3px var(--focus);
+  border-radius: var(--radius-chip);
+}
+
+.text-button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* A mode the screen is in (AI off), not an error: grey dot, ink text, panel ground. */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  font-size: var(--fs-13);
+  font-weight: 500;
+}
+
+.notice::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--control);
+}
+
+/* Figures share one right edge per column. */
+.num {
+  text-align: right;
+}
+
+/* Flat loading bars at the size of the value they stand in for. */
+.bar {
+  display: inline-block;
+  vertical-align: middle;
+  height: 12px;
+  border-radius: var(--radius-chip);
+  background: var(--active);
+}
+
+.bar--num {
+  width: 20px;
+}
+
+.bar--pill {
+  width: 64px;
+  height: 20px;
+}
+
+.bar--time {
+  width: 112px;
+}
+
+/* Documents: drop zone ------------------------------------------------------ */
+
+.upload {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.dropzone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 96px;
+  padding: var(--space-4) var(--space-6);
+  overflow: hidden;
+  border: 1px dashed var(--control);
+  border-radius: var(--radius-card);
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.dropzone[data-dragging] {
+  border-style: solid;
+  border-color: var(--text);
+  background: var(--surface-2);
+}
+
+.dropzone__mark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dropzone[data-dragging] .dropzone__mark {
+  stroke: var(--text);
+}
+
+.dropzone__text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dropzone__line {
+  font-weight: 500;
+}
+
+.dropzone__hint {
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+.dropzone__status {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  font-size: var(--fs-13);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropzone__file {
+  font-weight: 600;
+}
+
+/* Upload has no byte progress from fetch, so the bar says "working", not "how far". */
+.dropzone__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  overflow: hidden;
+}
+
+.dropzone__progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 30%;
+  background: var(--text);
+  animation: upload-progress 1.2s var(--ease-out) infinite;
+}
+
+@keyframes upload-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+
+.upload__errors {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--danger);
+  font-size: var(--fs-13);
+  white-space: pre-line;
+}
+
+/* Documents: table ----------------------------------------------------------- */
+
+.doc-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.doc-table th {
+  height: 32px;
+  padding: 0 var(--space-3);
+  color: var(--muted);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  text-align: left;
+  vertical-align: bottom;
+  padding-bottom: var(--space-2);
+  white-space: nowrap;
+}
+
+.doc-table th.num {
+  text-align: right;
+}
+
+.doc-table td {
+  height: var(--row-height);
+  padding: var(--space-2) var(--space-3);
+  vertical-align: middle;
+}
+
+/* Rules between rows only: none under the header. */
+.doc-table tbody tr + tr td {
+  border-top: 1px solid var(--rule);
+}
+
+.doc-table th:first-child,
+.doc-table td:first-child {
+  padding-left: 0;
+}
+
+.doc-table th:last-child,
+.doc-table td:last-child {
+  padding-right: 0;
+}
+
+.doc-table__pages {
+  width: 72px;
+}
+
+.doc-table__status {
+  width: 160px;
+}
+
+.doc-table__count {
+  width: 72px;
+}
+
+.doc-table__review {
+  width: 112px;
+}
+
+.doc-table__uploaded {
+  width: 148px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.doc-table td.doc-table__name {
+  overflow: hidden;
+}
+
+.doc-table__link {
+  display: block;
+  overflow: hidden;
+  font-weight: 500;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-table__link:hover {
+  text-decoration: underline;
+}
+
+.doc-table__subline {
+  display: none;
+  color: var(--muted);
+  font-size: var(--fs-13);
+}
+
+/* The server's reason a run failed: the row's subline, under the name where there is room. */
+.doc-table__error {
+  color: var(--danger);
+  font-size: var(--fs-13);
+}
+
+.doc-table__message td {
+  height: 64px;
+  color: var(--muted);
+}
+
+.doc-table__failure {
+  color: var(--danger);
+}
+
+.doc-table__failure .text-button {
+  color: inherit;
+}
+
+/* Tablet: uploaded-at moves under the name. */
+@media (max-width: 960px) {
+  .doc-table .doc-table__uploaded {
+    display: none;
+  }
+
+  .doc-table__subline {
+    display: block;
+  }
+
+  .doc-table__subline--phone {
+    display: none;
+  }
+
+  .doc-table__status {
+    width: 136px;
+  }
+
+  .doc-table__pages,
+  .doc-table__count {
+    width: 64px;
+  }
+
+  .doc-table__review {
+    width: 104px;
+  }
+}
+
 @media (max-width: 640px) {
   .topbar {
     gap: var(--space-3);
@@ -499,6 +823,31 @@ textarea.input {
 
   .brand__name,
   .health__model {
+    display: none;
+  }
+
+  .dropzone {
+    padding: var(--space-4);
+  }
+
+  /* Phone: name, status and needs review as columns; the other figures move under the name. */
+  .doc-table .doc-table__minor {
+    display: none;
+  }
+
+  .doc-table__subline--phone:not(:empty) {
+    display: block;
+  }
+
+  .doc-table__status {
+    width: 84px;
+  }
+
+  .doc-table__review {
+    width: 92px;
+  }
+
+  .dropzone__mark {
     display: none;
   }
 
@@ -515,5 +864,11 @@ textarea.input {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+  }
+
+  .dropzone__progress::after {
+    animation: none;
+    width: 100%;
+    opacity: 0.4;
   }
 }

@@ -106,13 +106,18 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
   width, then the table. Columns: name (widest, truncates with ellipsis), pages, status, dates,
   flags, needs review, uploaded at; counts right-aligned; needs review as `.pill--review` when
   above zero and a plain `0` otherwise; status as a pill (queued/reading/classifying/validating in
-  `--info`, done plain, failed `--danger` with the error as its subline).
+  `--info`, done plain, failed `--danger`); a failed row carries the server's message as its
+  subline under the name, in `--danger`. Counts print as an em dash until the run is done. The
+  list refreshes every 2 s while any run is still moving. When AI is off, a `.notice` line under
+  the title row reads "AI classification off — rules only".
 - **Review** (sheet): title row (breadcrumb "Documents /" then the filename as h1; export and
   reprocess on the right). Below it a two-column split: page viewer `minmax(0, 1fr)` and date
   panel `400px`, 16 px apart (1214 = 798 + 16 + 400 at 1280). The viewer sits on `--surface-2` with an
   80 px thumbnail rail on its left and zoom controls in its header; the date panel is the sheet
   itself, flags first, then dates grouped by family (`h2` per family with its count).
-- **Tablet (834 px):** Documents keeps the table and moves uploaded-at under the name as a subline.
+- **Tablet (834 px):** Documents keeps the table and moves uploaded-at under the name as a subline
+  (from 960 px down). Below 640 px it keeps name, status and needs review as columns and moves
+  pages, dates and flags to a subline ("3 pages · 12 dates · 2 flags").
   Review stacks the viewer (60 vh) above the date panel; the thumbnail rail becomes a horizontal
   strip.
 
@@ -133,7 +138,8 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
 
 ## States
 
-- **Loading:** the final layout with flat `--surface-2` bars at each value's real size; no
+- **Loading:** the final layout with flat bars at each value's real size (`--active` on the
+  sheet, where `--surface-2` would not show); no
   shimmer, no spinner in content, no layout shift when data lands.
 - **Empty:** the block keeps its frame and header plus one sentence that names the next step
   ("No documents yet. Drop a PDF or scan here, or choose a file.").
