@@ -134,14 +134,38 @@ def _patterns() -> tuple[re.Pattern[str], ...]:
         rf"(?P<day>\d{{1,2}}){_SEP}(?P<roman>{roman}){_SEP}{_YEAR}",
         rf"(?P<day>\d{{1,2}}){_ROMAN_SEP}(?P<roman>{roman_long}){_ROMAN_SEP}{_YEAR}",
         rf"(?P<day>\d{{1,2}})(?:st|nd|rd|th)?(?: of)?\.?{_NOISE}(?P<month>{month})\.?{_NOISE}{_YEAR}",
-        rf"(?P<month>{month})\.?\s+(?P<day>\d{{1,2}})(?:st|nd|rd|th)?,?\s+{_YEAR}",
+        rf"(?P<month>{month})\.?\s+(?P<day>\d{{1,2}})(?:st|nd|rd|th)?(?:,\s*|\s+){_YEAR}",
+        # Numeric month and year ("03/2027", "03.2027", "2027-03"); see `_NUMERIC_MONTH_YEAR`.
         rf"(?P<month>\d{{1,2}})[-/]{_YEAR}",
-        # Month and year only, with a space or dot between ("MAR 2027", "Feb. 2026"); not after
+        rf"(?P<month>\d{{2}})\.{_YEAR}",
+        rf"{_YEAR}[-/](?P<month>\d{{2}})",
+        # Month and year only ("MAR 2027", "Feb. 2026", "MAR-2027", "March, 2027"); not after
         # "of", where a spelled-out day may precede the month, and not in lower case (see
         # `extract_dates`).
-        rf"(?<!of )(?P<month>{month})(?:\. ?| {{1,2}}){_YEAR}",
+        rf"(?<!of )(?P<month>{month})(?:\. ?| {{1,2}}|-|, ?){_YEAR}",
     ]
     return tuple(re.compile(_START + body + _END) for body in bodies)
+
+
+# A numeric month and year followed by a unit is a range or a count: "10-2000 ng/mL", "5-2000 um".
+_UNIT_AFTER = re.compile(
+    r"\s*(?:%|(?:ng|ug|µg|μg|mcg|mg|g|kg|ml|µl|μl|ul|l|nm|um|µm|μm|mm|cm|cfu|ppm|ppb|iu|units?|counts?"
+    r"|tablets?|capsules?|vials?|doses?)(?![^\W\d_]))"
+)
+
+
+def _numeric_month_year(match: re.Match[str]) -> bool:
+    groups = match.groupdict()
+    return "day" not in groups and "first" not in groups and groups["month"].isdigit()
+
+
+def _needs_label(match: re.Match[str]) -> bool:
+    """A numeric month and year other than "MM/YYYY" or "MM-YYYY" ("3/2027", "03.2027", "2027-03")
+    is a date only next to a field word ("EXP 03.2027"): unlabeled, it is more often a dilution
+    ("1/2000"), a version ("Rev. 3.2021") or a reference ("Ref 2026-01")."""
+    if match.start("month") > match.start("year"):
+        return True
+    return len(match.group("month")) == 1 or match.string[match.end("month")] == "."
 
 
 def _safe_date(year: int, month: int, day: int) -> str | None:
@@ -213,8 +237,12 @@ def extract_dates(
     text: str,
     repair_ocr: bool = True,
     date_order: str = "auto",
+    standalone: bool = False,
 ) -> list[DateHit]:
-    """Return source-backed fields. Ambiguous numeric dates have no normalized value."""
+    """Return source-backed fields. Ambiguous numeric dates have no normalized value.
+
+    `standalone` means `text` is a quoted date on its own (Claude's verbatim text, checked against
+    the page afterwards), so forms that need a field word on a page ("03.2027") are read without."""
     if date_order not in DATE_ORDERS:
         raise ValueError(f"Unsupported date order: {date_order}")
     repaired = repair_ocr_noise(text) if repair_ocr else text
@@ -235,20 +263,25 @@ def extract_dates(
             if "day" not in groups and "first" not in groups:
                 if repaired[slice(*match.span("month"))].islower():
                     continue
+            numeric_month = _numeric_month_year(match)
+            if numeric_month and _UNIT_AFTER.match(searchable, end):
+                continue
             candidates = _normalize(match, date_order)
             if candidates:
-                found.append((start, end, candidates))
+                found.append((start, end, candidates, numeric_month and _needs_label(match)))
     hits: list[DateHit] = []
-    for start, end, candidates in found:
+    for start, end, candidates, needs_label in found:
         left = max(text.rfind("\n", 0, start) + 1, start - 70)
         next_line = text.find("\n", end)
         right = min(next_line if next_line != -1 else len(text), end + 70)
         others = tuple(
             (max(s, left) - left, min(e, right) - left)
-            for s, e, _ in found
+            for s, e, *_ in found
             if (s, e) != (start, end) and s < right and left < e
         )
         label, confidence = classify_context(repaired[left:right], start - left, end - left, others)
+        if needs_label and label == "unknown" and not standalone:
+            continue
         reasons = []
         if len(candidates) > 1:
             reasons.append("ambiguous_numeric_date")

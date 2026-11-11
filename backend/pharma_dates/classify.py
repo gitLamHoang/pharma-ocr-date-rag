@@ -458,7 +458,7 @@ def _slash_word(text: str, i: int) -> bool:
 
 def _parse(verbatim: str) -> tuple[str | None, list[str], str] | None:
     """(normalized, candidates, precision) of a text holding exactly one date, else None."""
-    hits = extract_dates(verbatim)
+    hits = extract_dates(verbatim, standalone=True)
     if len(hits) == 1:
         hit = hits[0]
         return hit.normalized, list(hit.candidates), hit.precision

@@ -270,3 +270,45 @@ def test_quantities_and_implausible_years_are_not_dates(text):
 def test_title_case_month_and_year_is_still_read():
     hit = one("Valid until May 2026")
     assert (hit.raw_text, hit.normalized, hit.precision) == ("May 2026", "2026-05", "month")
+
+
+# --- More month-year and month-first forms ---------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("text", "raw", "value"),
+    [
+        ("EXP: MAR-2027", "MAR-2027", "2027-03"),
+        ("EXP 03.2027", "03.2027", "2027-03"),
+        ("Expiry: 2027-03", "2027-03", "2027-03"),
+        ("EXP 2027/03", "2027/03", "2027-03"),
+        ("Expiry: March, 2027", "March, 2027", "2027-03"),
+        ("EXP 3/2027", "3/2027", "2027-03"),
+    ],
+)
+def test_more_month_year_forms(text, raw, value):
+    hit = one(text)
+    assert (hit.raw_text, hit.normalized, hit.precision, hit.label) == (raw, value, "month", "expiry")
+
+
+def test_month_first_date_with_no_space_after_the_comma():
+    hit = one("Signed January 5,2026")
+    assert (hit.raw_text, hit.normalized) == ("January 5,2026", "2026-01-05")
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Linearity range: 10-2000 ng/mL",
+        "Diluted 1/2000 in buffer",
+        "Particle size 5-2000 um",
+        "Tablets 1-2000 count",
+        "Range 10-2000 mg",
+        "Recovery 12/2020 %",
+        "Ref 2026-01",
+        "Rev. 3.2021",
+        "Quality system certified to ISO 9001:2015",
+    ],
+)
+def test_ranges_dilutions_and_references_are_not_month_dates(text):
+    assert extract_dates(text) == []

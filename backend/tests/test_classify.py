@@ -568,3 +568,19 @@ def test_ai_only_date_stores_the_printed_text_not_claudes_wording(verbatim):
     [date], _ = label_page(layout, page_candidates(layout), client)
     assert date.raw_text == layout.text[date.char_start : date.char_end]
     assert date.raw_text in ("the twelfth day of March, 2026", "twelfth day of March, 2026")
+
+
+@pytest.mark.parametrize(
+    ("printed", "verbatim"), [("Expiry 03.2027", "03.2027"), ("Expiry 2027-03", "2027-03")]
+)
+def test_missed_numeric_month_year_is_verified(printed, verbatim):
+    layout = make_layout(["Batch 12031", printed])
+    client = FakeClient(classified(missed_dates=[missed(verbatim, "expiry_date")]))
+    # The rules already read these forms next to a field word; Claude's copy is then a duplicate.
+    dates, discarded = label_page(layout, page_candidates(layout), client)
+    assert [(d.raw_text, d.normalized, d.precision) for d in dates] == [(verbatim, "2027-03", "month")]
+    assert [d["reason"] for d in discarded] == [f"duplicate of {dates[0].id}"]
+    # On its own, Claude's verbatim text parses (it used to be discarded as unparseable).
+    from pharma_dates.classify import _parse
+
+    assert _parse(verbatim) == ("2027-03", ["2027-03"], "month")
