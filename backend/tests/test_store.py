@@ -342,6 +342,17 @@ def test_latest_run_none_without_runs(store):
     assert store.latest_run(store.upsert_document("f" * 64, "new.pdf", 1)) is None
 
 
+def test_latest_done_run_skips_unfinished_and_failed_runs(store):
+    doc = store.upsert_document("f" * 64, "new.pdf", 1)
+    assert store.latest_done_run(doc) is None
+    done = store.create_run(doc, "1.0.0", None, False)
+    store.set_run_status(done, "done")
+    failed = store.create_run(doc, "1.0.0", None, False)
+    store.set_run_status(failed, "failed", "Processing error")
+    store.create_run(doc, "1.0.0", None, False)  # still queued
+    assert store.latest_done_run(doc).id == done
+
+
 def test_list_documents_counts_latest_run(store):
     dates = [dated("c1", "31/03/2027", "2027-03-31"), dated("c2", "01/02/2026", "2026-02-01", char_start=30)]
     flag = Flag(rule="r", severity="warning", message="m", date_ids=["c1"])

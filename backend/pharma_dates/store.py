@@ -194,6 +194,15 @@ class Store:
             ).fetchone()
         return Run(**row) if row else None
 
+    def latest_done_run(self, document_id: int) -> Run | None:
+        """The newest run of the document that finished `done` (the one reviewer decisions carry from)."""
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT * FROM runs WHERE document_id = ? AND status = 'done' ORDER BY id DESC LIMIT 1",
+                (document_id,),
+            ).fetchone()
+        return Run(**row) if row else None
+
     def list_documents(self) -> list[DocumentSummary]:
         """Newest first, with counts from each document's latest run."""
         with self._connect() as conn:

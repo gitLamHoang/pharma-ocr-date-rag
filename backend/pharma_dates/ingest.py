@@ -61,7 +61,7 @@ def ingest(path: Path, settings: Settings) -> IngestedFile:
         raise IngestError(UNSUPPORTED)
     _, kind, suffix = match
 
-    sha256 = _sha256(path)
+    sha256 = sha256_of(path)
     out_dir = settings.data_dir / "uploads" / sha256
     if kind == "pdf":
         pages = _render_pdf(path, out_dir, settings)
@@ -74,7 +74,7 @@ def ingest(path: Path, settings: Settings) -> IngestedFile:
     return IngestedFile(sha256=sha256, kind=kind, page_images=pages, page_count=len(pages), source=source)
 
 
-def _sha256(path: Path) -> str:
+def sha256_of(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as f:
         for chunk in iter(lambda: f.read(1 << 20), b""):

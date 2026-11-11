@@ -268,6 +268,33 @@ def test_reprocess_carries_decisions(native_pdf, store, settings):
     assert store.history(new_date.id)[0].reason == f"carried over from run {first}"
 
 
+def test_reprocess_after_failed_run_carries_from_last_done_run(native_pdf, store, settings, monkeypatch):
+    queue = JobQueue(store, settings, None)
+    try:
+        document_id, first = queue.submit(native_pdf, "native.pdf")
+        queue.wait()
+        old_date = store.dates_for_run(first)[0]
+        store.add_review(old_date.id, "accept", "QA Reviewer", "matches the label")
+
+        def boom(*args, **kwargs):
+            raise RuntimeError("validator down")
+
+        with monkeypatch.context() as m:
+            m.setattr(pipeline, "validate", boom)
+            failed = queue.reprocess(document_id)
+            queue.wait()
+        assert store.get_run(failed).status == "failed"
+
+        third = queue.reprocess(document_id)
+        queue.wait()
+    finally:
+        queue.shutdown()
+
+    assert store.get_run(third).status == "done"
+    (new_date,) = store.dates_for_run(third)
+    assert new_date.status == "accepted" and new_date.carried_from_run == first
+
+
 def test_reprocess_unknown_document_raises(store, settings):
     queue = JobQueue(store, settings, None)
     try:

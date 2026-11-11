@@ -8,7 +8,6 @@ anything else (the details go to the server log, without document text).
 from __future__ import annotations
 
 import asyncio
-import hashlib
 import logging
 import threading
 import traceback
@@ -21,7 +20,7 @@ from typing import TYPE_CHECKING
 from .candidates import apply_document_order, page_candidates, transcription_candidates
 from .classify import ClaudeUnavailable, label_page
 from .config import Settings
-from .ingest import IngestError, ingest
+from .ingest import IngestError, ingest, sha256_of
 from .layout import layout_page
 from .models import Candidate, LabeledDate, PageLayout
 from .store import Store
@@ -56,7 +55,7 @@ def run_document(
     reviewer decisions from that earlier run are carried over before the run is marked `done`."""
     path = Path(path)
     if run_id is None:
-        run_id = _new_run(store, store.upsert_document(_sha256(path), filename, 0), client)
+        run_id = _new_run(store, store.upsert_document(sha256_of(path), filename, 0), client)
     try:
         _process(run_id, path, filename, store, settings, client, carry_from)
     except IngestError as exc:
@@ -156,14 +155,6 @@ def _new_run(store: Store, document_id: int, client: ClaudeClient | None) -> int
     return store.create_run(document_id, PIPELINE_VERSION, model, client is not None)
 
 
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with Path(path).open("rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 class JobQueue:
     """Runs documents in background threads, at most `MAX_PARALLEL_DOCUMENTS` at once."""
 
@@ -178,7 +169,7 @@ class JobQueue:
         place until the run has read it. An identical file whose latest run is done or still
         running here returns that run; otherwise (failed, or left unfinished by a restart) a
         new run starts."""
-        sha256 = _sha256(path)
+        sha256 = sha256_of(Path(path))
         with self._lock:
             document_id = self.store.upsert_document(sha256, filename, 0)
             latest = self.store.latest_run(document_id)
@@ -189,9 +180,10 @@ class JobQueue:
         return document_id, run_id
 
     def reprocess(self, document_id: int) -> int:
-        """A new run over the stored upload, carrying reviewer decisions over from the latest run.
-        Returns the latest run instead while that run is still running here. `LookupError` for
-        an unknown document."""
+        """A new run over the stored upload, carrying reviewer decisions over from the newest run
+        that finished `done` (a failed run has no dates, so it would carry nothing). Returns the
+        latest run instead while that run is still running here. `LookupError` for an unknown
+        document."""
         document = self.store.get_document(document_id)
         if document is None:
             raise LookupError(f"document {document_id} not found")
@@ -202,13 +194,16 @@ class JobQueue:
             latest = self.store.latest_run(document_id)
             if latest is not None and latest.id in self._jobs:
                 return latest.id
+            carry_from = self.store.latest_done_run(document_id)
             run_id = _new_run(self.store, document_id, self.client)
-            self._start(run_id, source, document.filename, latest.id if latest else None)
+            self._start(run_id, source, document.filename, carry_from.id if carry_from else None)
         return run_id
 
     def wait(self) -> None:
         """Block until every queued run has finished."""
-        wait_for(list(self._jobs.values()))
+        with self._lock:
+            jobs = list(self._jobs.values())
+        wait_for(jobs)
 
     def shutdown(self, wait: bool = True) -> None:
         self._pool.shutdown(wait=wait)
