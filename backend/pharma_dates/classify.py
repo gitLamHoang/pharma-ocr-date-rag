@@ -238,9 +238,12 @@ class _Page:
         return None
 
     def on_page(self, quote: str) -> bool:
-        """Whether `quote` is printed on the page (partial_ratio >= 85 on the folded text)."""
-        needle = fold(quote).strip().strip("\"'“”‘’").strip()
-        if not needle or not self.folded.strip():
+        """Whether `quote` is printed on the page (partial_ratio >= 85 on the folded text).
+
+        A quote longer than the page text cannot be on it: partial_ratio would otherwise align
+        the page inside the quote and accept a page plus invented words."""
+        needle = _unquote(fold(quote))
+        if not needle or not self.folded.strip() or len(needle) > len(self.folded):
             return False
         from rapidfuzz import fuzz  # lazy: keeps this module importable without native wheels
 
@@ -352,6 +355,9 @@ def _resolution(c: Candidate, item: CandidateLabel, page: _Page) -> tuple[str | 
     if evidence is None:
         page.discard("resolution", "resolved value given without evidence", payload)
         return None, None
+    if not re.sub(r"\W", "", _unquote(fold(evidence)).replace(fold(c.raw_text), "")):
+        page.discard("resolution", "evidence only repeats the date", payload)
+        return None, None
     if not page.on_page(evidence):
         page.discard("resolution", "evidence not found on the page", payload)
         return None, None
@@ -364,6 +370,10 @@ def _clamp(confidence: float) -> float:
 
 def _text_or_none(value: str | None) -> str | None:
     return value.strip() or None if value else None
+
+
+def _unquote(text: str) -> str:
+    return text.strip().strip("\"'“”‘’").strip()
 
 
 # --- Verification helpers -------------------------------------------------------------------
@@ -383,7 +393,11 @@ def _reads_as(printed: str, readings: list[str], precision: str) -> bool:
 def _find(verbatim: str, haystack: str, text: str) -> tuple[int, int] | None:
     """Span in `text` where `verbatim` is printed: rapidfuzz partial_ratio >= 85 on the folded
     text, widened to whole words, and every number in `verbatim` printed in that span too
-    (so "01/01/2030" does not match "01/01/2020", which scores 90)."""
+    (so "01/01/2030" does not match "01/01/2020", which scores 90).
+
+    Widening stops at a label separator on the left ("Expiry:III.2027", "Ref=12.III.2026") and
+    at a slash before a word on the right ("12.III.2026/Riga"), so the label or place name is
+    not read as part of the date."""
     needle = fold(verbatim).strip()
     if not needle or not haystack.strip():
         return None
@@ -393,9 +407,9 @@ def _find(verbatim: str, haystack: str, text: str) -> tuple[int, int] | None:
     if match is None:
         return None
     start, end = match.dest_start, match.dest_end
-    while start > 0 and not text[start - 1].isspace():
+    while start > 0 and not text[start - 1].isspace() and text[start - 1] not in ":=":
         start -= 1
-    while end < len(text) and not text[end].isspace():
+    while end < len(text) and not text[end].isspace() and not _slash_word(text, end):
         end += 1
     while start < end and text[start] in "(\"'":
         start += 1
@@ -405,6 +419,11 @@ def _find(verbatim: str, haystack: str, text: str) -> tuple[int, int] | None:
     if not {int(n) for n in _DIGIT_RUN.findall(verbatim)} <= printed:
         return None
     return start, end
+
+
+def _slash_word(text: str, i: int) -> bool:
+    """Whether `text[i]` is a slash followed by a letter ("/Riga"); "/03" stays part of a date."""
+    return text[i] == "/" and i + 1 < len(text) and text[i + 1].isalpha()
 
 
 def _parse(verbatim: str) -> tuple[str | None, list[str], str] | None:

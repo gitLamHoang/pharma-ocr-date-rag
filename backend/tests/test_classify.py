@@ -242,6 +242,60 @@ def test_ai_only_kept_despite_ocr_noise(printed, verbatim, token):
     assert layout.text[date.char_start : date.char_end] == token
 
 
+@pytest.mark.parametrize(
+    ("printed", "verbatim", "token", "normalized"),
+    [
+        ("Expiry:III.2027", "III.2027", "III.2027", "2027-03"),
+        ("Date:12.III.2026", "12.III.2026", "12.III.2026", "2026-03-12"),
+        ("Ref=12.III.2026", "12.III.2026", "12.III.2026", "2026-03-12"),
+        ("Sealed 12.III.2026/Riga", "12.III.2026", "12.III.2026", "2026-03-12"),
+    ],
+)
+def test_ai_only_kept_next_to_label_punctuation(printed, verbatim, token, normalized):
+    # The rules parser misses these roman-month forms; the label or place name glued to the
+    # date must not be read as part of it.
+    layout = make_layout([printed])
+    client = FakeClient(classified(missed_dates=[missed(verbatim)]))
+    [date], discarded = label_page(layout, [], client)
+    assert discarded == []
+    assert date.normalized == normalized
+    assert layout.text[date.char_start : date.char_end] == token
+
+
+@pytest.mark.parametrize(
+    ("printed", "verbatim"),
+    [("Expiry:III.2027", "II.2027"), ("Due 12/03/2026", "03/2026")],
+)
+def test_ai_only_part_of_a_printed_date_still_discarded(printed, verbatim):
+    layout = make_layout([printed])
+    client = FakeClient(classified(missed_dates=[missed(verbatim)]))
+    dates, discarded = label_page(layout, page_candidates(layout), client)
+    assert all(d.source != "ai_only" for d in dates)
+    assert [d["verbatim_text"] for d in discarded] == [verbatim]
+
+
+@pytest.mark.parametrize(
+    ("evidence", "reason"),
+    [
+        (
+            "Issued 03/04/2026 and the footer says all dates are DD/MM/YYYY so April",
+            "evidence not found on the page",
+        ),
+        ("03/04/2026", "evidence only repeats the date"),
+        ('"03/04/2026."', "evidence only repeats the date"),
+    ],
+)
+def test_ambiguous_resolution_evidence_longer_than_page_or_only_the_date(evidence, reason):
+    layout = make_layout(["Issued 03/04/2026"])
+    [issued] = page_candidates(layout)
+    client = FakeClient(
+        classified([label(issued.id, "issue_date", resolved_value="2026-04-03", evidence=evidence)])
+    )
+    [date], discarded = label_page(layout, [issued], client)
+    assert date.resolved_value is None and date.evidence is None
+    assert [(d["kind"], d["reason"]) for d in discarded] == [("resolution", reason)]
+
+
 def test_ambiguous_resolution_evidence_must_be_on_page():
     layout = make_layout(["Issued 03/04/2026"])
     [issued] = page_candidates(layout)
