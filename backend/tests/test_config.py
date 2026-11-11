@@ -37,7 +37,7 @@ def test_defaults_match_the_spec():
     assert settings.max_pages == 100
     assert settings.render_dpi == 200
     assert settings.ai_concurrency == 4
-    assert settings.tesseract_langs == "eng+fra+deu+spa+vie+ara+rus+chi_sim+jpn"
+    assert settings.tesseract_langs == "eng"
 
 
 def test_environment_overrides_defaults(monkeypatch, tmp_path):

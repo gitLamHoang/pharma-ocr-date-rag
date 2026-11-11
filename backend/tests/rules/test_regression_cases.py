@@ -6,14 +6,12 @@ import pytest
 from pharma_dates.rules.dates import extract_dates
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
-CASES = json.loads((FIXTURES / "multilingual_cases.json").read_text(encoding="utf-8"))["cases"]
+CASES = json.loads((FIXTURES / "regression_cases.json").read_text(encoding="utf-8"))["cases"]
 
 
 @pytest.mark.parametrize("case", CASES, ids=lambda case: case["id"])
-@pytest.mark.parametrize("use_explicit_language", [False, True], ids=["all-languages", "explicit"])
-def test_multilingual_regression_case(case, use_explicit_language):
-    language = case["language"] if use_explicit_language else "auto"
-    hits = extract_dates(case["text"], language=language, date_order=case["date_order"])
+def test_regression_case(case):
+    hits = extract_dates(case["text"], date_order=case["date_order"])
     actual = [
         {
             "normalized": hit.normalized,
@@ -38,10 +36,26 @@ def test_source_positions_survive_ocr_word_repairs_and_repeated_dates():
         assert text[hit.start : hit.end] == hit.raw_text
 
 
-@pytest.mark.parametrize("options", [{"language": "zz"}, {"date_order": "ymd"}])
-def test_invalid_configuration_is_rejected(options):
+def test_invalid_date_order_is_rejected():
     with pytest.raises(ValueError):
-        extract_dates("Expiry: 2028-04-14", **options)
+        extract_dates("Expiry: 2028-04-14", date_order="ymd")
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Date de péremption: 28 février 2028",
+        "Fecha de caducidad: 31 de enero de 2028",
+        "Verfall: 31. März 2028",
+    ],
+)
+def test_non_english_month_names_are_not_parsed(text):
+    assert extract_dates(text) == []
+
+
+def test_non_english_field_words_get_no_label():
+    [hit] = extract_dates("Réception: 24/03/2026")
+    assert (hit.normalized, hit.label) == ("2026-03-24", "unknown")
 
 
 def test_noise_repair_can_be_disabled():

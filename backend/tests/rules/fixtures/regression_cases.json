@@ -1,0 +1,242 @@
+{
+  "description": "Authored synthetic development fixtures, not held-out or real OCR accuracy.",
+  "cases": [
+    {
+      "id": "en-iso",
+      "text": "Expiry: 2028-04-14",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-04-14",
+          "label": "expiry",
+          "candidates": [
+            "2028-04-14"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-month",
+      "text": "Manufactured: 15 April 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-04-15",
+          "label": "manufacture",
+          "candidates": [
+            "2026-04-15"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-check",
+      "text": "QA check: April 22, 2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-04-22",
+          "label": "qa_check",
+          "candidates": [
+            "2026-04-22"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-received",
+      "text": "Received: 07/18/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-07-18",
+          "label": "received",
+          "candidates": [
+            "2026-07-18"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "en-ambiguous",
+      "text": "Inspection: 09/01/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": null,
+          "label": "qa_check",
+          "candidates": [
+            "2026-01-09",
+            "2026-09-01"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ambiguous_numeric_date"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "en-partial",
+      "text": "EXP: 07/2029",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2029-07",
+          "label": "expiry",
+          "candidates": [
+            "2029-07"
+          ],
+          "precision": "month",
+          "review_reasons": [
+            "month_precision"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edge-invalid-day",
+      "text": "Expiry: 02/31/2026",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-invalid-iso",
+      "text": "EXP: 2026-02-31",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-leap-valid",
+      "text": "EXP: 2028-02-29",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-02-29",
+          "label": "expiry",
+          "candidates": [
+            "2028-02-29"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-leap-invalid",
+      "text": "EXP: 2026-02-29",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-no-dates",
+      "text": "Batch released after packaging inspection.",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-lot-token",
+      "text": "Lot DCC-O812-26 and ID-2026-08-12-X",
+      "date_order": "auto",
+      "expected": []
+    },
+    {
+      "id": "edge-noisy",
+      "text": "EXP1RY: 2O28-O8-2I",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2028-08-21",
+          "label": "expiry",
+          "candidates": [
+            "2028-08-21"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "ocr_repaired"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edge-unknown",
+      "text": "Window starts 2026-08-15",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-08-15",
+          "label": "unknown",
+          "candidates": [
+            "2026-08-15"
+          ],
+          "precision": "day",
+          "review_reasons": [
+            "unknown_label"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edge-explicit-dmy",
+      "text": "EXP: 09/01/2026",
+      "date_order": "dmy",
+      "expected": [
+        {
+          "normalized": "2026-01-09",
+          "label": "expiry",
+          "candidates": [
+            "2026-01-09"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-explicit-mdy",
+      "text": "EXP: 09/01/2026",
+      "date_order": "mdy",
+      "expected": [
+        {
+          "normalized": "2026-09-01",
+          "label": "expiry",
+          "candidates": [
+            "2026-09-01"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-equal-day-month",
+      "text": "Expiry: 08/08/2026",
+      "date_order": "auto",
+      "expected": [
+        {
+          "normalized": "2026-08-08",
+          "label": "expiry",
+          "candidates": [
+            "2026-08-08"
+          ],
+          "precision": "day",
+          "review_reasons": []
+        }
+      ]
+    },
+    {
+      "id": "edge-invalid-policy",
+      "text": "Expiry: 24/03/2026",
+      "date_order": "mdy",
+      "expected": []
+    }
+  ]
+}

@@ -56,7 +56,7 @@ def test_unanimous_conflicting_and_missing_evidence():
     [("eu_receipt.txt", "2026-10-09", "2025-01-12"), ("us_receipt.txt", "2026-09-10", "2025-01-12")],
 )
 def test_declared_fixture_conventions_are_recovered_from_document_evidence(name, expiry, manufacture):
-    hits = extract_dates((MIXED / name).read_text(encoding="utf-8"), language="en")
+    hits = extract_dates((MIXED / name).read_text(encoding="utf-8"))
     assert sum(hit.normalized is None for hit in hits) == 2
     resolved = {hit.label: hit for hit in apply_document_order(hits)}
     assert resolved["expiry"].normalized == expiry
@@ -68,25 +68,25 @@ def test_declared_fixture_conventions_are_recovered_from_document_evidence(name,
 
 
 def test_document_without_revealing_dates_stays_unresolved():
-    hits = extract_dates((MIXED / "unconfirmed_receipt.txt").read_text(encoding="utf-8"), language="en")
+    hits = extract_dates((MIXED / "unconfirmed_receipt.txt").read_text(encoding="utf-8"))
     assert hit_order(hits).status == "no_evidence"
     assert apply_document_order(hits) == hits
 
 
 def test_conflicting_document_keeps_ambiguity_and_says_why():
-    hits = extract_dates("Expiry: 09/10/2026\nMfg: 31/01/2025\nQC: 01/31/2025", language="en")
+    hits = extract_dates("Expiry: 09/10/2026\nMfg: 31/01/2025\nQC: 01/31/2025")
     expiry = apply_document_order(hits)[0]
     assert expiry.normalized is None
     assert {"ambiguous_numeric_date", CONFLICT_REASON} <= set(expiry.review_reasons)
 
 
 def test_explicit_policy_hits_are_not_changed():
-    hits = extract_dates("Expiry: 09/10/2026\nMfg: 10/31/2025", language="en", date_order="dmy")
+    hits = extract_dates("Expiry: 09/10/2026\nMfg: 10/31/2025", date_order="dmy")
     assert apply_document_order(hits) == hits
 
 
 def test_ocr_damaged_ambiguous_date_is_not_reinterpreted():
-    hits = extract_dates("Expiry: O9/10/2026\nMfg: 31/01/2025", language="en")
+    hits = extract_dates("Expiry: O9/10/2026\nMfg: 31/01/2025")
     expiry = apply_document_order(hits)[0]
     assert expiry.normalized is None
 

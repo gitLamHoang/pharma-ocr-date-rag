@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from datetime import date
 from functools import cache
 
-from .languages import field_patterns, fold, month_lookup, validate_language
+from .languages import field_patterns, fold, month_lookup
 
 DATE_ORDERS = ("auto", "dmy", "mdy")
 OCR_WORD_REPAIRS = {
@@ -52,23 +52,15 @@ def repair_ocr_noise(text: str) -> str:
 
 
 @cache
-def _patterns(language: str) -> tuple[re.Pattern[str], ...]:
-    months = month_lookup(language)
-    month = "|".join(re.escape(name) for name in sorted(months, key=lambda s: (-len(s), s)))
+def _patterns() -> tuple[re.Pattern[str], ...]:
+    month = "|".join(re.escape(name) for name in sorted(month_lookup(), key=lambda s: (-len(s), s)))
     bodies = [
         r"(?P<year>[12]\d{3})[-/.](?P<month>\d{1,2})[-/.](?P<day>\d{1,2})",
         r"(?P<first>\d{1,2})[-/.](?P<second>\d{1,2})[-/.](?P<year>[12]\d{3})",
+        rf"(?P<day>\d{{1,2}})\.?\s+(?P<month>{month})\.?\s+(?P<year>[12]\d{{3}})",
+        rf"(?P<month>{month})\.?\s+(?P<day>\d{{1,2}}),?\s+(?P<year>[12]\d{{3}})",
+        r"(?P<month>\d{1,2})[-/](?P<year>[12]\d{3})",
     ]
-    if months:
-        bodies.extend(
-            [
-                rf"(?P<day>\d{{1,2}})\.?\s+(?:de\s+)?(?P<month>{month})\.?\s+(?:de\s+)?(?P<year>[12]\d{{3}})",
-                rf"(?P<month>{month})\.?\s+(?P<day>\d{{1,2}}),?\s+(?P<year>[12]\d{{3}})",
-            ]
-        )
-    if language in {"auto", "vi"}:
-        bodies.append(r"ngay\s+(?P<day>\d{1,2})\s+thang\s+(?P<month>\d{1,2})\s+nam\s+(?P<year>[12]\d{3})")
-    bodies.append(r"(?P<month>\d{1,2})[-/](?P<year>[12]\d{3})")
     return tuple(re.compile(r"(?<![\w/.-])" + body + r"(?![\w/-]|\.\d)") for body in bodies)
 
 
@@ -79,7 +71,7 @@ def _safe_date(year: int, month: int, day: int) -> str | None:
         return None
 
 
-def _normalize(match: re.Match[str], language: str, date_order: str) -> tuple[str, ...]:
+def _normalize(match: re.Match[str], date_order: str) -> tuple[str, ...]:
     parts = match.groupdict()
     year = int(parts["year"])
     if parts.get("first"):
@@ -89,7 +81,7 @@ def _normalize(match: re.Match[str], language: str, date_order: str) -> tuple[st
         options = [dmy, mdy] if date_order == "auto" else [dmy if date_order == "dmy" else mdy]
         return tuple(sorted({option for option in options if option}))
     month_raw = parts["month"]
-    month = int(month_raw) if month_raw.isdigit() else month_lookup(language)[month_raw]
+    month = int(month_raw) if month_raw.isdigit() else month_lookup()[month_raw]
     if not 1 <= month <= 12:
         return ()
     if not parts.get("day"):
@@ -102,10 +94,9 @@ def classify_context(
     context: str,
     date_start: int | None = None,
     date_end: int | None = None,
-    language: str = "auto",
 ) -> tuple[str, float]:
     best_label, best_distance = "unknown", 10_000
-    for label, pattern in field_patterns(language):
+    for label, pattern in field_patterns():
         for match in pattern.finditer(fold(context)):
             if date_start is None or date_end is None:
                 distance = 0
@@ -127,31 +118,29 @@ def classify_context(
 def extract_dates(
     text: str,
     repair_ocr: bool = True,
-    language: str = "auto",
     date_order: str = "auto",
 ) -> list[DateHit]:
     """Return source-backed fields. Ambiguous numeric dates have no normalized value."""
-    validate_language(language)
     if date_order not in DATE_ORDERS:
         raise ValueError(f"Unsupported date order: {date_order}")
     repaired = repair_ocr_noise(text) if repair_ocr else text
     searchable = fold(repaired)
     hits: list[DateHit] = []
     seen: list[tuple[int, int]] = []
-    for pattern in _patterns(language):
+    for pattern in _patterns():
         for match in pattern.finditer(searchable):
             start, end = match.span()
             if any(start < old_end and old_start < end for old_start, old_end in seen):
                 continue
             # Reserve invalid spans too, so a suffix cannot become a month/year.
             seen.append((start, end))
-            candidates = _normalize(match, language, date_order)
+            candidates = _normalize(match, date_order)
             if not candidates:
                 continue
             left = max(text.rfind("\n", 0, start) + 1, start - 70)
             next_line = text.find("\n", end)
             right = min(next_line if next_line != -1 else len(text), end + 70)
-            label, confidence = classify_context(repaired[left:right], start - left, end - left, language)
+            label, confidence = classify_context(repaired[left:right], start - left, end - left)
             reasons = []
             if len(candidates) > 1:
                 reasons.append("ambiguous_numeric_date")

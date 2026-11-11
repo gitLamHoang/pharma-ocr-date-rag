@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     max_pages: int = 100
     render_dpi: int = 200
     ai_concurrency: int = 4
-    tesseract_langs: str = "eng+fra+deu+spa+vie+ara+rus+chi_sim+jpn"
+    tesseract_langs: str = "eng"
 
 
 @cache
