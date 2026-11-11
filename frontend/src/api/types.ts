@@ -105,6 +105,8 @@ export interface DateRecord {
   char_start: number;
   char_end: number;
   bbox: BBox | null;
+  /** One tight box per printed line when the date wraps across lines; empty on one line (use `bbox`). */
+  line_boxes: BBox[];
   context: string;
   rule_label: string;
   source: DateSource;

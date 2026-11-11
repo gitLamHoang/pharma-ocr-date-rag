@@ -443,3 +443,17 @@ def test_carry_over_keeps_a_correction_through_a_later_reopen(store):
         ("correct", "retest_date", old_run),
         ("reopen", None, old_run),
     ]
+
+
+def test_line_boxes_round_trip_and_old_databases_gain_the_column(store, tmp_path):
+    boxes = [BBox(x0=250, y0=0, x1=330, y1=15), BBox(x0=0, y0=20, x1=50, y1=35)]
+    _, run = new_run(store, [dated("c1", "March 4,\n1999", "1999-03-04", line_boxes=boxes)])
+    assert only_date(store, run).line_boxes == boxes
+
+    path = tmp_path / "data" / "pharma.sqlite"
+    with sqlite3.connect(path) as conn:
+        conn.execute("ALTER TABLE dates DROP COLUMN line_boxes_json")  # a database from before
+    reopened = Store(path)
+    assert only_date(reopened, run).line_boxes == []
+    _, newer = new_run(reopened, [dated("c1", "31/03/2027", "2027-03-31")], sha="b" * 64)
+    assert only_date(reopened, newer).line_boxes == []

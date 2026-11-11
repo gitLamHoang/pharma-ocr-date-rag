@@ -114,6 +114,9 @@ class Store:
         with self._connect() as conn:
             conn.execute("PRAGMA journal_mode = WAL")
             conn.executescript(_SCHEMA.read_text(encoding="utf-8"))
+            # Databases made before dates had per-line boxes.
+            if "line_boxes_json" not in {r["name"] for r in conn.execute("PRAGMA table_info(dates)")}:
+                conn.execute("ALTER TABLE dates ADD COLUMN line_boxes_json TEXT")
 
     @contextmanager
     def _connect(self, write: bool = False) -> Iterator[sqlite3.Connection]:
@@ -295,8 +298,8 @@ class Store:
                 ids[d.id] = conn.execute(
                     "INSERT INTO dates (run_id, document_id, candidate_id, page, raw_text, normalized,"
                     " candidates_json, precision, date_type, family, qualifier, resolved_value, evidence,"
-                    " bbox_json, source, confidence, rationale, context, char_start, char_end, rule_label)"
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    " bbox_json, line_boxes_json, source, confidence, rationale, context, char_start, char_end,"
+                    " rule_label) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (
                         run_id,
                         document_id,
@@ -312,6 +315,7 @@ class Store:
                         d.resolved_value,
                         d.evidence,
                         d.bbox.model_dump_json() if d.bbox else None,
+                        json.dumps([b.model_dump() for b in d.line_boxes]),
                         d.source,
                         d.confidence,
                         d.rationale,
@@ -553,6 +557,7 @@ def _date_with_status(row: sqlite3.Row, events: list[sqlite3.Row]) -> DateWithSt
         char_start=row["char_start"],
         char_end=row["char_end"],
         bbox=BBox.model_validate_json(row["bbox_json"]) if row["bbox_json"] else None,
+        line_boxes=[BBox(**b) for b in json.loads(row["line_boxes_json"] or "[]")],
         context=row["context"],
         rule_label=row["rule_label"],
         source=row["source"],

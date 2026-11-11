@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS dates (
     resolved_value TEXT,
     evidence TEXT,
     bbox_json TEXT,
+    line_boxes_json TEXT,  -- JSON list of boxes, one per printed line; NULL or [] on one line
     source TEXT NOT NULL CHECK (source IN ('rules', 'ai_only', 'rules+ai')),
     confidence REAL NOT NULL,
     rationale TEXT,

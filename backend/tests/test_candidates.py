@@ -176,3 +176,19 @@ def test_transcription_second_identical_signature_kept():
     assert extra.raw_text == "12/03/2026"
     assert extra.source == "ai_only"
     assert layout.transcription.index("Approved") < extra.char_start
+
+
+def test_date_printed_across_two_lines_gets_one_box_per_line():
+    layout = make_layout(["The application received March 4,", "1999, submitted under section 505(b)"])
+    [c] = page_candidates(layout)
+    assert c.raw_text == "March 4,\n1999"
+    first, second = c.line_boxes
+    assert (first.y0, second.y0) == (0, 20)  # one tight box on each line
+    assert (first.x0, first.x1) == (250, 330)
+    assert (second.x0, second.x1) == (0, 50)
+    assert c.bbox.y1 == second.y1  # the union box still spans both
+
+
+def test_date_on_one_line_has_no_line_boxes():
+    [c] = page_candidates(make_layout(["Expiry 31/03/2027"]))
+    assert c.line_boxes == []

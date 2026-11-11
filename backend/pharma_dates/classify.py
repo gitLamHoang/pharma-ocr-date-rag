@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING, Protocol
 from pydantic import BaseModel
 
 from . import taxonomy
-from .candidates import CONTEXT_CHARS, span_box
+from .candidates import CONTEXT_CHARS, line_boxes, span_box
 from .models import Candidate, LabeledDate, PageLayout
 from .rules.dates import extract_dates
 from .rules.languages import field_patterns, fold, month_lookup
@@ -301,6 +301,7 @@ class _Page:
             "char_start": start,
             "char_end": end,
             "bbox": span_box(self.layout.words, start, end),
+            "line_boxes": line_boxes(self.layout.words, start, end),
             "context": text[max(0, start - CONTEXT_CHARS) : end + CONTEXT_CHARS],
         }
 

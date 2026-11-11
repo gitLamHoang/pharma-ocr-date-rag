@@ -35,6 +35,15 @@ describe("snippet", () => {
     expect(snippet("Expiry date: 03/2027", "03/2027")).toEqual({ before: "Expiry date: ", match: "03/2027", after: "" });
   });
 
+  it("finds a date printed across a line break", () => {
+    const wrapped = "effrey Koup, Pharm.D. Director, the application received March 4,\n1999, submitted under section 505(b)";
+    expect(snippet(wrapped, "March 4,\n1999", 20)).toEqual({
+      before: "…received ",
+      match: "March 4, 1999",
+      after: ", submitted under…",
+    });
+  });
+
   it("shows the context as it is when the date is not in it", () => {
     expect(snippet("Lot 4471", "03/2027")).toEqual({ before: "Lot 4471", match: "", after: "" });
   });

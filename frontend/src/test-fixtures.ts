@@ -15,6 +15,7 @@ export function dateRecord(overrides: Partial<DateRecord> = {}): DateRecord {
     char_start: 0,
     char_end: 10,
     bbox: { x0: 100, y0: 200, x1: 300, y1: 250 },
+    line_boxes: [],
     context: "Date of manufacture: 14/03/2026",
     rule_label: "manufacture_date",
     source: "rules",

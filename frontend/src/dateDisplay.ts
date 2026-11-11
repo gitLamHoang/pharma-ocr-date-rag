@@ -77,16 +77,18 @@ export interface Snippet {
  */
 export function snippet(context: string, raw: string, reach = 48): Snippet {
   const text = context.replace(/\s+/g, " ").trim();
-  const at = raw ? text.indexOf(raw) : -1;
+  // Spaced the same way as the context: a date printed across a line break ("March 4,\n1999").
+  const needle = raw.replace(/\s+/g, " ").trim();
+  const at = needle ? text.indexOf(needle) : -1;
   if (at < 0) return { before: text, match: "", after: "" };
   let start = Math.max(0, at - reach);
-  let end = Math.min(text.length, at + raw.length + reach);
+  let end = Math.min(text.length, at + needle.length + reach);
   if (start > 0) start = text.indexOf(" ", start) + 1 || start;
-  if (end < text.length) end = Math.max(text.lastIndexOf(" ", end), at + raw.length);
+  if (end < text.length) end = Math.max(text.lastIndexOf(" ", end), at + needle.length);
   return {
     before: (start > 0 ? "…" : "") + text.slice(start, at),
-    match: raw,
-    after: text.slice(at + raw.length, end) + (end < text.length ? "…" : ""),
+    match: needle,
+    after: text.slice(at + needle.length, end) + (end < text.length ? "…" : ""),
   };
 }
 

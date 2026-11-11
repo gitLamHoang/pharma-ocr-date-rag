@@ -49,6 +49,22 @@ describe("PageViewer", () => {
     expect(pageImage().src).toContain("/api/runs/1/pages/1.png");
   });
 
+  it("draws a wrapped date as one box per printed line", () => {
+    const lines = [
+      { x0: 600, y0: 200, x1: 900, y1: 240 },
+      { x0: 100, y0: 260, x1: 250, y1: 300 },
+    ];
+    renderViewer([dateRecord({ id: 1, bbox: { x0: 100, y0: 200, x1: 900, y1: 300 }, line_boxes: lines })], { selectedId: 1 });
+
+    const boxes = document.querySelectorAll<HTMLElement>('[data-box-id="1"]');
+    expect([...boxes].map((b) => [b.style.left, b.style.top, b.style.width])).toEqual([
+      ["60%", "10%", "30%"],
+      ["10%", "13%", "15%"],
+    ]);
+    expect([...boxes].map((b) => b.getAttribute("aria-hidden"))).toEqual([null, "true"]);
+    expect(boxes[1]).toHaveAttribute("data-active", "true");
+  });
+
   it("selects a date when its box is clicked", () => {
     const { onSelect } = renderViewer([dateRecord({ id: 5 })]);
 

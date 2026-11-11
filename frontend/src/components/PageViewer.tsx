@@ -167,12 +167,13 @@ export function PageViewer({ runId, pages, dates, selectedId, selectionSeq = 0, 
                 onError={() => setFailed(page.n)}
               />
             )}
-            {onPage.map((d) => {
-              const box = d.bbox!;
+            {onPage.flatMap((d) => {
               const isSelected = d.id === selectedId || linkedIds.includes(d.id);
-              return (
+              // A date wrapped across lines gets a tight box on each line, not one box over both.
+              const boxes = d.line_boxes.length > 0 ? d.line_boxes : [d.bbox!];
+              return boxes.map((box, i) => (
                 <button
-                  key={d.id}
+                  key={`${d.id}-${i}`}
                   type="button"
                   tabIndex={-1}
                   className="viewer__box"
@@ -180,7 +181,8 @@ export function PageViewer({ runId, pages, dates, selectedId, selectionSeq = 0, 
                   data-family={d.current_family}
                   data-active={d.id === selectedId || undefined}
                   aria-pressed={isSelected}
-                  aria-label={`${d.raw_text}, page ${d.page}`}
+                  aria-label={`${d.raw_text.replace(/\s+/g, " ")}, page ${d.page}`}
+                  aria-hidden={i > 0 || undefined}
                   style={{
                     left: percent(box.x0, page.width),
                     top: percent(box.y0, page.height),
@@ -189,7 +191,7 @@ export function PageViewer({ runId, pages, dates, selectedId, selectionSeq = 0, 
                   }}
                   onClick={() => onSelect(d.id)}
                 />
-              );
+              ));
             })}
           </div>
         </div>

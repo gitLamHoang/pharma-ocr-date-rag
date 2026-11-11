@@ -45,6 +45,8 @@ class Candidate(BaseModel):
     context: str
     rule_label: str
     source: Literal["rules", "ai_only", "rules+ai"]
+    # One tight box per printed line when the date wraps ("March 4,\n1999"); empty on one line.
+    line_boxes: list[BBox] = []
 
 
 class LabeledDate(Candidate):

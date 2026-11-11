@@ -25,6 +25,7 @@ def page_candidates(layout: PageLayout, date_order: str = "auto") -> list[Candid
             layout.n,
             span_box(layout.words, hit.start, hit.end),
             "rules",
+            line_boxes(layout.words, hit.start, hit.end),
         )
         for i, hit in enumerate(extract_dates(layout.text, date_order=date_order), start=1)
     ]
@@ -82,7 +83,15 @@ def apply_document_order[C: Candidate](cands: list[C]) -> list[C]:
     return result
 
 
-def _candidate(hit: DateHit, text: str, id_: str, page: int, bbox: BBox | None, source: str) -> Candidate:
+def _candidate(
+    hit: DateHit,
+    text: str,
+    id_: str,
+    page: int,
+    bbox: BBox | None,
+    source: str,
+    boxes: list[BBox] | None = None,
+) -> Candidate:
     return Candidate(
         id=id_,
         page=page,
@@ -96,6 +105,7 @@ def _candidate(hit: DateHit, text: str, id_: str, page: int, bbox: BBox | None, 
         context=text[max(0, hit.start - CONTEXT_CHARS) : hit.end + CONTEXT_CHARS],
         rule_label=hit.label,
         source=source,
+        line_boxes=boxes or [],
     )
 
 
@@ -110,6 +120,30 @@ def span_box(words: list[Word], start: int, end: int) -> BBox | None:
         x1=max(b.x1 for b in boxes),
         y1=max(b.y1 for b in boxes),
     )
+
+
+def line_boxes(words: list[Word], start: int, end: int) -> list[BBox]:
+    """One union box per printed line of the span, or [] when it is on one line (`span_box` then
+    covers it): a date wrapped across two lines would otherwise get one box over both lines."""
+    lines: list[list[BBox]] = []
+    for w in words:
+        if w.char_start < end and start < w.char_end:
+            middle = (w.bbox.y0 + w.bbox.y1) / 2
+            if lines and lines[-1][0].y0 <= middle <= lines[-1][0].y1:
+                lines[-1].append(w.bbox)
+            else:
+                lines.append([w.bbox])
+    if len(lines) < 2:
+        return []
+    return [
+        BBox(
+            x0=min(b.x0 for b in boxes),
+            y0=min(b.y0 for b in boxes),
+            x1=max(b.x1 for b in boxes),
+            y1=max(b.y1 for b in boxes),
+        )
+        for boxes in lines
+    ]
 
 
 def _same_date(cand: Candidate, hit: DateHit) -> bool:
