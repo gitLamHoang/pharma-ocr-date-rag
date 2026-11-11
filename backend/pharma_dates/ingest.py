@@ -13,7 +13,7 @@ import pypdfium2 as pdfium
 from pdfminer.pdfdocument import PDFDocument, PDFPasswordIncorrect
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
-from PIL import Image, ImageSequence, UnidentifiedImageError
+from PIL import Image, ImageOps, ImageSequence, UnidentifiedImageError
 
 from .config import Settings
 
@@ -158,7 +158,9 @@ def _save_image_frames(path: Path, out_dir: Path, settings: Settings) -> list[Pa
             pages = []
             for i, frame in enumerate(ImageSequence.Iterator(img)):
                 target = out_dir / f"page-{i + 1}.png"
-                frame.convert("RGB").save(target)
+                # Phone photos and some scanners store the page sideways with an EXIF
+                # Orientation tag; OCR and the review screen need it upright.
+                ImageOps.exif_transpose(frame).convert("RGB").save(target)
                 pages.append(target)
             return pages
     except Image.DecompressionBombError as exc:

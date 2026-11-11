@@ -127,3 +127,13 @@ def test_huge_later_tiff_frame_raises(tmp_path, settings, monkeypatch):
     with pytest.raises(IngestError, match="too large"):
         ingest(path, settings)
     assert list(settings.data_dir.glob("uploads/*/page-*.png")) == []
+
+
+def test_exif_orientation_applied_to_stored_page(tmp_path, settings):
+    path = tmp_path / "phone.jpg"
+    exif = Image.Exif()
+    exif[0x0112] = 6  # Orientation: rotate 90 degrees clockwise to display
+    Image.new("RGB", (400, 200), "white").save(path, exif=exif)
+    ingested = ingest(path, settings)
+    with Image.open(ingested.page_images[0]) as page:
+        assert page.size == (200, 400)
