@@ -16,6 +16,7 @@ ENV_VARS = (
     "AI_CONCURRENCY",
     "TESSERACT_LANGS",
     "ANTHROPIC_API_KEY",
+    "ANTHROPIC_AUTH_TOKEN",
     "AWS_REGION",
     "VERTEX_PROJECT_ID",
     "VERTEX_REGION",
@@ -68,6 +69,7 @@ def test_provider_credentials_from_environment_are_hidden(monkeypatch):
     settings = Settings(_env_file=None)
     assert settings.anthropic_api_key.get_secret_value() == "test-not-a-key"  # pragma: allowlist secret
     assert "test-not-a-key" not in repr(settings)
+    assert settings.anthropic_auth_token is None
     assert settings.vertex_project_id == "demo-project"
     assert settings.vertex_region == "global"
     assert settings.aws_region is None

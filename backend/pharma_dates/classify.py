@@ -3,8 +3,9 @@
 Claude only labels candidates the rules found; it never changes their text or invents a value.
 A date Claude reports that the rules did not find (a missed date, or a date found only in its
 transcription) is kept only when the rules or the loose parser below can read it AND it appears
-on the page's own text layer (pdfplumber or Tesseract). Everything rejected goes to the
-"discarded AI suggestions" list with a reason; it is never shown as a date.
+on the page's own text layer (pdfplumber or Tesseract) AND that printed text reads as the same
+date. A resolution of an ambiguous date needs evidence quoted from the page. Everything rejected
+goes to the "discarded AI suggestions" list with a reason; it is never shown as a date.
 
 Standard library and pydantic only at import time (the static build runs this module in Pyodide).
 """
@@ -32,6 +33,7 @@ logger = logging.getLogger(__name__)
 MATCH_THRESHOLD = 85
 OFFLINE_CONFIDENCE = 0.5
 OFFLINE_RATIONALE = "Rule-based label from nearby words (no AI label for this date)."
+DIFFERENT_DATE = "printed text reads as a different date"
 
 
 class ClaudeUnavailable(Exception):
@@ -208,26 +210,46 @@ class _Page:
         logger.info("page %d: discarded AI %s: %s", self.layout.n, kind, reason)  # no document text
         self.discarded.append({"page": self.layout.n, "kind": kind, "reason": reason} | payload)
 
-    def locate(self, verbatim: str, kind: str, payload: dict) -> tuple[int, int] | None:
-        """Where `verbatim` is printed on the page, outside spans already taken; logs failures."""
+    def locate(
+        self, verbatim: str, readings: list[str], precision: str, kind: str, payload: dict
+    ) -> tuple[int, int] | None:
+        """Where `verbatim` is printed on the page, outside spans already taken; logs failures.
+
+        The matched page text must itself parse as the same date (`readings`, `precision`):
+        "12.III.2026" is close to a printed "12.II.2026" but is a different date."""
+        text = self.layout.text
         masked = list(self.folded)
         for start, end, _ in self.claimed:
             masked[start:end] = " " * (end - start)
-        span = _find(verbatim, "".join(masked), self.layout.text)
+        span = _find(verbatim, "".join(masked), text)
         if span is not None:
-            return span
-        span = _find(verbatim, self.folded, self.layout.text)
+            if _reads_as(text[span[0] : span[1]], readings, precision):
+                return span
+            self.discard(kind, DIFFERENT_DATE, payload)
+            return None
+        span = _find(verbatim, self.folded, text)
         owner = span and next((i for s, e, i in self.claimed if s < span[1] and span[0] < e), None)
-        if owner:
+        if owner and _reads_as(text[span[0] : span[1]], readings, precision):
             self.discard(kind, f"duplicate of {owner}", payload)
+        elif owner:
+            self.discard(kind, DIFFERENT_DATE, payload)
         else:
             self.discard(kind, "not found in the page text", payload)
         return None
 
+    def on_page(self, quote: str) -> bool:
+        """Whether `quote` is printed on the page (partial_ratio >= 85 on the folded text)."""
+        needle = fold(quote).strip().strip("\"'“”‘’").strip()
+        if not needle or not self.folded.strip():
+            return False
+        from rapidfuzz import fuzz  # lazy: keeps this module importable without native wheels
+
+        return fuzz.partial_ratio(needle, self.folded, score_cutoff=MATCH_THRESHOLD) > 0
+
     def relocate(self, c: Candidate) -> Candidate | None:
         """A transcription candidate moved onto the page text, or None if it is not there."""
         payload = {"candidate_id": c.id, "verbatim_text": c.raw_text}
-        span = self.locate(c.raw_text, "transcription", payload)
+        span = self.locate(c.raw_text, c.candidates, c.precision, "transcription", payload)
         if span is None:
             return None
         self.claim(*span, c.id)
@@ -242,13 +264,13 @@ class _Page:
         if parsed is None:
             self.discard("missed_date", "could not parse the text as one date", payload)
             return None
-        span = self.locate(m.verbatim_text, "missed_date", payload)
+        normalized, candidates, precision = parsed
+        span = self.locate(m.verbatim_text, candidates, precision, "missed_date", payload)
         if span is None:
             return None
         self._next_ai += 1
         id_ = f"p{self.layout.n}-a{self._next_ai}"
         self.claim(*span, id_)
-        normalized, candidates, precision = parsed
         return LabeledDate(
             id=id_,
             page=self.layout.n,
@@ -330,6 +352,9 @@ def _resolution(c: Candidate, item: CandidateLabel, page: _Page) -> tuple[str | 
     if evidence is None:
         page.discard("resolution", "resolved value given without evidence", payload)
         return None, None
+    if not page.on_page(evidence):
+        page.discard("resolution", "evidence not found on the page", payload)
+        return None, None
     return item.resolved_value, evidence
 
 
@@ -345,6 +370,14 @@ def _text_or_none(value: str | None) -> str | None:
 
 _DIGIT_RUN = re.compile(r"\d+")
 _OCR_DIGITS = str.maketrans({"O": "0", "I": "1", "l": "1"})
+# A run of digits and O/I/l holding at least one real digit ("2O26", "l2"), so "III" stays roman.
+_OCR_NUMBER = re.compile(r"(?<![A-Za-z0-9])(?=[OIl]*\d)[0-9OIl]+(?![A-Za-z0-9])")
+
+
+def _reads_as(printed: str, readings: list[str], precision: str) -> bool:
+    """Whether the printed page text, after OCR-digit repair, parses as exactly this date."""
+    parsed = _parse(_OCR_NUMBER.sub(lambda m: m.group().translate(_OCR_DIGITS), printed))
+    return parsed is not None and parsed[2] == precision and set(parsed[1]) == set(readings)
 
 
 def _find(verbatim: str, haystack: str, text: str) -> tuple[int, int] | None:

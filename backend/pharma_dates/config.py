@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     tesseract_langs: str = "eng"
     # Provider credentials and location; never logged.
     anthropic_api_key: SecretStr | None = None
+    anthropic_auth_token: SecretStr | None = None
     aws_region: str | None = None
     vertex_project_id: str | None = None
     vertex_region: str = "global"

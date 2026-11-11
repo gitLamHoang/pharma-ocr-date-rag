@@ -9,7 +9,6 @@ from __future__ import annotations
 import base64
 import json
 import logging
-import os
 from typing import Any
 
 import anthropic
@@ -47,8 +46,9 @@ def make_client(settings: Settings) -> ClaudeClient | None:
         key = settings.anthropic_api_key.get_secret_value() if settings.anthropic_api_key else None
         if key:
             return ClaudeClient(anthropic.Anthropic(api_key=key), settings.claude_model, provider)
-        if os.environ.get("ANTHROPIC_AUTH_TOKEN"):
-            return ClaudeClient(anthropic.Anthropic(), settings.claude_model, provider)
+        token = settings.anthropic_auth_token.get_secret_value() if settings.anthropic_auth_token else None
+        if token:
+            return ClaudeClient(anthropic.Anthropic(auth_token=token), settings.claude_model, provider)
         return None
     if provider == "bedrock":
         if not settings.aws_region:
@@ -81,11 +81,14 @@ class ClaudeClient:
 
     def transcribe(self, image_png: bytes) -> str:
         """A faithful transcription of the page image."""
-        response = self._create(
-            system=[{"type": "text", "text": TRANSCRIBE_PROMPT}],
-            messages=[{"role": "user", "content": [_image(image_png)]}],
-            output_config={"effort": EFFORT},
-        )
+        try:
+            response = self._create(
+                system=[{"type": "text", "text": TRANSCRIBE_PROMPT}],
+                messages=[{"role": "user", "content": [_image(image_png)]}],
+                output_config={"effort": EFFORT},
+            )
+        except anthropic.BadRequestError:
+            raise ClaudeUnavailable("Claude rejected the request") from None
         _check_stop(response, allow_max_tokens=True)
         return "".join(block.text for block in response.content if block.type == "text")
 
@@ -155,8 +158,8 @@ class ClaudeClient:
         try:
             return self.sdk.beta.messages.create(**kwargs)
         except anthropic.BadRequestError:
-            raise
-        except anthropic.APIError as exc:
+            raise  # callers decide: classify retries once on Bedrock/Vertex
+        except Exception as exc:  # API errors, and credential errors the AWS/Google SDKs raise
             raise ClaudeUnavailable(f"Claude API error ({type(exc).__name__})") from None
 
 

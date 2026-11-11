@@ -111,6 +111,17 @@ def test_make_client_anthropic_with_key(monkeypatch):
     assert client.provider == "anthropic"
 
 
+@pytest.mark.parametrize("from_env", [True, False])
+def test_make_client_anthropic_with_auth_token(monkeypatch, from_env):
+    if from_env:
+        monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "test-not-a-token")  # pragma: allowlist secret
+        client = make_client(settings())
+    else:
+        client = make_client(settings(anthropic_auth_token="test-not-a-token"))  # pragma: allowlist secret
+    assert isinstance(client, ClaudeClient)
+    assert client.sdk.auth_token == "test-not-a-token"  # pragma: allowlist secret
+
+
 def test_make_client_bedrock_needs_region():
     assert make_client(settings(claude_provider="bedrock")) is None
     client = make_client(settings(claude_provider="bedrock", aws_region="us-east-1"))
@@ -193,6 +204,20 @@ def test_api_error_raises_unavailable():
         classify(ClaudeClient(FakeSDK(error), "claude-opus-5-5", "anthropic"))
 
 
+@pytest.mark.parametrize(
+    "error",
+    [
+        RuntimeError("Could not resolve AWS credentials from session"),  # Bedrock without credentials
+        type("DefaultCredentialsError", (Exception,), {})("no Google credentials"),  # Vertex likewise
+    ],
+)
+@pytest.mark.parametrize("call", ["classify", "transcribe"])
+def test_non_api_sdk_error_raises_unavailable(error, call):
+    client = ClaudeClient(FakeSDK(error), "anthropic.claude-opus-5-5", "bedrock")
+    with pytest.raises(ClaudeUnavailable, match=type(error).__name__):
+        classify(client) if call == "classify" else client.transcribe(b"png")
+
+
 def test_anthropic_bad_request_not_retried():
     sdk = FakeSDK(bad_request())
     with pytest.raises(ClaudeUnavailable):
@@ -256,3 +281,11 @@ def test_transcribe_refusal_raises():
     sdk = FakeSDK(response(stop_reason="refusal"))
     with pytest.raises(ClaudeUnavailable):
         ClaudeClient(sdk, "claude-opus-5-5", "anthropic").transcribe(b"png")
+
+
+@pytest.mark.parametrize("provider", ["anthropic", "bedrock", "vertex"])
+def test_transcribe_bad_request_raises_unavailable(provider):
+    sdk = FakeSDK(bad_request("image too large"))
+    with pytest.raises(ClaudeUnavailable):
+        ClaudeClient(sdk, "claude-opus-5-5", provider).transcribe(b"png")
+    assert len(sdk.calls) == 1

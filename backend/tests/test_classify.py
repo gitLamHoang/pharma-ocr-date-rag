@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 import pytest
-from test_candidates import make_layout
+from helpers import make_layout
 
 from pharma_dates.candidates import page_candidates, transcription_candidates
 from pharma_dates.classify import (
@@ -84,14 +84,17 @@ def test_labels_applied():
 
 
 def test_ambiguous_resolved_only_with_evidence():
-    layout = make_layout(["Issued 03/04/2026", "Approved 05/06/2026"])
+    layout = make_layout(["Issued 03/04/2026", "Approved 05/06/2026", "All dates are DD/MM/YYYY"])
     issued, approved = page_candidates(layout)
     assert issued.normalized is None and approved.normalized is None
     client = FakeClient(
         classified(
             [
                 label(
-                    issued.id, "issue_date", resolved_value="2026-04-03", evidence='Footer: "3 April 2026"'
+                    issued.id,
+                    "issue_date",
+                    resolved_value="2026-04-03",
+                    evidence='"All dates are DD/MM/YYYY"',
                 ),
                 label(approved.id, "approval_date", resolved_value="2026-06-05", evidence="  "),
             ]
@@ -100,7 +103,7 @@ def test_ambiguous_resolved_only_with_evidence():
     dates, discarded = label_page(layout, [issued, approved], client)
     by_id = {d.id: d for d in dates}
     assert by_id[issued.id].resolved_value == "2026-04-03"
-    assert by_id[issued.id].evidence == 'Footer: "3 April 2026"'
+    assert by_id[issued.id].evidence == '"All dates are DD/MM/YYYY"'
     assert by_id[issued.id].normalized is None
     assert by_id[approved.id].resolved_value is None
     assert by_id[approved.id].evidence is None
@@ -181,6 +184,73 @@ def test_ai_only_near_miss_digits_discarded():
     assert dates == []
     assert discarded[0]["verbatim_text"] == "12.III.2026"
     assert "not found" in discarded[0]["reason"]
+
+
+@pytest.mark.parametrize(
+    ("printed", "verbatim"),
+    [
+        ("Seal dated 12.II.2026", "12.III.2026"),
+        ("Seal dated 12.IV.2026", "12.VI.2026"),
+        ("Seal dated 12.XI.2026", "12.XII.2026"),
+        ("Signed 14 Jun 2026", "14 Jan 2026"),
+        ("Valid until III.2027", "II.2027"),
+        (
+            "Given on the twelfth day of March, two thousand twenty-six",
+            "the eleventh day of March, two thousand twenty-six",
+        ),
+    ],
+)
+def test_ai_only_near_miss_month_or_day_discarded(printed, verbatim):
+    # Close enough for partial_ratio >= 85 and no digit differs, but the page prints another date.
+    layout = make_layout([printed])
+    client = FakeClient(classified(missed_dates=[missed(verbatim)]))
+    dates, discarded = label_page(layout, [], client)
+    assert dates == []
+    assert [(d["verbatim_text"], d["reason"]) for d in discarded] == [
+        (verbatim, "printed text reads as a different date")
+    ]
+
+
+def test_ai_only_near_miss_of_rule_candidate_discarded():
+    layout = make_layout(["Signed 14 Jun 2026"])
+    cands = page_candidates(layout)
+    client = FakeClient(classified(missed_dates=[missed("14 Jan 2026")]))
+    dates, discarded = label_page(layout, cands, client)
+    assert [d.id for d in dates] == [cands[0].id]
+    assert discarded[0]["reason"] == "printed text reads as a different date"
+
+
+@pytest.mark.parametrize(
+    ("printed", "verbatim", "token"),
+    [
+        ("Seal dated 12.III.2O26 Riga", "12.III.2026", "12.III.2O26"),
+        ("Seal dated l2.III.2026 Riga", "12.III.2026", "l2.III.2026"),
+        ("Released 12 March 2O26 by QA", "12 March 2026", "12 March 2O26"),
+        (
+            "Given on the twelfth day of March, two thousand twenty-six at Riga",
+            "the twelfth day of March, two thousand twenty-six",
+            "the twelfth day of March, two thousand twenty-six",
+        ),
+    ],
+)
+def test_ai_only_kept_despite_ocr_noise(printed, verbatim, token):
+    layout = make_layout([printed])
+    client = FakeClient(classified(missed_dates=[missed(verbatim)]))
+    [date], discarded = label_page(layout, [], client)
+    assert discarded == []
+    assert date.normalized == "2026-03-12"
+    assert layout.text[date.char_start : date.char_end] == token
+
+
+def test_ambiguous_resolution_evidence_must_be_on_page():
+    layout = make_layout(["Issued 03/04/2026"])
+    [issued] = page_candidates(layout)
+    client = FakeClient(
+        classified([label(issued.id, "issue_date", resolved_value="2026-04-03", evidence="3 April 2026")])
+    )
+    [date], discarded = label_page(layout, [issued], client)
+    assert date.resolved_value is None and date.evidence is None
+    assert [(d["kind"], d["reason"]) for d in discarded] == [("resolution", "evidence not found on the page")]
 
 
 def test_ai_only_unparseable_text_discarded():
