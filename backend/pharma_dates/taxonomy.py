@@ -2,6 +2,8 @@
 
 import re
 
+from .rules.dates import extract_dates
+
 FAMILIES: dict[str, list[str]] = {
     "product": [
         "manufacture_date",
@@ -85,35 +87,85 @@ _RULE_TYPES = {
     "received": "receipt_date",
 }
 
+# Matched on the date's own line only: a certificate of analysis that says "this certificate is
+# valid without signature" three lines below the product expiry is not a validity date.
 _CERTIFICATE_VALIDITY = re.compile(
-    r"\bcertific\w*.*\bvalid(?:ity)?\b|\bvalid(?:ity)?\b.*\bcertific", re.IGNORECASE | re.DOTALL
+    r"\bcertific\w*.*\bvalid(?:ity)?\b|\bvalid(?:ity)?\b.*\bcertific", re.IGNORECASE
 )
 
-# Most specific first: an apostille or notarial certificate also says "signed".
-_KEYWORDS = [
+# An apostille or notarial certificate also says "signed": on the same line these two win.
+_DOCUMENT_KEYWORDS = [
     ("apostille_date", re.compile(r"\bapostill?e\b", re.IGNORECASE)),
     ("notarization_date", re.compile(r"\bnotar\w*", re.IGNORECASE)),
+]
+_FIELD_KEYWORDS = [
     ("certificate_valid_until", _CERTIFICATE_VALIDITY),
     ("retest_date", re.compile(r"\bre-?\s?test\w*", re.IGNORECASE)),
     ("signature_date", re.compile(r"\bsign(?:ed|ature|atures|atory)?\b", re.IGNORECASE)),
     ("approval_date", re.compile(r"\bapprov\w*", re.IGNORECASE)),
     ("effective_date", re.compile(r"\beffective\b", re.IGNORECASE)),
 ]
+# What may precede a date on a row that does not name it: "Date:", "6. the ", "on".
+_BARE_PREFIX = re.compile(r"\s*(?:\d{1,2}\.\s)?(?:[^\w]|_|\b(?:the|on|dated?)\b)*", re.IGNORECASE)
+LOOKBACK_LINES = 2
+_AFTER_PENALTY = 12  # a word after the date labels it less often than a word before it
 
 
-def offline_label(rule_label: str, context: str) -> str:
+def offline_label(rule_label: str, text: str, start: int | None = None, end: int | None = None) -> str:
     """Taxonomy type for a rule candidate when Claude is not used.
 
-    Strong rule labels (expiry, manufacture, audit, received) are kept, except that an expiry
-    next to certificate-validity wording becomes `certificate_valid_until`. Weak labels
-    (document, qa_check, unknown) take the first English keyword found in `context`;
-    otherwise `document` means `issue_date` and everything else is `unknown`.
+    `text[start:end]` is the date (by default the date follows `text`). Only the date's own line
+    is read: strong rule labels (expiry, manufacture, audit, received) are kept, except that an
+    expiry on a line with certificate-validity wording becomes `certificate_valid_until`. Weak
+    labels (document, qa_check, unknown) take the English keyword nearest the date on its line
+    (a line that starts in lower case continues the sentence of the line above it).
+    A row that does not name its date ("Date: 05-Jan-2026", "6. the 12 March 2026") reads the
+    keyword of the block heading just above it, up to two lines and never past another date.
+    Otherwise `document` means `issue_date` and everything else is `unknown`.
     """
-    if rule_label == "expiry" and _CERTIFICATE_VALIDITY.search(context):
+    if start is None or end is None:
+        start = end = len(text)
+    line_start = text.rfind("\n", 0, start) + 1
+    if line_start and text[line_start : line_start + 1].islower():
+        line_start = text.rfind("\n", 0, line_start - 1) + 1  # a sentence wrapped onto this line
+    line_end = text.find("\n", end)
+    line = text[line_start : len(text) if line_end == -1 else line_end]
+    at, until = start - line_start, end - line_start
+    if rule_label == "expiry" and _CERTIFICATE_VALIDITY.search(line):
         return "certificate_valid_until"
     if rule_label in _RULE_TYPES:
         return _RULE_TYPES[rule_label]
-    for date_type, pattern in _KEYWORDS:
-        if pattern.search(context):
-            return date_type
+    found = _nearest_keyword(line, at, until)
+    if found is None and _BARE_PREFIX.fullmatch(line[:at]):
+        found = _heading_keyword(text[:line_start].split("\n")[:-1])
+    if found is not None:
+        return found
     return "issue_date" if rule_label == "document" else "unknown"
+
+
+def _nearest_keyword(line: str, at: int, until: int) -> str | None:
+    for date_type, pattern in _DOCUMENT_KEYWORDS:
+        if pattern.search(line):
+            return date_type
+    best, best_distance = None, None
+    for date_type, pattern in _FIELD_KEYWORDS:
+        for match in pattern.finditer(line):
+            if match.end() <= at:
+                distance = at - match.end()
+            elif match.start() >= until:
+                distance = match.start() - until + _AFTER_PENALTY
+            else:
+                continue
+            if best_distance is None or distance < best_distance:
+                best, best_distance = date_type, distance
+    return best
+
+
+def _heading_keyword(lines_above: list[str]) -> str | None:
+    for line in reversed(lines_above[-LOOKBACK_LINES:]):
+        if extract_dates(line):
+            return None  # that row is another field's
+        found = _nearest_keyword(line, len(line), len(line))
+        if found is not None:
+            return found
+    return None

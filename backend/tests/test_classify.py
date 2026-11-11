@@ -379,7 +379,9 @@ def test_unknown_id_and_bad_type_ignored(caplog):
     by_id = {d.id: d for d in dates}
     assert set(by_id) == {approved.id, exp.id}
     # The bad label is ignored: the rule label is kept for that candidate.
-    assert by_id[approved.id].date_type == offline_label(approved.rule_label, approved.context)
+    assert by_id[approved.id].date_type == offline_label(
+        approved.rule_label, layout.text, approved.char_start, approved.char_end
+    )
     assert by_id[approved.id].source == "rules"
     assert by_id[approved.id].confidence == 0.5
     assert by_id[exp.id].date_type == "expiry_date"
@@ -424,7 +426,8 @@ def test_invalid_json_falls_back_to_rules(error):
     dates, discarded = label_page(layout, cands, FakeClient(error=error))
     assert discarded == []
     assert [(d.id, d.date_type, d.confidence, d.source) for d in dates] == [
-        (c.id, offline_label(c.rule_label, c.context), 0.5, "rules") for c in cands
+        (c.id, offline_label(c.rule_label, layout.text, c.char_start, c.char_end), 0.5, "rules")
+        for c in cands
     ]
 
 
@@ -433,7 +436,9 @@ def test_offline_when_client_none():
     cands = page_candidates(layout)
     dates, discarded = label_page(layout, cands, None)
     assert discarded == []
-    assert [d.date_type for d in dates] == [offline_label(c.rule_label, c.context) for c in cands]
+    assert [d.date_type for d in dates] == [
+        offline_label(c.rule_label, layout.text, c.char_start, c.char_end) for c in cands
+    ]
     assert dates[1].date_type == "expiry_date"
     assert all(d.confidence == 0.5 and d.source == "rules" for d in dates)
     assert all(d.resolved_value is None and d.qualifier is None for d in dates)
@@ -477,3 +482,32 @@ def test_classify_imports_only_pure_modules():
     )
     out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
     assert out.stdout.strip() == "[]"
+
+
+def _offline_types(lines):
+    layout = make_layout(lines)
+    dates, _ = label_page(layout, page_candidates(layout), None)
+    return [(d.raw_text, d.date_type) for d in dates]
+
+
+def test_offline_certificate_wording_elsewhere_on_page_keeps_expiry():
+    lines = [
+        "CERTIFICATE OF ANALYSIS",
+        "Product: Paracetamol 500 mg",
+        "Batch: 12031",
+        "Expiry date: 31-Jan-2025",
+        "Result: complies",
+        "This certificate is valid without signature.",
+    ]
+    assert _offline_types(lines) == [("31-Jan-2025", "expiry_date")]
+
+
+def test_offline_keyword_on_another_field_line_does_not_leak():
+    lines = [
+        "Prepared by: A. Clerk",
+        "Signature: ________",
+        "Date: 05-Jan-2026",
+        "Analysis date: 07-Jan-2026",
+    ]
+    # A bare "Date:" row takes the signature line just above it; a labelled row keeps its own.
+    assert _offline_types(lines) == [("05-Jan-2026", "signature_date"), ("07-Jan-2026", "unknown")]

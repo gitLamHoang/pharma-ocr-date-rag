@@ -321,7 +321,7 @@ def _valid_labels(result: PageClassification, ids: set[str], page: _Page) -> dic
 
 def _labeled(c: Candidate, item: CandidateLabel | None, page: _Page) -> LabeledDate:
     if item is None:
-        date_type = taxonomy.offline_label(c.rule_label, c.context)
+        date_type = taxonomy.offline_label(c.rule_label, page.layout.text, c.char_start, c.char_end)
         fields = {
             "date_type": date_type,
             "qualifier": None,

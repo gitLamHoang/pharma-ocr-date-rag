@@ -113,3 +113,45 @@ def test_offline_label_apostille_beats_its_own_signature_wording():
 def test_offline_label_always_in_taxonomy():
     for rule_label in ["expiry", "manufacture", "qa_check", "audit", "received", "document", "unknown"]:
         assert offline_label(rule_label, "signed approved effective retest") in ALL_TYPES
+
+
+def test_offline_label_reads_only_the_dates_line():
+    text = "CERTIFICATE OF ANALYSIS\nExpiry date: 31-Jan-2025\nThis certificate is valid without signature."
+    start = text.index("31-Jan")
+    assert offline_label("expiry", text, start, start + 11) == "expiry_date"
+    text = "Signed by J. Doe\nIssued: 05-Jan-2026"
+    start = text.index("05-Jan")
+    assert offline_label("document", text, start, start + 11) == "issue_date"
+
+
+def test_offline_label_nearest_keyword_wins():
+    text = "Approved by J. Doe   Signature: ____ 05-Jan-2026"
+    start = text.index("05-Jan")
+    assert offline_label("qa_check", text, start, start + 11) == "signature_date"
+    text = "Signed by J. Doe. Effective date: 05-Jan-2026"
+    start = text.index("05-Jan")
+    assert offline_label("unknown", text, start, start + 11) == "effective_date"
+
+
+def test_offline_label_bare_row_reads_its_heading_but_not_past_another_date():
+    text = "APOSTILLE\nIssued by the competent authority\n6. the 12 March 2026"
+    start = text.index("12 March")
+    assert offline_label("unknown", text, start, start + 13) == "apostille_date"
+    text = "Signature: ____\nTested: 01-Jan-2026\nDate: 05-Jan-2026"
+    start = text.index("05-Jan")
+    assert offline_label("unknown", text, start, start + 11) == "unknown"
+    text = "Signature: ____\nAnalysis date: 07-Jan-2026"
+    start = text.index("07-Jan")
+    assert offline_label("unknown", text, start, start + 11) == "unknown"
+
+
+def test_offline_label_wrapped_sentence_reads_the_line_above():
+    text = "Expiration of Certification: The certification of SRM 870 is valid, within the\nuntil 31 December 2035"
+    start = text.index("31 December")
+    assert offline_label("unknown", text, start, start + 16) == "certificate_valid_until"
+
+
+def test_offline_label_revision_row_is_not_a_bare_row():
+    text = "Approved by L. Brennan\nRevision history\n1.0 12.Jun.2018 First issue"
+    start = text.index("12.Jun")
+    assert offline_label("unknown", text, start, start + 11) == "unknown"
