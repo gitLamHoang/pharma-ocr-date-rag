@@ -1,16 +1,20 @@
+# Secrets: only .env.example (placeholders) is committed.
+.env
+
+# Uploads, page images, databases and logs.
+data/
+*.sqlite*
+*.log
+eval/cache/
+
+# Tooling.
 .venv/
 node_modules/
-web/dist/
-web/test-results/
-__pycache__/
-*.pyc
-.pytest_cache/
-.DS_Store
 dist/
 build/
+__pycache__/
+*.pyc
 *.egg-info/
-outputs/
-*.sqlite
-
+.pytest_cache/
 .ruff_cache/
-*.sqlite-*
+.DS_Store

@@ -1,0 +1,15 @@
+# Run locally with: uvx pre-commit run --all-files
+# Local secret scan uses detect-secrets (no Go toolchain needed); CI runs gitleaks as well.
+repos:
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        exclude: (^|/)(uv\.lock|package-lock\.json)$
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.4
+    hooks:
+      - id: ruff-check
+        files: ^(backend|eval)/
+      - id: ruff-format
+        files: ^(backend|eval)/
