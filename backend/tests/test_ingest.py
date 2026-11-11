@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pypdfium2 as pdfium
 import pytest
+from fpdf import FPDF
 from PIL import Image
 
 from pharma_dates.ingest import IngestError, ingest
@@ -105,3 +106,24 @@ def test_huge_pixel_image_raises_ingest_error(blank_png, settings, monkeypatch):
     monkeypatch.setattr(Image, "MAX_IMAGE_PIXELS", 1000)
     with pytest.raises(IngestError, match="too large"):
         ingest(blank_png, settings)
+
+
+def test_huge_pdf_page_raises_before_rendering(tmp_path, settings):
+    # 14400 pt is the largest page PDF allows: 40000 x 40000 px at 200 DPI, a multi-GB bitmap.
+    pdf = FPDF(format=(5080, 5080))
+    pdf.add_page()
+    path = tmp_path / "huge.pdf"
+    pdf.output(str(path))
+    with pytest.raises(IngestError, match="too large"):
+        ingest(path, settings)
+    assert list(settings.data_dir.glob("uploads/*/page-*.png")) == []
+
+
+def test_huge_later_tiff_frame_raises(tmp_path, settings, monkeypatch):
+    path = tmp_path / "bomb.tiff"
+    small, big = Image.new("RGB", (20, 20), "white"), Image.new("RGB", (100, 100), "white")
+    small.save(path, save_all=True, append_images=[big])
+    monkeypatch.setattr(Image, "MAX_IMAGE_PIXELS", 1000)  # first frame 400 px passes Pillow's own check
+    with pytest.raises(IngestError, match="too large"):
+        ingest(path, settings)
+    assert list(settings.data_dir.glob("uploads/*/page-*.png")) == []

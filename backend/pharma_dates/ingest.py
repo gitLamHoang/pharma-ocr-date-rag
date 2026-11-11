@@ -20,6 +20,7 @@ from .config import Settings
 UNSUPPORTED = "This file type is not supported. Upload a PDF, PNG, JPG or TIFF file."
 DAMAGED = "This file is damaged or incomplete and cannot be read."
 NO_PAGES = "This document has no readable pages."
+TOO_LARGE = "This document has a page too large to process (too many pixels)."
 
 # Leading bytes -> (kind, stored file suffix).
 _SIGNATURES: list[tuple[bytes, Literal["pdf", "image"], str]] = [
@@ -88,6 +89,13 @@ def _check_page_count(count: int, settings: Settings) -> None:
         raise IngestError(f"This document has {count} pages; the limit is {settings.max_pages}.")
 
 
+def _check_pixels(width: int, height: int) -> None:
+    """Refuse pages bigger than Pillow's decompression-bomb limit before they are decoded or rendered."""
+    limit = Image.MAX_IMAGE_PIXELS
+    if limit is not None and width * height > limit:
+        raise IngestError(TOO_LARGE)
+
+
 def _render_pdf(path: Path, out_dir: Path, settings: Settings) -> list[Path]:
     try:
         doc = pdfium.PdfDocument(path)
@@ -95,12 +103,19 @@ def _render_pdf(path: Path, out_dir: Path, settings: Settings) -> list[Path]:
         raise IngestError(_pdf_failure_reason(path)) from exc
     try:
         _check_page_count(len(doc), settings)
+        scale = settings.render_dpi / 72
+        try:
+            for i in range(len(doc)):
+                width, height = doc[i].get_size()
+                _check_pixels(round(width * scale), round(height * scale))
+        except pdfium.PdfiumError as exc:
+            raise IngestError(DAMAGED) from exc
         out_dir.mkdir(parents=True, exist_ok=True)
         pages = []
         for i in range(len(doc)):
             target = out_dir / f"page-{i + 1}.png"
             try:
-                doc[i].render(scale=settings.render_dpi / 72).to_pil().save(target)
+                doc[i].render(scale=scale).to_pil().save(target)
             except pdfium.PdfiumError as exc:
                 raise IngestError(DAMAGED) from exc
             pages.append(target)
@@ -130,6 +145,9 @@ def _save_image_frames(path: Path, out_dir: Path, settings: Settings) -> list[Pa
     try:
         with Image.open(path) as img:
             _check_page_count(getattr(img, "n_frames", 1), settings)
+            # Pillow checks only the first frame on open; later TIFF frames are checked here.
+            for frame in ImageSequence.Iterator(img):
+                _check_pixels(*frame.size)
             out_dir.mkdir(parents=True, exist_ok=True)
             pages = []
             for i, frame in enumerate(ImageSequence.Iterator(img)):
@@ -138,6 +156,6 @@ def _save_image_frames(path: Path, out_dir: Path, settings: Settings) -> list[Pa
                 pages.append(target)
             return pages
     except Image.DecompressionBombError as exc:
-        raise IngestError("This image is too large to process (too many pixels).") from exc
+        raise IngestError(TOO_LARGE) from exc
     except (UnidentifiedImageError, OSError, SyntaxError) as exc:
         raise IngestError(DAMAGED) from exc

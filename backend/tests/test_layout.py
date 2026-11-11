@@ -1,7 +1,9 @@
 import shutil
 
+import pypdfium2 as pdfium
 import pytest
 from fpdf import FPDF
+from PIL import Image, ImageOps
 
 from pharma_dates.ingest import ingest
 from pharma_dates.layout import layout_page
@@ -91,3 +93,75 @@ def test_unparseable_text_layer_falls_back_to_ocr(native_pdf, settings, monkeypa
     monkeypatch.setattr("pharma_dates.layout.pdfplumber.open", broken_open)
     layout = layout_page(ingested, 1, settings)
     assert layout.text_source == "ocr"
+
+
+def test_cropped_pdf_boxes_are_relative_to_the_visible_area(native_pdf, tmp_path, settings):
+    # Crop 20 pt off the left, 100 pt off the bottom and 10 pt off the top (PDF origin is bottom-left).
+    doc = pdfium.PdfDocument(native_pdf)
+    page_width, page_height = doc[0].get_size()
+    uncropped = layout_page(ingest(native_pdf, settings), 1, settings)
+    doc[0].set_cropbox(20, 100, page_width, page_height - 10)
+    path = tmp_path / "cropped.pdf"
+    doc.save(str(path))
+    doc.close()
+
+    layout = layout_page(ingest(path, settings), 1, settings)
+    assert layout.text_source == "pdf"
+    scale = settings.render_dpi / 72
+    before, after = _word(uncropped, "31/03/2027").bbox, _word(layout, "31/03/2027").bbox
+    assert after.x0 == pytest.approx(before.x0 - 20 * scale, abs=1)
+    assert after.y0 == pytest.approx(before.y0 - 10 * scale, abs=1)
+    assert after.x1 - after.x0 == pytest.approx(before.x1 - before.x0, abs=1)
+    _assert_offsets_consistent(layout)
+
+
+def test_text_outside_cropbox_is_ignored(tmp_path, settings):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Helvetica", size=14)
+    pdf.cell(text="Expiry date: 31/03/2027")  # near the top, cropped away below
+    pdf.set_xy(10, 200)
+    pdf.cell(text="Batch released by QA on 01/02/2026")
+    path = tmp_path / "hidden.pdf"
+    pdf.output(str(path))
+    doc = pdfium.PdfDocument(path)
+    page_width, page_height = doc[0].get_size()
+    doc[0].set_cropbox(0, 0, page_width, page_height - 100)  # hide the top 100 pt
+    cropped = tmp_path / "hidden-cropped.pdf"
+    doc.save(str(cropped))
+    doc.close()
+
+    layout = layout_page(ingest(cropped, settings), 1, settings)
+    assert layout.text_source == "pdf"
+    assert "31/03/2027" not in layout.text
+    assert "01/02/2026" in layout.text
+    _assert_offsets_consistent(layout)
+
+
+@pytest.mark.parametrize("rotation", [0, 90, 180, 270])
+def test_word_boxes_match_rendered_ink_on_rotated_cropped_pages(tmp_path, settings, make_pdf, rotation):
+    source = make_pdf(tmp_path / "source.pdf", ["Expiry date: 31/03/2027 for batch A1"])
+    doc = pdfium.PdfDocument(source)
+    page = doc[0]
+    width, height = page.get_size()
+    page.set_mediabox(-20, 30, width - 20, height + 30)  # MediaBox not at the origin
+    page.set_cropbox(0, 70, width - 50, height - 10)
+    page.set_rotation(rotation)
+    path = tmp_path / f"rotated-{rotation}.pdf"
+    doc.save(str(path))
+    doc.close()
+
+    ingested = ingest(path, settings)
+    layout = layout_page(ingested, 1, settings)
+    assert layout.text_source == "pdf"
+    with Image.open(ingested.page_images[0]) as img:
+        ink = ImageOps.invert(img.convert("L")).getbbox()
+    boxes = [w.bbox for w in layout.words]
+    words = (
+        min(b.x0 for b in boxes),
+        min(b.y0 for b in boxes),
+        max(b.x1 for b in boxes),
+        max(b.y1 for b in boxes),
+    )
+    # Word boxes span the font's line height, so they reach a few pixels past the glyph ink.
+    assert words == pytest.approx(ink, abs=10)
