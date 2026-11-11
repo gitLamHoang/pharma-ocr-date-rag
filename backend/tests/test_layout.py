@@ -3,7 +3,7 @@ import shutil
 import pypdfium2 as pdfium
 import pytest
 from fpdf import FPDF
-from PIL import Image, ImageOps
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 from pharma_dates.ingest import ingest
 from pharma_dates.layout import layout_page
@@ -173,3 +173,37 @@ def test_ocr_words_carry_confidence_and_pdf_words_do_not(scanned_png, native_pdf
     assert scan.words and all(0 <= w.confidence <= 1 for w in scan.words)
     native = layout_page(ingest(native_pdf, settings), 1, settings)
     assert all(w.confidence is None for w in native.words)
+
+
+def _scan_with_stamp(tmp_path, stamp: str, body_lines: int = 0):
+    scan = Image.new("RGB", (1654, 2339), "white")  # A4 at 200 DPI
+    ImageDraw.Draw(scan).text(
+        (150, 600), "Expiry date: 31/03/2027", fill="black", font=ImageFont.load_default(size=56)
+    )
+    scan.save(tmp_path / "scan-a4.png")
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.image(str(tmp_path / "scan-a4.png"), x=0, y=0, w=pdf.w, h=pdf.h)  # the scanned body, full page
+    pdf.set_font("Helvetica", size=8)
+    pdf.set_xy(10, 5)
+    pdf.cell(text=stamp)  # a DMS header stamped on top of the scan
+    for i in range(body_lines):
+        pdf.set_xy(10, 20 + i * 6)
+        pdf.cell(text=f"Line {i}: native text over a letterhead background image, Expiry date: 31/03/2027")
+    path = tmp_path / "stamped.pdf"
+    pdf.output(str(path))
+    return path
+
+
+@needs_tesseract
+def test_scan_with_a_stamped_text_header_is_still_ocrd(tmp_path, settings):
+    path = _scan_with_stamp(tmp_path, "Page 1 of 5   Doc No QA-12345   Printed copy")
+    layout = layout_page(ingest(path, settings), 1, settings)
+    assert layout.text_source == "ocr"
+    assert "31/03/2027" in layout.text
+
+
+def test_native_text_over_a_background_image_uses_the_text_layer(tmp_path, settings):
+    path = _scan_with_stamp(tmp_path, "Letterhead", body_lines=30)
+    layout = layout_page(ingest(path, settings), 1, settings)
+    assert layout.text_source == "pdf"

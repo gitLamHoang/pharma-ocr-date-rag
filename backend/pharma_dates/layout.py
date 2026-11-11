@@ -1,7 +1,7 @@
 """Step 2: words, boxes and text for one page.
 
-Native PDF pages use the pdfplumber text layer; scans (and PDF pages with almost no text layer) use
-Tesseract, run on the page image and on a cleaned copy (`preprocess.prepare`); the pass with the
+Native PDF pages use the pdfplumber text layer; scans (and PDF pages with almost no text layer, or
+a scan whose text layer is only a stamped header or footer) use Tesseract, run on the page image and on a cleaned copy (`preprocess.prepare`); the pass with the
 higher mean word confidence is kept. Boxes are in page-image pixels. `PageLayout.text` joins words
 with spaces and lines with newlines, and each word's `char_start/char_end` index into it.
 """
@@ -20,6 +20,10 @@ from .models import BBox, PageLayout, Word
 logger = logging.getLogger(__name__)
 
 MIN_TEXT_LAYER_CHARS = 20
+# A page mostly covered by an image whose text layer covers little of it is a scan with a stamped
+# header, footer or banner ("Page 1 of 5", a Bates number): the scanned body needs OCR.
+SCAN_IMAGE_SHARE = 0.5
+MIN_TEXT_SHARE_ON_SCAN = 0.03
 TESSERACT_CONFIG = "--oem 1 --psm 3"
 
 Line = list[tuple[str, BBox, float | None]]  # text, box, OCR confidence 0-1
@@ -55,6 +59,8 @@ def _pdf_lines(ingested: IngestedFile, n: int, settings: Settings) -> list[Line]
             page = page.crop(visible, strict=False)
             if sum(1 for c in page.chars if not c["text"].isspace()) < MIN_TEXT_LAYER_CHARS:
                 return None
+            if _stamped_scan(page):
+                return None
             raw = page.extract_words()
     except Exception:
         logger.warning("text layer unreadable on page %d; using OCR", n)
@@ -76,6 +82,16 @@ def _pdf_lines(ingested: IngestedFile, n: int, settings: Settings) -> list[Line]
             line_bottom = w["bottom"]
         lines[-1].append((w["text"], box, None))
     return [sorted(line, key=lambda item: item[1].x0) for line in lines]
+
+
+def _stamped_scan(page: pdfplumber.page.Page) -> bool:
+    """Whether an image covers most of the page while the text layer covers little of it."""
+    area = page.width * page.height
+
+    def covered(objects) -> float:
+        return sum(max(0, o["x1"] - o["x0"]) * max(0, o["bottom"] - o["top"]) for o in objects) / area
+
+    return covered(page.images) >= SCAN_IMAGE_SHARE and covered(page.chars) < MIN_TEXT_SHARE_ON_SCAN
 
 
 def _visible_area(page: pdfplumber.page.Page) -> tuple[float, float, float, float] | None:
