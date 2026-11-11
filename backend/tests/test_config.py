@@ -15,6 +15,10 @@ ENV_VARS = (
     "RENDER_DPI",
     "AI_CONCURRENCY",
     "TESSERACT_LANGS",
+    "ANTHROPIC_API_KEY",
+    "AWS_REGION",
+    "VERTEX_PROJECT_ID",
+    "VERTEX_REGION",
 )
 
 
@@ -56,6 +60,17 @@ def test_env_file_is_read_and_unknown_keys_are_ignored(tmp_path):
     env_file = tmp_path / ".env"
     env_file.write_text("\n".join(["CLAUDE_PROVIDER=vertex", "VERTEX_REGION=us-east5", ""]))
     assert Settings(_env_file=env_file).claude_provider == "vertex"
+
+
+def test_provider_credentials_from_environment_are_hidden(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-not-a-key")  # pragma: allowlist secret
+    monkeypatch.setenv("VERTEX_PROJECT_ID", "demo-project")
+    settings = Settings(_env_file=None)
+    assert settings.anthropic_api_key.get_secret_value() == "test-not-a-key"  # pragma: allowlist secret
+    assert "test-not-a-key" not in repr(settings)
+    assert settings.vertex_project_id == "demo-project"
+    assert settings.vertex_region == "global"
+    assert settings.aws_region is None
 
 
 def test_unknown_provider_is_rejected(monkeypatch):

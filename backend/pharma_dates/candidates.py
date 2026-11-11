@@ -18,7 +18,14 @@ EVIDENCE_QUOTES = 3
 def page_candidates(layout: PageLayout, date_order: str = "auto") -> list[Candidate]:
     """Every date the rules find in `layout.text`, each with the union box of its words."""
     return [
-        _candidate(hit, layout.text, f"p{layout.n}-c{i}", layout.n, _box(layout.words, hit), "rules")
+        _candidate(
+            hit,
+            layout.text,
+            f"p{layout.n}-c{i}",
+            layout.n,
+            span_box(layout.words, hit.start, hit.end),
+            "rules",
+        )
         for i, hit in enumerate(extract_dates(layout.text, date_order=date_order), start=1)
     ]
 
@@ -92,8 +99,9 @@ def _candidate(hit: DateHit, text: str, id_: str, page: int, bbox: BBox | None, 
     )
 
 
-def _box(words: list[Word], hit: DateHit) -> BBox | None:
-    boxes = [w.bbox for w in words if w.char_start < hit.end and hit.start < w.char_end]
+def span_box(words: list[Word], start: int, end: int) -> BBox | None:
+    """Union box of the words overlapping the text span `[start, end)`."""
+    boxes = [w.bbox for w in words if w.char_start < end and start < w.char_end]
     if not boxes:
         return None
     return BBox(

@@ -4,6 +4,7 @@ from functools import cache
 from pathlib import Path
 from typing import Literal
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
@@ -21,6 +22,11 @@ class Settings(BaseSettings):
     render_dpi: int = 200
     ai_concurrency: int = 4
     tesseract_langs: str = "eng"
+    # Provider credentials and location; never logged.
+    anthropic_api_key: SecretStr | None = None
+    aws_region: str | None = None
+    vertex_project_id: str | None = None
+    vertex_region: str = "global"
 
 
 @cache
