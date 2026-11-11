@@ -253,3 +253,34 @@ def test_validate_imports_only_pure_modules():
     )
     out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
     assert out.stdout.strip() == "[]"
+
+
+def lot(id_, date_type, value, line):
+    return dated(id_, date_type, value, char_start=line * 30, char_end=line * 30 + 10)
+
+
+def test_two_lots_are_paired_by_position_not_across_lots():
+    dates = [
+        lot("mfg-a", "manufacture_date", "2024-01-10", 0),
+        lot("exp-a", "expiry_date", "2026-01-10", 1),
+        lot("mfg-b", "manufacture_date", "2026-06-10", 2),
+        lot("exp-b", "expiry_date", "2028-06-10", 3),
+    ]
+    flags = [f for f in validate(dates, TODAY) if f.rule == "expiry_before_manufacture"]
+    # Lot B's manufacture against lot A's expiry may be a cross-lot pair: a warning, not an error.
+    assert [(f.severity, f.date_ids) for f in flags] == [("warning", ["mfg-b", "exp-a"])]
+    assert "different lots" in flags[0].message
+
+
+def test_nearest_pair_in_a_multi_lot_document_is_still_an_error():
+    dates = [
+        lot("mfg-a", "manufacture_date", "2024-01-10", 0),
+        lot("exp-a", "expiry_date", "2024-01-01", 1),  # lot A expires before it was made
+        lot("mfg-b", "manufacture_date", "2025-06-10", 5),
+        lot("exp-b", "expiry_date", "2027-06-10", 6),
+    ]
+    flags = [f for f in validate(dates, TODAY) if f.rule == "expiry_before_manufacture"]
+    assert [(f.severity, f.date_ids) for f in flags] == [
+        ("error", ["mfg-a", "exp-a"]),
+        ("warning", ["mfg-b", "exp-a"]),
+    ]

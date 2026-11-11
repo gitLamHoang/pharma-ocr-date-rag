@@ -73,18 +73,50 @@ def _name(date_type: str) -> str:
 
 
 def _not_after(rule: str, first_type: str, later_type: str, valued) -> list[Flag]:
-    """Error when a `later_type` date is on or before a `first_type` date (e.g. expiry ≤ manufacture)."""
-    return [
-        Flag(
-            rule=rule,
-            severity="error",
-            message=f"{_name(later_type).capitalize()} {_show(late, lv)} is not after "
-            f"{_name(first_type)} {_show(first, fv)}.",
-            date_ids=[first.id, late.id],
+    """Flag a `later_type` date on or before a `first_type` date (e.g. expiry ≤ manufacture).
+
+    With one date of each type, or for a pair that are each other's nearest on the page (one
+    batch's manufacture and expiry), it is an error. Other pairs in a document with several lots
+    may belong to different lots, so they are only a warning."""
+    firsts, laters = _of(first_type, valued), _of(later_type, valued)
+    single = len(firsts) == 1 and len(laters) == 1
+    flags = []
+    for (first, fv), (late, lv) in product(firsts, laters):
+        if lv > fv:
+            continue
+        paired = single or (
+            _nearest(late, [f for f, _ in firsts], before=True) is first
+            and _nearest(first, [d for d, _ in laters], before=False) is late
         )
-        for (first, fv), (late, lv) in product(_of(first_type, valued), _of(later_type, valued))
-        if lv <= fv
-    ]
+        message = f"{_name(later_type).capitalize()} {_show(late, lv)} is not after {_name(first_type)} {_show(first, fv)}"
+        flags.append(
+            Flag(
+                rule=rule,
+                severity="error" if paired else "warning",
+                message=f"{message}." if paired else f"{message}; these dates may belong to different lots.",
+                date_ids=[first.id, late.id],
+            )
+        )
+    return flags
+
+
+def _nearest(d: LabeledDate, others: list[LabeledDate], before: bool) -> LabeledDate | None:
+    """The date of `others` closest to `d` on its page (by box centre, else by text offset); on a
+    tie, the one before `d` in reading order if `before`, else the one after."""
+    same_page = [o for o in others if o.page == d.page]
+    if not same_page:
+        return None
+
+    def key(o: LabeledDate) -> tuple[float, bool]:
+        if d.bbox and o.bbox:
+            dx = (d.bbox.x0 + d.bbox.x1 - o.bbox.x0 - o.bbox.x1) / 2
+            dy = (d.bbox.y0 + d.bbox.y1 - o.bbox.y0 - o.bbox.y1) / 2
+            distance = (dx * dx + dy * dy) ** 0.5
+        else:
+            distance = abs(d.char_start - o.char_start)
+        return distance, (o.char_start < d.char_start) != before
+
+    return min(same_page, key=key)
 
 
 def _signature_before_effective(valued) -> list[Flag]:
