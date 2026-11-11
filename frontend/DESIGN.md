@@ -190,6 +190,11 @@ One family at two widths, plus a mono with one job. All OFL, self-hosted via @fo
   the server's `detail` message shown as written.
 - **Zero** prints as `0`; missing values are an em dash in `--muted`.
 - **Offline mode** (AI off) is a mode, not an error: a grey dot and "Rules only" in the top bar.
+- **Static build** (GitHub Pages, `VITE_MODE=static`): one line in the frame under the top bar on
+  every screen, aligned with the brand, 13 px: "Runs in your browser" in ink 500, then "rules only
+  (no AI) · documents are not uploaded anywhere · every date needs review" in muted, wrapping only
+  after a dot. No tint, no box, no sunflower. It replaces the Documents "AI classification off"
+  notice, which would repeat it.
 
 ## Motion
 

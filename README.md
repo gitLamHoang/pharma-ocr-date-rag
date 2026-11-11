@@ -2,6 +2,8 @@
 
 Finds every date in a pharmaceutical document, says what each one means, shows where it is on the page and checks that the dates agree, so a reviewer on a pharmaceutical quality team can confirm them instead of hunting for them.
 
+**Live demo:** <https://gitlamhoang.github.io/pharma-ocr-date-rag/>, the same app running in your browser. It runs rules only (no AI), documents are not uploaded anywhere, and every date needs review. See [Browser demo](#browser-demo) for its limits; the full app (Claude + server) is the Docker deployment below.
+
 ![The review screen: a certificate of analysis with its dates boxed on the page, and the list of dates to accept, correct or reject](docs/images/review.png)
 
 ## What you get
@@ -44,6 +46,26 @@ make eval    # fetch the public evaluation set and score it (AI=on to include Cl
 ```
 
 The browser smoke test runs with `cd frontend && npx playwright install chromium && npm run build && npx playwright test` (the install downloads Playwright's Chromium once, into its user cache); it starts its own offline server.
+
+## Browser demo
+
+The GitHub Pages build (`VITE_MODE=static`) is the same React app with an in-browser engine instead of the server: pdf.js renders each page at 200 DPI and reads its text layer, tesseract.js (`eng`) reads scans, and the server's own date rules, labels and consistency checks run in Python through Pyodide in a Web Worker. Documents, page images, dates and the append-only review history stay in this browser's IndexedDB (in memory only when the browser blocks storage); CSV and JSON exports are built in the page. Its limits:
+
+- **Rules only.** No Claude labels or transcription, so types come from the keyword rules and many dates are `unknown`.
+- **Same upload limits** as the server: PDF, PNG, JPG or TIFF, up to 50 MB and 100 pages, with the same messages for password-protected or damaged PDFs. Most browsers cannot decode TIFF; save such scans as PDF, PNG or JPG.
+- **OCR is a single Tesseract pass** (the server also tries a cleaned copy of the page and keeps the better one), so results on poor scans can differ from the server's.
+- **Your data stays in this browser.** Clearing the site's data deletes it; nothing syncs between browsers or devices.
+- **First use downloads** Pyodide with pydantic and Tesseract's English data from jsDelivr at pinned versions; nothing else is fetched from outside the site.
+
+Build and test it locally:
+
+```sh
+cd frontend
+VITE_MODE=static npm run build                       # dist/ for /pharma-ocr-date-rag/
+npx playwright test -c playwright.static.config.ts   # runs the in-browser engine on the build
+```
+
+`.github/workflows/pages.yml` builds, tests and deploys it on every push to `main`.
 
 ## Configuration
 
