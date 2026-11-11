@@ -5,6 +5,8 @@ Tesseract. Boxes are in page-image pixels. `PageLayout.text` joins words with sp
 newlines, and each word's `char_start/char_end` index into it.
 """
 
+import logging
+
 import pdfplumber
 import pytesseract
 from PIL import Image
@@ -12,6 +14,8 @@ from PIL import Image
 from .config import Settings
 from .ingest import IngestedFile, IngestError
 from .models import BBox, PageLayout, Word
+
+logger = logging.getLogger(__name__)
 
 MIN_TEXT_LAYER_CHARS = 20
 TESSERACT_CONFIG = "--oem 1 --psm 3"
@@ -35,12 +39,19 @@ def layout_page(ingested: IngestedFile, n: int, settings: Settings) -> PageLayou
 
 
 def _pdf_lines(ingested: IngestedFile, n: int, settings: Settings) -> list[Line] | None:
-    """Text-layer lines, or None when the page has too little text to trust (likely a scan)."""
-    with pdfplumber.open(ingested.source) as pdf:
-        page = pdf.pages[n - 1]
-        if sum(1 for c in page.chars if not c["text"].isspace()) < MIN_TEXT_LAYER_CHARS:
-            return None
-        raw = page.extract_words()
+    """Text-layer lines, or None when the page has too little text to trust (likely a scan).
+
+    PDFium (used to render) accepts some files pdfminer cannot parse; those pages are read with OCR.
+    """
+    try:
+        with pdfplumber.open(ingested.source) as pdf:
+            page = pdf.pages[n - 1]
+            if sum(1 for c in page.chars if not c["text"].isspace()) < MIN_TEXT_LAYER_CHARS:
+                return None
+            raw = page.extract_words()
+    except Exception:
+        logger.warning("text layer unreadable on page %d; using OCR", n)
+        return None
     scale = settings.render_dpi / 72
     lines: list[Line] = []
     line_bottom = None

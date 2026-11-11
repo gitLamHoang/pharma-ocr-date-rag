@@ -99,3 +99,9 @@ def test_too_many_pages_raises(tmp_path, settings, make_pdf):
 def test_missing_file_raises_ingest_error(tmp_path: Path, settings):
     with pytest.raises(IngestError):
         ingest(tmp_path / "nope.pdf", settings)
+
+
+def test_huge_pixel_image_raises_ingest_error(blank_png, settings, monkeypatch):
+    monkeypatch.setattr(Image, "MAX_IMAGE_PIXELS", 1000)
+    with pytest.raises(IngestError, match="too large"):
+        ingest(blank_png, settings)

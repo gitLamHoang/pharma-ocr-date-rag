@@ -137,5 +137,7 @@ def _save_image_frames(path: Path, out_dir: Path, settings: Settings) -> list[Pa
                 frame.convert("RGB").save(target)
                 pages.append(target)
             return pages
-    except (UnidentifiedImageError, Image.DecompressionBombError, OSError, SyntaxError) as exc:
+    except Image.DecompressionBombError as exc:
+        raise IngestError("This image is too large to process (too many pixels).") from exc
+    except (UnidentifiedImageError, OSError, SyntaxError) as exc:
         raise IngestError(DAMAGED) from exc

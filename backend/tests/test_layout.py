@@ -79,3 +79,15 @@ def test_page_number_out_of_range(native_pdf, settings):
     ingested = ingest(native_pdf, settings)
     with pytest.raises(IndexError):
         layout_page(ingested, 2, settings)
+
+
+@needs_tesseract
+def test_unparseable_text_layer_falls_back_to_ocr(native_pdf, settings, monkeypatch):
+    ingested = ingest(native_pdf, settings)
+
+    def broken_open(*args, **kwargs):
+        raise ValueError("pdfminer could not parse this file")
+
+    monkeypatch.setattr("pharma_dates.layout.pdfplumber.open", broken_open)
+    layout = layout_page(ingested, 1, settings)
+    assert layout.text_source == "ocr"
