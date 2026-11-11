@@ -111,7 +111,8 @@ def test_offline_label_apostille_beats_its_own_signature_wording():
 
 
 def test_offline_label_always_in_taxonomy():
-    for rule_label in ["expiry", "manufacture", "qa_check", "audit", "received", "document", "unknown"]:
+    rule_labels = ["expiry", "manufacture", "retest", "release", "qa_check", "audit", "received", "document"]
+    for rule_label in [*rule_labels, "unknown"]:
         assert offline_label(rule_label, "signed approved effective retest") in ALL_TYPES
 
 

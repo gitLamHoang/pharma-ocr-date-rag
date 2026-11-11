@@ -85,6 +85,8 @@ _RULE_TYPES = {
     "manufacture": "manufacture_date",
     "audit": "audit_date",
     "received": "receipt_date",
+    "retest": "retest_date",
+    "release": "release_date",
 }
 
 # Matched on the date's own line only: a certificate of analysis that says "this certificate is

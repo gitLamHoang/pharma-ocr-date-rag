@@ -511,3 +511,14 @@ def test_offline_keyword_on_another_field_line_does_not_leak():
     ]
     # A bare "Date:" row takes the signature line just above it; a labelled row keeps its own.
     assert _offline_types(lines) == [("05-Jan-2026", "signature_date"), ("07-Jan-2026", "unknown")]
+
+
+def test_offline_coa_header_row_labels_each_date_and_raises_no_false_flag():
+    from datetime import date
+
+    from pharma_dates.validate import validate
+
+    layout = make_layout(["Mfg. Date: 05-Jan-2026   Retest Date: 05-Jan-2027   Expiry Date: 05-Jan-2028"])
+    dates, _ = label_page(layout, page_candidates(layout), None)
+    assert [d.date_type for d in dates] == ["manufacture_date", "retest_date", "expiry_date"]
+    assert validate(dates, date(2026, 11, 11)) == []

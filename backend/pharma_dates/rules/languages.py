@@ -11,11 +11,13 @@ ROMAN_MONTHS = "I II III IV V VI VII VIII IX X XI XII".split()
 
 FIELD_WORDS = {
     "expiry": ["expiry", "expiration", "expires", "exp", "use before", "valid until", "shelf life"],
-    "manufacture": ["manufacture", "manufactured", "mfg", "mfd", "production", "packed"],
+    "manufacture": ["manufacture", "manufactured", "manufacturing", "mfg", "mfd", "production", "packed"],
+    "retest": ["retest", "re-test", "re test"],
+    "release": ["release", "release date", "date of release"],
     "qa_check": ["qa", "qc", "quality", "check", "inspection", "reviewed", "verified", "released"],
     "audit": ["audit", "supplier visit", "vendor review"],
     "received": ["received", "arrival", "delivered"],
-    "document": ["document", "issued", "printed", "report date"],
+    "document": ["document", "issue date", "issued", "date of issue", "printed", "report date"],
 }
 
 

@@ -177,15 +177,26 @@ def classify_context(
     context: str,
     date_start: int | None = None,
     date_end: int | None = None,
+    other_dates: tuple[tuple[int, int], ...] = (),
 ) -> tuple[str, float]:
+    """The field label nearest the date in `context`, with a confidence.
+
+    `other_dates` are the spans of the other dates in `context`. A label never reaches past one
+    ("Mfg: 05-Jan-2026  Analysis: 07-Jan-2026" leaves the second date unlabeled), and a label
+    followed by another date is that date's, not an earlier one's.
+    """
     best_label, best_distance = "unknown", 10_000
     for label, pattern in field_patterns():
         for match in pattern.finditer(fold(context)):
             if date_start is None or date_end is None:
                 distance = 0
             elif match.end() <= date_start:
+                if any(match.end() <= s and e <= date_start for s, e in other_dates):
+                    continue
                 distance = date_start - match.end()
             elif match.start() >= date_end:
+                if any(s >= date_end for s, _ in other_dates):
+                    continue
                 distance = match.start() - date_end + 12
             else:
                 continue
@@ -208,7 +219,7 @@ def extract_dates(
         raise ValueError(f"Unsupported date order: {date_order}")
     repaired = repair_ocr_noise(text) if repair_ocr else text
     searchable = fold(repaired)
-    hits: list[DateHit] = []
+    found: list[tuple[int, int, tuple[str, ...]]] = []
     seen: list[tuple[int, int]] = []
     for pattern in _patterns():
         for match in pattern.finditer(searchable):
@@ -225,34 +236,41 @@ def extract_dates(
                 if repaired[slice(*match.span("month"))].islower():
                     continue
             candidates = _normalize(match, date_order)
-            if not candidates:
-                continue
-            left = max(text.rfind("\n", 0, start) + 1, start - 70)
-            next_line = text.find("\n", end)
-            right = min(next_line if next_line != -1 else len(text), end + 70)
-            label, confidence = classify_context(repaired[left:right], start - left, end - left)
-            reasons = []
-            if len(candidates) > 1:
-                reasons.append("ambiguous_numeric_date")
-            precision = "month" if len(candidates[0]) == 7 else "day"
-            if precision == "month":
-                reasons.append("month_precision")
-            if repaired[start:end] != text[start:end]:
-                reasons.append("ocr_repaired")
-            if label == "unknown":
-                reasons.append("unknown_label")
-            hits.append(
-                DateHit(
-                    raw_text=text[start:end],
-                    normalized=candidates[0] if len(candidates) == 1 else None,
-                    label=label,
-                    confidence=confidence,
-                    context=text[left:right],
-                    start=start,
-                    end=end,
-                    candidates=candidates,
-                    precision=precision,
-                    review_reasons=tuple(reasons),
-                )
+            if candidates:
+                found.append((start, end, candidates))
+    hits: list[DateHit] = []
+    for start, end, candidates in found:
+        left = max(text.rfind("\n", 0, start) + 1, start - 70)
+        next_line = text.find("\n", end)
+        right = min(next_line if next_line != -1 else len(text), end + 70)
+        others = tuple(
+            (max(s, left) - left, min(e, right) - left)
+            for s, e, _ in found
+            if (s, e) != (start, end) and s < right and left < e
+        )
+        label, confidence = classify_context(repaired[left:right], start - left, end - left, others)
+        reasons = []
+        if len(candidates) > 1:
+            reasons.append("ambiguous_numeric_date")
+        precision = "month" if len(candidates[0]) == 7 else "day"
+        if precision == "month":
+            reasons.append("month_precision")
+        if repaired[start:end] != text[start:end]:
+            reasons.append("ocr_repaired")
+        if label == "unknown":
+            reasons.append("unknown_label")
+        hits.append(
+            DateHit(
+                raw_text=text[start:end],
+                normalized=candidates[0] if len(candidates) == 1 else None,
+                label=label,
+                confidence=confidence,
+                context=text[left:right],
+                start=start,
+                end=end,
+                candidates=candidates,
+                precision=precision,
+                review_reasons=tuple(reasons),
             )
+        )
     return sorted(hits, key=lambda hit: hit.start)
