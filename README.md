@@ -31,6 +31,8 @@ make up                 # mkdir -p data, then docker compose up --build
 
 Open http://localhost:8000. Data (database, uploads, page images) is kept in `./data`.
 
+The app has no login, so Compose publishes it on the loopback interface only (`127.0.0.1:8000`). To use it from other machines, put a reverse proxy with authentication in front of it; do not publish the port on every interface.
+
 If you run `docker compose up --build` yourself, create `./data` first (`mkdir -p data`); otherwise Docker creates it as root on Linux and the app, which runs as uid 1000, cannot write to it.
 
 **Local development** needs Python 3.12 with [uv](https://docs.astral.sh/uv/), Node 22 and Tesseract (`brew install tesseract` or `apt install tesseract-ocr`):
@@ -41,7 +43,7 @@ make test    # backend pytest and frontend Vitest
 make eval    # fetch the public evaluation set and score it (AI=on to include Claude)
 ```
 
-The browser smoke test runs with `cd frontend && npm run build && npx playwright test`; it starts its own offline server.
+The browser smoke test runs with `cd frontend && npx playwright install chromium && npm run build && npx playwright test` (the install downloads Playwright's Chromium once, into its user cache); it starts its own offline server.
 
 ## Configuration
 
