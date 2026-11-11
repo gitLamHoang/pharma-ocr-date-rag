@@ -405,3 +405,39 @@ def test_reopening_store_keeps_data(store, tmp_path):
     _, run = new_run(store, [dated("c1", "31/03/2027", "2027-03-31")])
     reopened = Store(tmp_path / "data" / "pharma.sqlite")
     assert only_date(reopened, run).raw_text == "31/03/2027"
+
+
+def test_carry_over_skips_accept_of_an_unread_date_that_is_now_resolved(store):
+    ambiguous = {"candidates": ["2026-03-04", "2026-04-03"]}
+    doc, old_run = new_run(store, [dated("c1", "03/04/2026", None, **ambiguous)])
+    review(store, only_date(store, old_run).id, "accept")
+    assert only_date(store, old_run).current_value is None
+    new_run_id = store.create_run(doc, "1.0.1", "claude-opus-5-5", True)
+    resolved = dated("n1", "03/04/2026", None, resolved_value="2026-04-03", evidence="DD/MM/YYYY", **ambiguous)
+    store.save_results(new_run_id, [resolved], [], [])
+
+    assert store.carry_over(old_run, new_run_id) == 0
+    new = only_date(store, new_run_id)
+    assert (new.status, new.current_value) == ("needs_review", "2026-04-03")
+    assert store.history(new.id) == []
+
+
+def test_carry_over_keeps_a_correction_through_a_later_reopen(store):
+    doc, old_run = new_run(store, [dated("c1", "31/03/2027", "2027-03-31")])
+    old_id = only_date(store, old_run).id
+    review(store, old_id, "correct", new_type="retest_date", reason="it is the retest date")
+    review(store, old_id, "reopen")
+    assert (only_date(store, old_run).status, only_date(store, old_run).current_type) == (
+        "needs_review",
+        "retest_date",
+    )
+    new_run_id = store.create_run(doc, "1.0.1", "claude-opus-5-5", True)
+    store.save_results(new_run_id, [dated("n1", "31/03/2027", "2027-03-31")], [], [])
+
+    assert store.carry_over(old_run, new_run_id) == 1
+    new = only_date(store, new_run_id)
+    assert (new.status, new.current_type, new.current_value) == ("needs_review", "retest_date", "2027-03-31")
+    assert [(e.action, e.new_type, e.carried_from_run) for e in store.history(new.id)] == [
+        ("correct", "retest_date", old_run),
+        ("reopen", None, old_run),
+    ]

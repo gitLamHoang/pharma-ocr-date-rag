@@ -410,7 +410,9 @@ class Store:
     def carry_over(self, old_run_id: int, new_run_id: int) -> int:
         """Copy reviewer decisions to the new run's dates that match an old date exactly (page, raw text
         and normalized value). Repeated identical dates pair up in reading order. Returns the number of
-        decisions carried; dates without a match, or whose last event is a reopen, stay `needs_review`.
+        decisions carried; dates without a match, or whose last event is a reopen, stay `needs_review`
+        (a reopened date keeps its corrected type or value). A decision on a date that had no reading
+        is not carried to a date the new run reads, since the reviewer never saw that reading.
         New dates that already have a review event are left alone, so a reviewer who acted first wins
         and a second call carries nothing. `FrozenRunError` if the new run is not the latest run."""
         with self._connect(write=True) as conn:
@@ -448,18 +450,28 @@ class Store:
                     continue
                 source = matches.pop(0)
                 last = last_events.get(source.id)
-                if d.id in reviewed or last is None or last["action"] == "reopen":
+                if d.id in reviewed or last is None:
                     continue
-                _insert_event(
-                    conn,
-                    d.id,
-                    last["action"],
-                    source.current_type if source.current_type != d.date_type else None,
-                    source.current_value if source.current_value != _value_of(d) else None,
-                    last["reviewer"],
-                    f"carried over from run {old_run_id}",
-                    old_run_id,
-                )
+                new_type = source.current_type if source.current_type != d.date_type else None
+                # A decision on a date with no reading does not carry to a date the new run reads:
+                # the reviewer never saw that reading.
+                unread = source.current_value is None and _value_of(d) is not None
+                new_value = source.current_value if source.current_value != _value_of(d) else None
+                reason = f"carried over from run {old_run_id}"
+                if last["action"] == "reopen":
+                    if new_type is None and new_value is None:
+                        continue
+                    # Reopened, but the reviewer's correction stays in effect: carry it, reopened.
+                    _insert_event(
+                        conn, d.id, "correct", new_type, new_value, last["reviewer"], reason, old_run_id
+                    )
+                    _insert_event(conn, d.id, "reopen", None, None, last["reviewer"], reason, old_run_id)
+                elif unread:
+                    continue
+                else:
+                    _insert_event(
+                        conn, d.id, last["action"], new_type, new_value, last["reviewer"], reason, old_run_id
+                    )
                 carried += 1
         return carried
 
